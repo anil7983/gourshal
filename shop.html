@@ -8,7 +8,7 @@
   <meta name="description"
     content="Browse Gourshal's full collection of premium natural products — A2 ghee, bulletproof coffee, Himalayan green tea, and raw forest honey.">
   <meta property="og:title" content="Shop — GOURSHAL">
-  <meta property="og:image" content="public/neww-logo.jpeg">
+  <meta property="og:image" content="/neww-logo.jpeg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
@@ -308,7 +308,7 @@
 
   <nav id="navbar" role="navigation" aria-label="Main navigation">
     <a href="index.html" class="nav-logo">
-      <img src="./public/neww-logo.jpeg" alt="Gourshal" class="nav-logo-img">
+      <img src="/neww-logo.jpeg" alt="Gourshal" class="nav-logo-img">
       <div class="nav-logo-text-wrap">
         <div class="nav-logo-text">GOURSHAL</div>
         <span class="nav-logo-tagline">CRAFTED TO LAST</span>
@@ -502,8 +502,9 @@
         return;
       }
       grid.innerHTML = products.map(p => {
+        const pid = p.productId || p.id || p._id;
         const stockStatus = window.getStockStatus ? getStockStatus(p.stock) : (p.stock < 10 ? { class: 'low-stock', label: `Only ${p.stock} left` } : { class: 'in-stock', label: 'In Stock' });
-        return `<div class="product-card" onclick="window.location='product.html?id=${p.id}'" role="listitem">
+        return `<div class="product-card" onclick="window.location='product.html?id=${pid}'" role="listitem">
       <div class="product-visual">
         <div class="product-glow" style="background:radial-gradient(circle, ${p.glowColor} 0%, transparent 70%);"></div>
         ${p.image ? `<img src="${p.image}" alt="${p.name}" class="product-img">` : '<div style="font-size:48px;display:flex;align-items:center;justify-content:center;height:100%;">🌿</div>'}
@@ -519,7 +520,7 @@
             <div style="font-size:10px;color:var(--text-muted);text-decoration:line-through;">${window.Utils?.formatCurrency ? Utils.formatCurrency(p.originalPrice) : '₹' + p.originalPrice.toLocaleString()}</div>
             <div style="font-size:9px;color:#81c784;letter-spacing:1px;margin-top:2px;">Save ${Math.round((1 - p.price / p.originalPrice) * 100)}%</div>
           </div>
-          <button class="add-to-cart-btn" onclick="event.stopPropagation(); Cart.add('${p.id}')" title="Add to cart" aria-label="Add ${p.name} to cart">+</button>
+          <button class="add-to-cart-btn" onclick="event.stopPropagation(); Cart.add('${pid}')" title="Add to cart" aria-label="Add ${p.name} to cart">+</button>
         </div>
         <div class="stock-indicator ${stockStatus.class}" style="font-size:10px;color:${p.stock < 10 ? 'var(--error)' : 'var(--text-muted)'};margin-top:12px;">
           ${stockStatus.label}

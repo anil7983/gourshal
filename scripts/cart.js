@@ -38,7 +38,7 @@ const Cart = {
           price: 899, 
           stock: 50,
           unit: '500ml',
-          image: 'public/ghee.jpg',
+          image: '/ghee.jpg',
           category: 'Pure Vedic'
         });
       }
@@ -62,7 +62,7 @@ const Cart = {
       existing.qty = newQty;
       existing.price = Number(product.price) || existing.price || 899;
       existing.name = product.name || existing.name;
-      existing.image = product.image || existing.image || 'public/ghee.jpg';
+      existing.image = product.image || existing.image || '/ghee.jpg';
       if (newQty >= safeStock) {
         this.showToast(`Maximum available stock reached for ${product.name}`);
       }
@@ -76,20 +76,24 @@ const Cart = {
         price: Number(product.price) || 899, 
         stock: safeStock,
         unit: product.unit || '500ml',
-        image: product.image || 'public/ghee.jpg',
+        image: product.image || '/ghee.jpg',
         category: product.category || 'Pure Vedic'
       });
     }
     
     this.save(items);
     this.showToast(`Added to cart: ${product.name}`);
-    window.dispatchEvent(new CustomEvent('cartUpdated', { detail: { items, count: this.count() } }));
+    if (typeof window.dispatchEvent === 'function') {
+      window.dispatchEvent(new CustomEvent('cartUpdated', { detail: { items, count: this.count() } }));
+    }
   },
 
   remove(productId) {
     const items = this.get().filter(i => i.id !== productId && i.productId !== productId && i._id !== productId);
     this.save(items);
-    window.dispatchEvent(new CustomEvent('cartUpdated', { detail: { items, count: this.count() } }));
+    if (typeof window.dispatchEvent === 'function') {
+      window.dispatchEvent(new CustomEvent('cartUpdated', { detail: { items, count: this.count() } }));
+    }
   },
 
   updateQty(productId, qty) {
@@ -115,13 +119,17 @@ const Cart = {
     }
     
     this.save(items);
-    window.dispatchEvent(new CustomEvent('cartUpdated', { detail: { items, count: this.count() } }));
+    if (typeof window.dispatchEvent === 'function') {
+      window.dispatchEvent(new CustomEvent('cartUpdated', { detail: { items, count: this.count() } }));
+    }
   },
 
   clear() {
     localStorage.removeItem(this.STORAGE_KEY);
     this.updateUI();
-    window.dispatchEvent(new CustomEvent('cartUpdated', { detail: { items: [], count: 0 } }));
+    if (typeof window.dispatchEvent === 'function') {
+      window.dispatchEvent(new CustomEvent('cartUpdated', { detail: { items: [], count: 0 } }));
+    }
   },
 
   count() {
@@ -151,7 +159,7 @@ const Cart = {
             price: Number(item.price) || 899,
             stock: Number(item.stock) || 50,
             unit: item.unit || '500ml',
-            image: item.image || 'public/ghee.jpg',
+            image: item.image || '/ghee.jpg',
             category: item.category || 'Pure Vedic'
           }
         };
@@ -160,7 +168,7 @@ const Cart = {
         ...item, 
         product: {
           ...product,
-          image: product.image || item.image || 'public/ghee.jpg'
+          image: product.image || item.image || '/ghee.jpg'
         }
       };
     });
@@ -184,24 +192,30 @@ const Cart = {
   },
 
   showToast(msg) {
-    let toast = document.getElementById('cartToast');
-    if (!toast) {
-      toast = document.createElement('div');
-      toast.id = 'cartToast';
-      toast.className = 'cart-toast';
-      toast.setAttribute('role', 'alert');
-      toast.setAttribute('aria-live', 'polite');
-      document.body.appendChild(toast);
+    try {
+      let toast = document.getElementById('cartToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'cartToast';
+        toast.className = 'cart-toast';
+        toast.setAttribute('role', 'alert');
+        toast.setAttribute('aria-live', 'polite');
+        if (document.body) document.body.appendChild(toast);
+      }
+      const text = document.getElementById('toastText') || (toast && typeof toast.querySelector === 'function' ? toast.querySelector('.toast-text, span') : null);
+      if (text) {
+        text.textContent = msg;
+      } else if (toast) {
+        toast.innerHTML = `<div class="toast-icon">✓</div><div class="toast-text" id="toastText">${msg}</div>`;
+      }
+      if (toast && toast.classList) toast.classList.add('show');
+      clearTimeout(this._toastTimer);
+      this._toastTimer = setTimeout(() => {
+        if (toast && toast.classList) toast.classList.remove('show');
+      }, 3200);
+    } catch (e) {
+      console.warn('Toast notification skipped:', e);
     }
-    const text = document.getElementById('toastText') || toast.querySelector('.toast-text, span');
-    if (text) {
-      text.textContent = msg;
-    } else {
-      toast.innerHTML = `<div class="toast-icon">✓</div><div class="toast-text" id="toastText">${msg}</div>`;
-    }
-    toast.classList.add('show');
-    clearTimeout(this._toastTimer);
-    this._toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
   }
 };
 

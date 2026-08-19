@@ -7,7 +7,7 @@
   <title>Product — GOURSHAL</title>
   <meta name="description" content="Premium natural wellness product from Gourshal.">
   <meta property="og:title" content="Product — GOURSHAL">
-  <meta property="og:image" content="public/neww-logo.jpeg">
+  <meta property="og:image" content="/neww-logo.jpeg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
@@ -342,7 +342,7 @@
   </div>
   <nav id="navbar" role="navigation" aria-label="Main navigation">
     <a href="index.html" class="nav-logo">
-      <img src="public/neww-logo.jpeg" alt="Gourshal" class="nav-logo-img">
+      <img src="/neww-logo.jpeg" alt="Gourshal" class="nav-logo-img">
       <div class="nav-logo-text-wrap">
         <div class="nav-logo-text">GOURSHAL</div><span class="nav-logo-tagline">CRAFTED TO LAST</span>
       </div>
@@ -486,8 +486,8 @@
       </div>
     </div>
     <div class="action-btns">
-      <button class="btn-primary btn-add-cart" onclick="Cart.add('${p.id}', qty)" ${p.stock <= 0 ? 'disabled' : ''}>Add to Cart</button>
-      <button class="btn-buy-now" onclick="buyNow('${p.id}', qty)" ${p.stock <= 0 ? 'disabled' : ''}>Buy Now →</button>
+      <button class="btn-primary btn-add-cart" onclick="Cart.add('${p.productId || p.id || p._id}', qty)" ${p.stock <= 0 ? 'disabled' : ''}>Add to Cart</button>
+      <button class="btn-buy-now" onclick="buyNow('${p.productId || p.id || p._id}', qty)" ${p.stock <= 0 ? 'disabled' : ''}>Buy Now →</button>
     </div>
     <div class="product-trust">
       <div class="trust-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> 100% Natural</div>
@@ -514,11 +514,14 @@
     }
 
     function renderRelated(p) {
-      const related = (window.GOURSHAL_PRODUCTS || []).filter(r => r.id !== p.id && r.categorySlug === p.categorySlug).slice(0, 3);
+      const pid = p.productId || p.id;
+      const related = (window.GOURSHAL_PRODUCTS || []).filter(r => (r.productId || r.id) !== pid && r.categorySlug === p.categorySlug).slice(0, 3);
       if (!related.length) return;
       document.getElementById('relatedSection').style.display = 'block';
-      document.getElementById('relatedGrid').innerHTML = related.map(r => `
-    <div class="product-card" onclick="window.location='product.html?id=${r.id}'" role="listitem">
+      document.getElementById('relatedGrid').innerHTML = related.map(r => {
+        const rid = r.productId || r.id || r._id;
+        return `
+    <div class="product-card" onclick="window.location='product.html?id=${rid}'" role="listitem">
       <div class="product-visual"><div class="product-glow" style="background:radial-gradient(circle,${r.glowColor} 0%,transparent 70%);"></div>${r.image ? `<img src="${r.image}" alt="${r.name}" class="product-img">` : '🌿'}</div>
       ${r.badge ? `<div class="product-badge">${r.badge}</div>` : ''}
       <div class="product-info">
@@ -526,10 +529,11 @@
         <div class="product-name">${r.name}</div>
         <div class="product-footer">
           <div class="product-price">${window.Utils?.formatCurrency ? Utils.formatCurrency(r.price) : '₹' + r.price.toLocaleString()} <span class="product-price-unit">/ ${r.unit}</span></div>
-          <button class="add-to-cart-btn" onclick="event.stopPropagation();Cart.add('${r.id}')" aria-label="Add ${r.name} to cart">+</button>
+          <button class="add-to-cart-btn" onclick="event.stopPropagation();Cart.add('${rid}')" aria-label="Add ${r.name} to cart">+</button>
         </div>
       </div>
-    </div>`).join('');
+    </div>`;
+      }).join('');
     }
 
     function buyNow(productId, q) {

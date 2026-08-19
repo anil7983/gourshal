@@ -14,8 +14,8 @@ const GOURSHAL_HERO_PRODUCTS = [
     price: 899,
     originalPrice: 1099,
     unit: '500ml',
-    image: 'public/ghee-hero.jpg',
-    thumbImage: 'public/ghee.jpg',
+    image: '/ghee-hero.jpg',
+    thumbImage: '/ghee.jpg',
     glowColor: 'rgba(212,168,75,0.4)',
     accentBg: '#F7F3EB',
     badges: [
@@ -70,8 +70,8 @@ const GOURSHAL_HERO_PRODUCTS = [
     price: 349,
     originalPrice: 449,
     unit: '500ml',
-    image: 'public/mustard-hero.jpg',
-    thumbImage: 'public/products/mustard-oil.jpg',
+    image: '/mustard-hero.jpg',
+    thumbImage: '/products/mustard-oil.jpg',
     glowColor: 'rgba(218,165,32,0.45)',
     accentBg: '#FAF5E8',
     badges: [
@@ -126,8 +126,8 @@ const GOURSHAL_HERO_PRODUCTS = [
     price: 299,
     originalPrice: 399,
     unit: '50g',
-    image: 'public/coffee-hero.jpg',
-    thumbImage: 'public/coffee.jpg',
+    image: '/coffee-hero.jpg',
+    thumbImage: '/coffee.jpg',
     glowColor: 'rgba(139,69,19,0.45)',
     accentBg: '#F8F4EE',
     badges: [
@@ -182,8 +182,8 @@ const GOURSHAL_HERO_PRODUCTS = [
     price: 199,
     originalPrice: 249,
     unit: '35g',
-    image: 'public/products/tea-tulsi.jpg',
-    thumbImage: 'public/products/tea-tulsi.jpg',
+    image: '/products/tea-tulsi.jpg',
+    thumbImage: '/products/tea-tulsi.jpg',
     glowColor: 'rgba(74,124,37,0.45)',
     accentBg: '#F3F7EE',
     badges: [
@@ -238,8 +238,8 @@ const GOURSHAL_HERO_PRODUCTS = [
     price: 199,
     originalPrice: 249,
     unit: '200g',
-    image: 'public/products/garam-masala.jpg',
-    thumbImage: 'public/products/garam-masala.jpg',
+    image: '/products/garam-masala.jpg',
+    thumbImage: '/products/garam-masala.jpg',
     glowColor: 'rgba(218,112,32,0.45)',
     accentBg: '#FAF2E6',
     badges: [
@@ -294,8 +294,8 @@ const GOURSHAL_HERO_PRODUCTS = [
     price: 749,
     originalPrice: 949,
     unit: '500g',
-    image: 'public/honey.jpg',
-    thumbImage: 'public/honey.jpg',
+    image: '/honey.jpg',
+    thumbImage: '/honey.jpg',
     glowColor: 'rgba(218,165,32,0.5)',
     accentBg: '#FAF6EB',
     badges: [
@@ -360,7 +360,7 @@ const GOURSHAL_PRODUCTS = [
     benefits: ['Rich in Omega-3 and Omega-9 fatty acids', 'High smoke point (250°C) — ideal for cooking', 'Supports gut lining health and immune function', 'Contains natural CLA & butyric acid', 'Zero lactose and casein protein'],
     ingredients: '100% A2 Desi Gir Cow Milk (Bilona Churned)',
     glowColor: 'rgba(201,168,76,0.6)',
-    image: 'public/ghee.jpg'
+    image: '/ghee.jpg'
   },
   {
     id: 'ghee-1kg',
@@ -379,7 +379,7 @@ const GOURSHAL_PRODUCTS = [
     benefits: ['Bigger value for family cooking', 'Shelf stable for 12 months in airtight glass jar', 'Certified A2 cow milk source', 'Aromatic granular texture'],
     ingredients: '100% A2 Desi Gir Cow Milk (Bilona Churned)',
     glowColor: 'rgba(201,168,76,0.5)',
-    image: 'public/ghee.jpg'
+    image: '/ghee.jpg'
   },
 
   // ── Cold-Pressed Mustard Oil ──
@@ -400,7 +400,7 @@ const GOURSHAL_PRODUCTS = [
     benefits: ['High MUFA & PUFA for heart wellness', 'Powerful natural antibacterial & antifungal', 'Stimulates digestive enzymes & appetite', 'Traditional remedy for deep hair massage & skin glow'],
     ingredients: '100% First-Grade Indian Black Mustard Seeds (Cold-Pressed)',
     glowColor: 'rgba(218,165,32,0.55)',
-    image: 'public/products/mustard-oil.jpg'
+    image: '/products/mustard-oil.jpg'
   },
   {
     id: 'mustard-oil-1l',
@@ -419,7 +419,7 @@ const GOURSHAL_PRODUCTS = [
     benefits: ['Authentic pungent flavor', 'Zero mineral oils, zero argemone oil', 'Preserves heat-sensitive micronutrients'],
     ingredients: '100% First-Grade Black Mustard Seeds',
     glowColor: 'rgba(218,165,32,0.5)',
-    image: 'public/products/mustard-oil.jpg'
+    image: '/products/mustard-oil.jpg'
   },
 
   // ── Coffee ──
@@ -440,7 +440,7 @@ const GOURSHAL_PRODUCTS = [
     benefits: ['100% Pure Coffee — Zero added chicory', 'Rich volatile aroma and smooth velvety taste', 'Easy to prepare — instant dissolving granules', 'Hygienically packed in amber glass jar with airtight seal'],
     ingredients: '100% Pure Coffee',
     glowColor: 'rgba(120,80,40,0.7)',
-    image: 'public/coffee.jpg'
+    image: '/coffee.jpg'
   },
 
   // ── OFFICIAL GOURSHAL GREEN TEA BLENDS (ALL 5 POUCHES) ──
@@ -461,7 +461,7 @@ const GOURSHAL_PRODUCTS = [
     benefits: ['100% Natural — No artificial flavours or chemicals', 'Boosts natural immunity & cellular defense', 'Rich in active catechins & antioxidants', 'Sip nature, live better — soothing aroma'],
     ingredients: 'Premium Whole Leaf Green Tea, Sacred Holy Basil (Tulsi)',
     glowColor: 'rgba(74,124,37,0.5)',
-    image: 'public/products/tea-tulsi.jpg'
+    image: '/products/tea-tulsi.jpg'
   },
   {
     id: 'tea-ashwagandha',
@@ -480,7 +480,7 @@ const GOURSHAL_PRODUCTS = [
     benefits: ['Enriched with adaptogenic Ashwagandha root', 'Helps reduce stress, fatigue & anxiety', 'Supports mental clarity & calm focus', 'Made with love and care — 100% natural'],
     ingredients: 'Premium Whole Leaf Green Tea, Pure Ashwagandha Root',
     glowColor: 'rgba(139,90,43,0.5)',
-    image: 'public/products/tea-ashwagandha.jpg'
+    image: '/products/tea-ashwagandha.jpg'
   },
   {
     id: 'tea-ginger',
@@ -499,7 +499,7 @@ const GOURSHAL_PRODUCTS = [
     benefits: ['Natural ginger goodness with warming aroma', 'Soothes throat & ignites digestive agni', 'Boosts immunity and cleanses toxins', 'Zero artificial flavours or preservatives'],
     ingredients: 'Premium Whole Leaf Green Tea, Sun-Dried Ginger Flakes',
     glowColor: 'rgba(218,140,32,0.5)',
-    image: 'public/products/tea-ginger.jpg'
+    image: '/products/tea-ginger.jpg'
   },
   {
     id: 'tea-mint',
@@ -518,7 +518,7 @@ const GOURSHAL_PRODUCTS = [
     benefits: ['Refreshing aromatic mint blend', 'Cooling & soothing effect on stomach', 'Rich in natural antioxidants & polyphenols', '100% natural whole leaf — zero bitter aftertaste'],
     ingredients: 'Premium Whole Leaf Green Tea, Pure Garden Mint Leaves',
     glowColor: 'rgba(46,139,87,0.5)',
-    image: 'public/products/tea-mint.jpg'
+    image: '/products/tea-mint.jpg'
   },
   {
     id: 'tea-lemon',
@@ -537,7 +537,7 @@ const GOURSHAL_PRODUCTS = [
     benefits: ['Zesty lemon flavour with natural aroma', 'Sourced from finest organic tea gardens', 'Rich in natural Vitamin C & bioflavonoids', 'Promotes active daily detoxification'],
     ingredients: 'Premium Whole Leaf Green Tea, Natural Dried Lemon Peels & Zest',
     glowColor: 'rgba(220,180,20,0.5)',
-    image: 'public/products/tea-lemon.jpg'
+    image: '/products/tea-lemon.jpg'
   },
 
   // ── OFFICIAL GOURSHAL PREMIUM SPICES (ALL 5 POUCHES) ──
@@ -558,7 +558,7 @@ const GOURSHAL_PRODUCTS = [
     benefits: ['Rich aroma & perfect blend of whole spices', 'Sun-dried for natural goodness', 'Fine ground for better flavour', '100% pure, natural and hygienically packed'],
     ingredients: 'Handpicked Royal Spices (Cardamom, Cinnamon, Cloves, Star Anise, Black Pepper, Nutmeg)',
     glowColor: 'rgba(180,80,20,0.6)',
-    image: 'public/products/garam-masala.jpg'
+    image: '/products/garam-masala.jpg'
   },
   {
     id: 'masala-turmeric',
@@ -577,7 +577,7 @@ const GOURSHAL_PRODUCTS = [
     benefits: ['Rich in Curcumin naturally', 'Handpicked finest whole turmeric roots', 'Sun-dried for purity & natural color', 'Hygienically packed for maximum freshness'],
     ingredients: '100% Pure Handpicked Turmeric Rhizomes',
     glowColor: 'rgba(230,130,20,0.6)',
-    image: 'public/products/turmeric-powder.jpg'
+    image: '/products/turmeric-powder.jpg'
   },
   {
     id: 'masala-coriander',
@@ -596,7 +596,7 @@ const GOURSHAL_PRODUCTS = [
     benefits: ['Handpicked premium coriander seeds', 'Sun-dried for natural goodness', 'Fine ground for better flavour & smooth gravy', 'Zero added color or preservatives'],
     ingredients: '100% Handpicked Pure Coriander Seeds',
     glowColor: 'rgba(80,140,50,0.6)',
-    image: 'public/products/coriander-powder.jpg'
+    image: '/products/coriander-powder.jpg'
   },
   {
     id: 'masala-kitchen-king',
@@ -615,7 +615,7 @@ const GOURSHAL_PRODUCTS = [
     benefits: ['Rich aroma & perfect blend for everyday cooking', 'Sun-dried for natural goodness', 'Authentic traditional taste', 'Hygienically packed in multi-barrier pouch'],
     ingredients: 'Master Blend of 20+ Handpicked Spices & Herbs',
     glowColor: 'rgba(160,90,30,0.6)',
-    image: 'public/products/kitchen-king.jpg'
+    image: '/products/kitchen-king.jpg'
   },
   {
     id: 'masala-red-chilli',
@@ -634,7 +634,7 @@ const GOURSHAL_PRODUCTS = [
     benefits: ['Rich natural color & appetizing heat', 'Handpicked quality red chillies', 'Sun-dried for natural color preservation', 'Zero artificial colors (Sudan red free)'],
     ingredients: '100% Pure Stemless Red Chillies',
     glowColor: 'rgba(200,40,20,0.6)',
-    image: 'public/products/red-chilli.jpg'
+    image: '/products/red-chilli.jpg'
   },
 
   // ── Honey ──
@@ -655,7 +655,7 @@ const GOURSHAL_PRODUCTS = [
     benefits: ['Rich in live enzymes (diastase & invertase)', 'Natural soothe for throat infections & cough', 'Sustained healthy prebiotic energy', '100% raw and unfiltered'],
     ingredients: '100% Pure Raw Multi-Floral Wild Forest Honey',
     glowColor: 'rgba(200,140,40,0.6)',
-    image: 'public/honey.jpg'
+    image: '/honey.jpg'
   }
 ];
 
@@ -672,14 +672,18 @@ async function initProducts() {
     if (data.ok && data.products && data.products.length > 0) {
       window.GOURSHAL_PRODUCTS = data.products;
       if (window.Cart) Cart.updateUI();
-      window.dispatchEvent(new Event('productsLoaded'));
+      if (typeof window.dispatchEvent === 'function') {
+        window.dispatchEvent(new Event('productsLoaded'));
+      }
       return;
     }
   } catch (e) {
     // Backend unavailable, fallback to local
   }
   if (window.Cart) Cart.updateUI();
-  window.dispatchEvent(new Event('productsLoaded'));
+  if (typeof window.dispatchEvent === 'function') {
+    window.dispatchEvent(new Event('productsLoaded'));
+  }
 }
 
 initProducts();
