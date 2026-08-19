@@ -1,0 +1,27 @@
+{
+  "name": "Gourshal — Premium Natural Wellness",
+  "short_name": "Gourshal",
+  "description": "Premium A2 Bilona Ghee, Bulletproof Coffee, Himalayan Green Tea & Raw Forest Honey. 100% natural, traditionally crafted wellness products.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0A0A0C",
+  "theme_color": "#C9A84C",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/gourshal-logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/gourshal-logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["shopping", "food", "lifestyle"],
+  "lang": "en-IN",
+  "dir": "ltr"
+}

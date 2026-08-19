@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Story & Brand Documentary — GOURSHAL</title>
+  <meta name="description" content="Discover the story of Gourshal — Crafting pure Vedic Bilona Ghee, Cold-Pressed Mustard Oil, High Altitude Teas, and Sun-Dried Spices.">
+  <meta property="og:title" content="Our Story & Vedic Heritage — GOURSHAL">
+  <meta property="og:image" content="public/neww-logo.jpeg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/home.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;400;500;600;700;1,400;600&family=Montserrat:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      background: var(--warm-ivory);
+      color: var(--deep-ink);
+      overflow-x: hidden;
+    }
+
+    /* Hero Video Banner */
+    .about-hero-section {
+      padding: 140px 48px 80px 48px;
+      background: radial-gradient(circle at 50% 30%, #172B20 0%, #0B1610 100%);
+      color: #FFFFFF;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .about-hero-header {
+      max-width: 860px;
+      margin: 0 auto 50px auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .about-hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(216, 175, 93, 0.35);
+      padding: 6px 18px;
+      border-radius: 30px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      color: var(--gold-vibrant);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .about-hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(38px, 5.5vw, 64px);
+      font-weight: 600;
+      line-height: 1.12;
+      color: #FFFFFF;
+      margin-bottom: 20px;
+    }
+
+    .about-hero-lead {
+      font-size: 16px;
+      color: #D6CFBE;
+      line-height: 1.8;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* Video Frame in About Page */
+    .about-video-frame {
+      position: relative;
+      max-width: 1100px;
+      height: 520px;
+      margin: 0 auto;
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1.5px solid rgba(216, 175, 93, 0.35);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+      background: #000000;
+      z-index: 2;
+    }
+
+    .about-video-frame video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.7;
+    }
+
+    /* Pillars of Philosophy */
+    .ethos-section {
+      padding: 100px 48px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .ethos-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 40px;
+    }
+
+    .ethos-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(197, 154, 70, 0.2);
+      border-radius: 20px;
+      padding: 40px 32px;
+      box-shadow: 0 10px 30px rgba(44, 31, 14, 0.05);
+      transition: all 0.35s ease;
+      text-align: center;
+    }
+
+    .ethos-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 45px rgba(27, 56, 43, 0.12);
+      border-color: var(--gold-vibrant);
+    }
+
+    .ethos-icon {
+      font-size: 38px;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+
+    .ethos-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--forest-green);
+      margin-bottom: 12px;
+    }
+
+    .ethos-text {
+      font-size: 13px;
+      color: var(--muted-ink);
+      line-height: 1.8;
+    }
+
+    /* Timeline Modern */
+    .about-timeline-section {
+      padding: 90px 48px;
+      background: #F4EFE6;
+      border-top: 1px solid rgba(197, 154, 70, 0.15);
+      border-bottom: 1px solid rgba(197, 154, 70, 0.15);
+    }
+
+    .about-timeline-wrap {
+      max-width: 1000px;
+      margin: 40px auto 0 auto;
+      position: relative;
+    }
+
+    .about-timeline-wrap::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 2px;
+      background: rgba(197, 154, 70, 0.3);
+      transform: translateX(-50%);
+    }
+
+    .about-t-node {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 50px;
+      position: relative;
+    }
+
+    .about-t-node:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+
+    .about-t-dot {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--forest-green);
+      border: 4px solid var(--gold-vibrant);
+      box-shadow: 0 0 15px rgba(216, 175, 93, 0.5);
+      z-index: 2;
+    }
+
+    .about-t-card {
+      width: 44%;
+      background: #FFFFFF;
+      border: 1px solid rgba(197, 154, 70, 0.2);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 8px 24px rgba(44, 31, 14, 0.06);
+    }
+
+    .about-t-year {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: var(--forest-green);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .about-t-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--deep-ink);
+      margin-bottom: 10px;
+    }
+
+    .about-t-desc {
+      font-size: 13px;
+      color: var(--muted-ink);
+      line-height: 1.7;
+    }
+
+    @media (max-width: 768px) {
+      .about-video-frame {
+        height: 380px;
+      }
+      .ethos-grid {
+        grid-template-columns: 1fr;
+      }
+      .about-timeline-wrap::before {
+        left: 20px;
+      }
+      .about-t-node, .about-t-node:nth-child(even) {
+        flex-direction: column;
+        align-items: flex-start;
+        padding-left: 50px;
+      }
+      .about-t-dot {
+        left: 20px;
+      }
+      .about-t-card {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header / Navigation Bar -->
+  <nav id="navbar" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">
+      <img src="public/neww-logo.jpeg" alt="Gourshal Logo" class="nav-logo-img">
+      <div class="nav-logo-text-wrap">
+        <div class="nav-logo-text">GOURSHAL</div>
+        <span class="nav-logo-tagline">CRAFTED TO LAST</span>
+      </div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html" class="active">Our Story</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="cart.html" class="nav-cart-link">Cart (<span id="navCartCount">0</span>)</a></li>
+      <li id="authNavItem"><a href="login.html" class="nav-cta">Sign In</a></li>
+    </ul>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Toggle Navigation Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <main id="main-content">
+    <!-- Hero Video Section -->
+    <section class="about-hero-section">
+      <div class="about-hero-header">
+        <span class="about-hero-eyebrow">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          Brand Film & Documentary
+        </span>
+        <h1 class="about-hero-title">Preserving Ancient Vedic Purity For The Modern Family</h1>
+        <p class="about-hero-lead">What started as a personal search for unadulterated food has blossomed into India's premier artisanal wellness house. Watch our brand film to see the craftsmanship behind every jar and pouch.</p>
+      </div>
+
+      <!-- Cinematic Video Player -->
+      <div class="about-video-frame">
+        <video autoplay muted loop playsinline poster="public/ghee.jpg">
+          <source src="public/videos/farm-nature.webm" type="video/webm">
+        </video>
+        <div class="story-film-overlay">
+          <div class="story-film-top">
+            <span class="story-film-tag">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              FULL BRAND FILM
+            </span>
+            <span class="story-film-badge">AUTHENTIC VEDIC HERITAGE</span>
+          </div>
+
+          <div class="story-film-center">
+            <button class="play-film-btn" onclick="openStoryVideo('public/videos/farm-nature.webm', 'GOURSHAL Brand Documentary — The Heritage Journey', 'Brand Film')" aria-label="Play Brand Film">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+            </button>
+            <span class="play-film-label">Watch Full Story With Audio</span>
+          </div>
+
+          <div class="story-film-bottom">
+            <div class="story-film-info">
+              <h3 style="font-size: 28px;">Zero Shortcuts. Zero Chemicals. 100% Truth.</h3>
+              <p>Hand-churned A2 Bilona Ghee, traditional cold-pressed oils, Himalayan whole-leaf teas, and stone-ground spices.</p>
+            </div>
+            <div class="story-stats-pills">
+              <div class="story-stat-item">
+                <div class="story-stat-number">10+</div>
+                <div class="story-stat-label">Years of Craft</div>
+              </div>
+              <div class="story-stat-item">
+                <div class="story-stat-number">100%</div>
+                <div class="story-stat-label">Vedic Purity</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 Video Chapter Reels Section -->
+    <section style="padding: 90px 48px; background: #0D1912; color: #FFFFFF;">
+      <div class="story-container">
+        <div class="story-chapters-header">
+          <span class="section-tag" style="color: var(--gold-vibrant);">Behind The Craft</span>
+          <h2 class="story-chapters-title" style="font-size: 40px;">Explore Our 4 Craft Reels</h2>
+          <p class="story-chapters-sub">Click on any video below to watch our artisans in action.</p>
+        </div>
+
+        <div class="story-reels-grid">
+          <!-- Reel 1 -->
+          <div class="story-reel-card" onclick="openStoryVideo('public/videos/cows-pasture.webm', 'Sacred Gir Cows & Vedic Bilona Churning', 'Chapter 01')">
+            <div class="story-reel-video-wrap">
+              <video autoplay muted loop playsinline poster="public/ghee.jpg">
+                <source src="public/videos/cows-pasture.webm" type="video/webm">
+              </video>
+              <span class="story-reel-badge">01 • DAIRY</span>
+              <div class="story-reel-play-icon">
+                <div class="story-reel-play-circle">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="story-reel-body">
+              <span class="story-reel-chapter">Chapter 01</span>
+              <h4 class="story-reel-title">Gir Cow Gaushala & Bilona</h4>
+              <p class="story-reel-desc">Ethical open grazing of native Gir cows, culturing curd and bidirectional wooden churning at dawn.</p>
+              <span class="story-reel-link">Play Video Reel →</span>
+            </div>
+          </div>
+
+          <!-- Reel 2 -->
+          <div class="story-reel-card" onclick="openStoryVideo('public/videos/farm-nature.webm', 'Cold-Pressed Mustard Oil in Kolhu', 'Chapter 02')">
+            <div class="story-reel-video-wrap">
+              <video autoplay muted loop playsinline poster="public/products/mustard-oil.jpg">
+                <source src="public/videos/farm-nature.webm" type="video/webm">
+              </video>
+              <span class="story-reel-badge">02 • OILS</span>
+              <div class="story-reel-play-icon">
+                <div class="story-reel-play-circle">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="story-reel-body">
+              <span class="story-reel-chapter">Chapter 02</span>
+              <h4 class="story-reel-title">Cold-Pressed Mustard Oil</h4>
+              <p class="story-reel-desc">Crushing first-grade mustard seeds at slow RPM under 35°C to preserve volatile pungency and Vitamin E.</p>
+              <span class="story-reel-link">Play Video Reel →</span>
+            </div>
+          </div>
+
+          <!-- Reel 3 -->
+          <div class="story-reel-card" onclick="openStoryVideo('public/videos/tea-craft.webm', 'High-Altitude Himalayan Whole Leaf Tea Harvest', 'Chapter 03')">
+            <div class="story-reel-video-wrap">
+              <video autoplay muted loop playsinline poster="public/products/tea-tulsi.jpg">
+                <source src="public/videos/tea-craft.webm" type="video/webm">
+              </video>
+              <span class="story-reel-badge">03 • TEAS</span>
+              <div class="story-reel-play-icon">
+                <div class="story-reel-play-circle">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="story-reel-body">
+              <span class="story-reel-chapter">Chapter 03</span>
+              <h4 class="story-reel-title">Himalayan Tea Gardens</h4>
+              <p class="story-reel-desc">Hand-plucking tender whole green tea leaves at 2,000m altitude in misty valleys rich in natural EGCG.</p>
+              <span class="story-reel-link">Play Video Reel →</span>
+            </div>
+          </div>
+
+          <!-- Reel 4 -->
+          <div class="story-reel-card" onclick="openStoryVideo('public/videos/nature-bloom.mp4', 'Sun-Dried Spices & Pure Ayurvedic Botanicals', 'Chapter 04')">
+            <div class="story-reel-video-wrap">
+              <video autoplay muted loop playsinline poster="public/products/garam-masala.jpg">
+                <source src="public/videos/nature-bloom.mp4" type="video/mp4">
+              </video>
+              <span class="story-reel-badge">04 • BOTANICALS</span>
+              <div class="story-reel-play-icon">
+                <div class="story-reel-play-circle">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="story-reel-body">
+              <span class="story-reel-chapter">Chapter 04</span>
+              <h4 class="story-reel-title">Stone Ground Spices</h4>
+              <p class="story-reel-desc">Sun-drying native Lakadong turmeric and pure spices before slow stone grinding to retain essential aromatic oils.</p>
+              <span class="story-reel-link">Play Video Reel →</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ethos & Pillars -->
+    <section class="ethos-section">
+      <div class="section-header-centered">
+        <span class="section-tag">Our Ethical Standards</span>
+        <h2 class="section-heading">How Gourshal Stands Apart</h2>
+        <p class="section-lead">In a world obsessed with industrial speed and high yields, we honor patience, natural seasons, and hand craftsmanship.</p>
+      </div>
+
+      <div class="ethos-grid">
+        <div class="ethos-card">
+          <div class="ethos-icon">🌱</div>
+          <h3 class="ethos-title">Ethical Direct Sourcing</h3>
+          <p class="ethos-text">We partner directly with traditional gaushalas, mountain tea estates, and tribal honey foragers, paying fair above-market compensation.</p>
+        </div>
+
+        <div class="ethos-card">
+          <div class="ethos-icon">🪵</div>
+          <h3 class="ethos-title">Zero Machine Refining</h3>
+          <p class="ethos-text">No chemical solvents, synthetic bleaching, or micro-filtering. We extract our products using slow wooden churns and low flames.</p>
+        </div>
+
+        <div class="ethos-card">
+          <div class="ethos-icon">🔬</div>
+          <h3 class="ethos-title">100% NABL Lab Certified</h3>
+          <p class="ethos-text">Every single batch is tested for zero adulteration, pesticides, or heavy metals. Complete transparency in every single jar.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Craft & Heritage Pillars -->
+    <section class="about-timeline-section">
+      <div class="section-header-centered">
+        <span class="section-tag">Our Craft & Heritage</span>
+        <h2 class="section-heading">The Pillars of Vedic Purity</h2>
+        <p class="section-lead">Rooted in ancient Indian wisdom, crafted with uncompromised food integrity.</p>
+      </div>
+
+      <div class="about-timeline-wrap">
+        <div class="about-t-node">
+          <div class="about-t-dot"></div>
+          <div class="about-t-card">
+            <div class="about-t-year">Pillar 01 • Sacred Gaushala</div>
+            <h4 class="about-t-title">A2 Gir Cow Vedic Bilona Ghee</h4>
+            <p class="about-t-desc">Hand-churned from free-grazing, grass-fed indigenous Gir Cows using traditional curd culturing and slow simmering.</p>
+          </div>
+        </div>
+
+        <div class="about-t-node">
+          <div class="about-t-dot"></div>
+          <div class="about-t-card">
+            <div class="about-t-year">Pillar 02 • Slow Cold Extraction</div>
+            <h4 class="about-t-title">Cold-Pressed Traditional Oils</h4>
+            <p class="about-t-desc">Slowly extracted below 35°C without chemical refining to retain natural antioxidants, Vitamin E, and authentic pungency.</p>
+          </div>
+        </div>
+
+        <div class="about-t-node">
+          <div class="about-t-dot"></div>
+          <div class="about-t-card">
+            <div class="about-t-year">Pillar 03 • High Altitude & Wild Forests</div>
+            <h4 class="about-t-title">Himalayan Whole-Leaf Teas & Raw Honey</h4>
+            <p class="about-t-desc">Hand-plucked from pristine 2,000m high-altitude tea gardens and unheated raw forest honey straight from wild hives.</p>
+          </div>
+        </div>
+
+        <div class="about-t-node">
+          <div class="about-t-dot"></div>
+          <div class="about-t-card">
+            <div class="about-t-year">Pillar 04 • Radical Transparency</div>
+            <h4 class="about-t-title">NABL Lab Certified Food Purity</h4>
+            <p class="about-t-desc">Every batch is independently tested by accredited food analysis laboratories to guarantee zero adulteration.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom CTA Banner -->
+    <section style="padding: 80px 48px; background: var(--forest-green); color: #FFFFFF; text-align: center;">
+      <div style="max-width: 700px; margin: 0 auto;">
+        <span class="section-tag" style="color: var(--gold-vibrant);">Taste The Difference</span>
+        <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 42px; margin: 16px 0; color: #FFFFFF;">Experience Genuine Purity Today</h2>
+        <p style="color: #D6CFBE; margin-bottom: 30px; font-size: 15px;">Explore our handcrafted selection of pure Ghee, Cold-Pressed Oils, Artisan Coffee, Green Teas, and Vedic Spices.</p>
+        <a href="shop.html" class="btn-hero-primary" style="display: inline-block;">Shop All Pure Creations →</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Interactive Video Modal Player -->
+  <div class="video-modal" id="storyVideoModal" role="dialog" aria-modal="true" aria-labelledby="modalVideoTitle">
+    <div class="video-modal-dialog">
+      <div class="video-modal-header">
+        <div class="video-modal-title-wrap">
+          <span class="video-modal-tag" id="modalVideoTag">Brand Film</span>
+          <div class="video-modal-title" id="modalVideoTitle">GOURSHAL Brand Documentary</div>
+        </div>
+        <button class="video-modal-close" onclick="closeStoryVideo()" aria-label="Close Video Player">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="video-modal-player-wrap">
+        <video id="modalVideoElement" controls autoplay playsinline style="width:100%; height:100%; object-fit:contain;">
+          <source id="modalVideoSource" src="public/videos/farm-nature.webm" type="video/webm">
+          Your browser does not support HTML5 video.
+        </video>
+      </div>
+      <div class="video-modal-footer">
+        <div class="video-modal-chapters">
+          <button class="video-chapter-btn active" onclick="switchModalChapter('public/videos/farm-nature.webm', 'GOURSHAL Brand Documentary — The Heritage Journey', 'Brand Film', this)">00 • Brand Film</button>
+          <button class="video-chapter-btn" onclick="switchModalChapter('public/videos/cows-pasture.webm', 'Sacred Gir Cows & Vedic Bilona Churning', 'Chapter 01', this)">01 • Gaushala & Ghee</button>
+          <button class="video-chapter-btn" onclick="switchModalChapter('public/videos/farm-nature.webm', 'Cold-Pressed Mustard Oil', 'Chapter 02', this)">02 • Mustard Oil</button>
+          <button class="video-chapter-btn" onclick="switchModalChapter('public/videos/tea-craft.webm', 'High-Altitude Himalayan Whole Leaf Tea Harvest', 'Chapter 03', this)">03 • Green Tea</button>
+          <button class="video-chapter-btn" onclick="switchModalChapter('public/videos/nature-bloom.mp4', 'Sun-Dried Spices & Pure Ayurvedic Botanicals', 'Chapter 04', this)">04 • Botanicals</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-brand-name">GOURSHAL</div>
+        <div class="footer-brand-tag">CRAFTED TO LAST</div>
+        <p class="footer-desc">Preserving sacred Indian Vedic traditions through chemical-free A2 Bilona Ghee, Cold-Pressed Mustard Oil, Artisanal Ghee Coffee, Himalayan Green Teas, High-Curcumin Spices, and Raw Wild Honey.</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="Instagram" class="social-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 0112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" aria-label="Facebook" class="social-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+          </a>
+          <a href="https://wa.me/917505906564" aria-label="WhatsApp" class="social-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title">Our Products</div>
+        <ul class="footer-links">
+          <li><a href="shop.html?category=ghee">A2 Vedic Bilona Ghee</a></li>
+          <li><a href="shop.html?category=oils">Wood-Pressed Mustard Oil</a></li>
+          <li><a href="shop.html?category=coffee">Bulletproof Ghee Coffee</a></li>
+          <li><a href="shop.html?category=tea">Himalayan Green Tea</a></li>
+          <li><a href="shop.html?category=spices">Lakadong Turmeric & Spices</a></li>
+          <li><a href="shop.html?category=honey">Raw Wild Forest Honey</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title">Vedic Craft</div>
+        <ul class="footer-links">
+          <li><a href="index.html#vedic-craft">The 5 Sacred Pillars</a></li>
+          <li><a href="index.html#purity-verifier">Certified Lab Reports</a></li>
+          <li><a href="index.html#rituals">Ayurvedic Recipes</a></li>
+          <li><a href="about.html">Our Farm Story</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title">Patron Support</div>
+        <ul class="footer-links">
+          <li><a href="orders.html">Track Order</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="shop.html">Shop All Products</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Gourshal Wellness Pvt Ltd. All rights reserved. FSSAI Certified.</div>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Vedic Craft</a>
+        <a href="#">Lab Certifications</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="scripts/config.js"></script>
+  <script src="scripts/utils.js"></script>
+  <script src="scripts/products.js"></script>
+  <script src="scripts/cart.js"></script>
+  <script src="scripts/home.js"></script>
+</body>
+</html>

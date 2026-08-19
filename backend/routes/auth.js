@@ -1,0 +1,138 @@
+const express = require('express');
+const router = express.Router();
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+const { sanitize, validate } = require('../middleware/validate');
+const { asyncHandler } = require('../middleware/errorHandler');
+
+const authFields = [
+  { name: 'name', required: true, min: 2, max: 50, message: 'Name must be 2-50 characters.' },
+  { name: 'email', required: true, message: 'Email is required.' },
+  { name: 'password', required: true, min: 8, message: 'Password must be at least 8 characters.' },
+  { name: 'phone', required: false, message: 'Invalid phone number.' }
+];
+
+const loginFields = [
+  { name: 'email', required: true, message: 'Email is required.' },
+  { name: 'password', required: true, message: 'Password is required.' }
+];
+
+// First admin email configurable via env, default preserved for backward compatibility
+const FIRST_ADMIN_EMAIL = process.env.FIRST_ADMIN_EMAIL || 'admin@gourshal.com';
+
+// @route   POST /api/auth/register
+router.post('/register', sanitize, validate(authFields), asyncHandler(async (req, res) => {
+  const { name, email, password, phone } = req.body;
+  
+  let user = await User.findOne({ email });
+  if (user) {
+    return res.status(400).json({ ok: false, error: 'An account with this email already exists.' });
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  const role = email.toLowerCase() === FIRST_ADMIN_EMAIL.toLowerCase() ? 'admin' : 'user';
+
+  user = new User({
+    name, email, password: hashedPassword, phone, role
+  });
+  await user.save();
+
+  const payload = { userId: user.id, role: user.role };
+  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+  res.json({
+    ok: true,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      token
+    }
+  });
+}));
+
+// @route   POST /api/auth/login
+router.post('/login', sanitize, validate(loginFields), asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+  
+  let user = await User.findOne({ email });
+  if (!user) {
+    return res.status(400).json({ ok: false, error: 'No account found with this email.' });
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    return res.status(400).json({ ok: false, error: 'Incorrect password. Please try again.' });
+  }
+
+  const payload = { userId: user.id, role: user.role };
+  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+  res.json({
+    ok: true,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      token
+    }
+  });
+}));
+
+// @route   POST /api/auth/forgot-password
+router.post('/forgot-password', sanitize, asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ ok: false, error: 'Email is required.' });
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(400).json({ ok: false, error: 'No account found with this email.' });
+  }
+
+  // Generate a random 6-character token for demo purposes
+  const token = Math.random().toString(36).substring(2, 8).toUpperCase();
+  
+  user.resetPasswordToken = token;
+  user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+  await user.save();
+
+  // In production, send this token via email using Nodemailer/SendGrid.
+  // For security, do NOT return the token in the API response.
+  res.json({ ok: true, message: 'If an account exists for this email, a password reset link has been sent.' });
+}));
+
+// @route   POST /api/auth/reset-password
+router.post('/reset-password', sanitize, asyncHandler(async (req, res) => {
+  const { token, newPassword } = req.body;
+  if (!token || !newPassword) {
+    return res.status(400).json({ ok: false, error: 'Token and new password are required.' });
+  }
+  if (newPassword.length < 8) {
+    return res.status(400).json({ ok: false, error: 'Password must be at least 8 characters.' });
+  }
+
+  const user = await User.findOne({
+    resetPasswordToken: token,
+    resetPasswordExpires: { $gt: Date.now() }
+  });
+
+  if (!user) {
+    return res.status(400).json({ ok: false, error: 'Password reset token is invalid or has expired.' });
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(newPassword, salt);
+  
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpires = undefined;
+  await user.save();
+
+  res.json({ ok: true, message: 'Password has been updated.' });
+}));
+
+module.exports = router;

@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — GOURSHAL</title>
+  <meta name="description" content="Secure checkout for your Gourshal order. Pay via cards, UPI, or Cash on Delivery.">
+  <meta property="og:title" content="Checkout — GOURSHAL">
+  <meta property="og:image" content="public/neww-logo.jpeg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <link rel="stylesheet" href="styles/main.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300,400&family=Montserrat:wght@200;300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    canvas#particles-canvas {
+      opacity: .1;
+    }
+
+    .checkout-layout {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 48px;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 60px;
+    }
+
+    .checkout-form-section h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 300;
+      margin-bottom: 32px;
+    }
+
+    .step-indicator {
+      display: flex;
+      align-items: center;
+      margin-bottom: 48px;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid rgba(201, 168, 76, .3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .step.active .step-num {
+      background: var(--gold);
+      color: var(--black);
+      border-color: var(--gold);
+    }
+
+    .step.done .step-num {
+      background: rgba(76, 175, 80, .2);
+      border-color: #81c784;
+      color: #81c784;
+    }
+
+    .step-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(201, 168, 76, .15);
+      margin: 0 16px;
+    }
+
+    .step-label {
+      color: #7A6A56;
+      font-weight: 600;
+    }
+
+    .step.active .step-label {
+      color: #2C1F0E;
+      font-weight: 700;
+    }
+
+    .checkout-step {
+      display: none;
+    }
+
+    .checkout-step.active {
+      display: block;
+    }
+
+    /* Order Review Table */
+    .review-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(201, 168, 76, .08);
+    }
+
+    .review-item-thumb {
+      width: 56px;
+      height: 56px;
+      background: #ffffff;
+      border: 1px solid rgba(201, 168, 76, .2);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .review-item-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 4px;
+    }
+
+    .review-item-name {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 600;
+      color: #2C1F0E;
+    }
+
+    .review-item-qty {
+      font-size: 12px;
+      color: #7A6A56;
+      margin-top: 3px;
+    }
+
+    .review-item-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #2C1F0E;
+    }
+
+    /* Payment Methods */
+    .payment-methods {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .payment-method {
+      border: 1px solid rgba(201, 168, 76, .15);
+      padding: 16px;
+      cursor: pointer;
+      transition: all .3s;
+      text-align: center;
+    }
+
+    .payment-method:hover,
+    .payment-method.selected {
+      border-color: var(--gold);
+      background: rgba(201, 168, 76, .06);
+    }
+
+    .payment-method-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .payment-method-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .payment-method.selected .payment-method-label {
+      color: var(--gold);
+    }
+
+    /* Razorpay mock */
+    .razorpay-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #072654, #3a86ff);
+      color: #fff;
+      border: none;
+      padding: 18px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all .4s;
+    }
+
+    .razorpay-btn:hover {
+      box-shadow: 0 8px 40px rgba(58, 134, 255, .4);
+      transform: translateY(-2px);
+    }
+
+    .error-overlay {
+      background: var(--black);
+      border: 1px solid var(--error);
+      padding: 20px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .error-overlay.show {
+      display: block;
+    }
+
+    /* Order Summary Side */
+    .checkout-summary {
+      background: #F4EEDF;
+      border: 1px solid rgba(184, 137, 42, .25);
+      border-radius: 12px;
+      padding: 32px;
+      position: sticky;
+      top: 100px;
+      height: fit-content;
+      box-shadow: 0 4px 20px rgba(44, 31, 14, .05);
+    }
+
+    .cs-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: #2C1F0E;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(184, 137, 42, .2);
+    }
+
+    .cs-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .cs-row .l {
+      color: #5C4A33;
+      font-weight: 500;
+    }
+
+    .cs-row span:last-child {
+      color: #2C1F0E;
+      font-weight: 600;
+    }
+
+    .cs-row.tot {
+      border-top: 1px solid rgba(184, 137, 42, .2);
+      padding-top: 16px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+
+    .cs-row.tot .l {
+      color: #2C1F0E;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .cs-row.tot .v {
+      color: #1A3828;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px;
+      font-weight: 700;
+    }
+
+    /* Success */
+    .success-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--black);
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 40px;
+      display: none;
+    }
+
+    .success-icon {
+      font-size: 72px;
+      margin-bottom: 28px;
+      animation: bounceIn .6s ease;
+    }
+
+    .success-overlay h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 300;
+      margin-bottom: 16px;
+    }
+
+    .success-overlay p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 2;
+      margin-bottom: 8px;
+    }
+
+    .confetti {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .error-overlay {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(239, 68, 68, .95);
+      color: #fff;
+      padding: 16px 32px;
+      z-index: 1000;
+      font-size: 13px;
+      letter-spacing: 1px;
+      display: none;
+      box-shadow: 0 10px 40px rgba(239, 68, 68, .3);
+      max-width: 90%;
+      text-align: center;
+    }
+
+    .error-overlay.show {
+      display: block;
+      animation: bounceIn .4s ease;
+    }
+
+    @keyframes bounceIn {
+      0% {
+        transform: scale(.3);
+        opacity: 0;
+      }
+
+      60% {
+        transform: scale(1.1);
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @media(max-width:900px) {
+      .checkout-layout {
+        grid-template-columns: 1fr;
+        padding: 24px;
+      }
+
+      .checkout-summary {
+        position: static;
+      }
+
+      .payment-methods {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media(max-width:600px) {
+      .checkout-layout {
+        padding: 16px;
+      }
+
+      /* Full-width buttons on mobile */
+      .btn-primary,
+      .btn-secondary {
+        width: 100%;
+        text-align: center;
+        display: block;
+      }
+
+      /* Stack back/continue buttons vertically */
+      .checkout-step > div[style*="display:flex"] {
+        flex-direction: column;
+      }
+
+      /* Stack form-row fields on small screens */
+      .form-row {
+        grid-template-columns: 1fr !important;
+      }
+
+      /* Payment methods single column on phones */
+      .payment-methods {
+        grid-template-columns: 1fr;
+      }
+
+      .page-header {
+        padding: 80px 16px 24px;
+      }
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--gold);
+      color: var(--black);
+      padding: 8px 16px;
+      z-index: 1000;
+      transition: top .3s;
+    }
+
+    .skip-link:focus {
+      top: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <canvas id="particles-canvas" aria-hidden="true"></canvas>
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+  <nav id="navbar" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">
+      <img src="public/neww-logo.jpeg" alt="Gourshal" class="nav-logo-img">
+      <div class="nav-logo-text-wrap">
+        <div class="nav-logo-text">GOURSHAL</div><span class="nav-logo-tagline">CRAFTED TO LAST</span>
+      </div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">Our Story</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="cart.html" class="nav-cart-link">Cart (<span id="navCartCount">0</span>)</a></li>
+      <li id="authNavItem"><a href="login.html" class="nav-cta">Sign In</a></li>
+    </ul>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+
+  <div class="page-header">
+    <div class="section-label">Final Step</div>
+    <h1 class="section-title">Secure Checkout</h1>
+  </div>
+
+  <main id="main-content">
+    <div class="checkout-layout">
+      <div class="checkout-form-section">
+        <!-- Error Overlay -->
+        <div class="error-overlay" id="paymentError" role="alert" aria-live="polite"></div>
+
+        <!-- Step Indicator -->
+        <div class="step-indicator" role="list">
+          <div class="step active" id="step1-ind" role="listitem">
+            <div class="step-num">1</div>
+            <div class="step-label">Address</div>
+          </div>
+          <div class="step-line" aria-hidden="true"></div>
+          <div class="step" id="step2-ind" role="listitem">
+            <div class="step-num">2</div>
+            <div class="step-label">Review</div>
+          </div>
+          <div class="step-line" aria-hidden="true"></div>
+          <div class="step" id="step3-ind" role="listitem">
+            <div class="step-num">3</div>
+            <div class="step-label">Payment</div>
+          </div>
+        </div>
+
+        <!-- Step 1: Address -->
+        <div class="checkout-step active" id="step1" role="form" aria-label="Delivery Address">
+          <h2>Delivery Address</h2>
+          <div class="form-row">
+            <div class="form-group"><label for="firstName">First Name *</label><input type="text" id="firstName"
+                placeholder="Ravi" required aria-required="true"></div>
+            <div class="form-group"><label for="lastName">Last Name *</label><input type="text" id="lastName"
+                placeholder="Sharma" required aria-required="true"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label for="email">Email *</label><input type="email" id="email"
+                placeholder="ravi@email.com" required aria-required="true"></div>
+            <div class="form-group"><label for="phone">Phone *</label><input type="tel" id="phone"
+                placeholder="+91 98765 43210" required aria-required="true"></div>
+          </div>
+          <div class="form-group"><label for="addr1">Address Line 1 *</label><input type="text" id="addr1"
+              placeholder="House / Flat no., Street" required aria-required="true"></div>
+          <div class="form-group"><label for="addr2">Address Line 2</label><input type="text" id="addr2"
+              placeholder="Area, Landmark (optional)"></div>
+          <div class="form-row">
+            <div class="form-group"><label for="city">City *</label><input type="text" id="city" placeholder="New Delhi"
+                required aria-required="true"></div>
+            <div class="form-group"><label for="state">State *</label><input type="text" id="state" placeholder="Delhi"
+                required aria-required="true"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label for="pin">PIN Code *</label><input type="text" id="pin" placeholder="110001"
+                required maxlength="6" aria-required="true"></div>
+            <div class="form-group"><label for="country">Country</label><input type="text" id="country" value="India"
+                readonly></div>
+          </div>
+          <button class="btn-primary" style="margin-top:8px;" onclick="goToStep2()"
+            aria-label="Continue to review order">Continue to Review →</button>
+        </div>
+
+        <!-- Step 2: Order Review -->
+        <div class="checkout-step" id="step2" aria-label="Order Review">
+          <h2>Review Your Order</h2>
+          <div id="reviewItems"></div>
+          <div style="display:flex;gap:12px;margin-top:28px;">
+            <button class="btn-secondary" onclick="goToStep(1)">← Back</button>
+            <button class="btn-primary" onclick="goToStep(3)">Continue to Payment →</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Payment -->
+        <div class="checkout-step" id="step3" aria-label="Payment Method">
+          <h2>Payment Method</h2>
+          <div class="payment-methods" role="radiogroup" aria-label="Select payment method">
+            <div class="payment-method selected" id="pm-razorpay" onclick="selectPayment('razorpay')" role="radio"
+              aria-checked="true" tabindex="0">
+              <div class="payment-method-icon" aria-hidden="true">💳</div>
+              <div class="payment-method-label">Cards / UPI / Net Banking</div>
+            </div>
+            <div class="payment-method" id="pm-cod" onclick="selectPayment('cod')" role="radio" aria-checked="false"
+              tabindex="0">
+              <div class="payment-method-icon" aria-hidden="true">💵</div>
+              <div class="payment-method-label">Cash on Delivery</div>
+            </div>
+            <div class="payment-method" id="pm-upi" onclick="selectPayment('upi')" role="radio" aria-checked="false"
+              tabindex="0">
+              <div class="payment-method-icon" aria-hidden="true">📱</div>
+              <div class="payment-method-label">UPI / PhonePe / GPay</div>
+            </div>
+            <div class="payment-method" id="pm-emi" onclick="selectPayment('emi')" role="radio" aria-checked="false"
+              tabindex="0">
+              <div class="payment-method-icon" aria-hidden="true">📅</div>
+              <div class="payment-method-label">EMI Options</div>
+            </div>
+          </div>
+
+          <!-- Note: Razorpay handles card/UPI input, no need for manual card fields -->
+          <div id="payment-note" style="margin-bottom:20px;">
+            <div class="alert alert-info">You will be redirected to Razorpay's secure payment gateway to complete your
+              payment.</div>
+          </div>
+
+          <div id="upi-field" style="display:none;margin-bottom:20px;">
+            <div class="form-group"><label for="upiId">UPI ID</label><input type="text" id="upiId"
+                placeholder="yourname@upi" aria-label="UPI ID"></div>
+          </div>
+          <div id="cod-info" style="display:none;margin-bottom:20px;">
+            <div class="alert alert-warning">₹50 additional COD fee applies. Pay when your order arrives at your door.
+            </div>
+          </div>
+
+          <button class="razorpay-btn" id="payBtn" onclick="placeOrder()" aria-label="Pay securely now">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              aria-hidden="true">
+              <rect x="1" y="4" width="22" height="16" rx="2" />
+              <line x1="1" y1="10" x2="23" y2="10" />
+            </svg>
+            <span id="payBtnText">Pay Securely Now</span>
+          </button>
+          <div style="text-align:center;margin-top:14px;font-size:10px;color:var(--text-muted);letter-spacing:1px;">🔒
+            Your payment details are encrypted and secure</div>
+          <div style="display:flex;gap:6px;justify-content:center;margin-top:14px;opacity:.4;font-size:20px;"
+            aria-hidden="true">💳 🏦 📱 🔐</div>
+          <div style="margin-top:16px;"><button class="btn-secondary" onclick="goToStep(2)"
+              style="font-size:10px;padding:10px 20px;">← Back to Review</button></div>
+        </div>
+      </div>
+
+      <!-- Summary Sidebar -->
+      <div class="checkout-summary" aria-label="Order Summary">
+        <div class="cs-title">Your Order</div>
+        <div id="csSummaryItems"></div>
+        <div style="border-top:1px solid rgba(201,168,76,.1);margin:16px 0;padding-top:16px;">
+          <div class="cs-row"><span class="l">Subtotal</span><span id="csSubtotal">₹0</span></div>
+          <div class="cs-row"><span class="l">Shipping</span><span id="csShipping">₹0</span></div>
+          <div class="cs-row tot"><span class="l">Total</span><span class="v" id="csTotal">₹0</span></div>
+        </div>
+        <div style="font-size:10px;color:var(--text-muted);letter-spacing:1px;line-height:1.8;">
+          ✓ Free shipping on orders ₹999+<br>
+          ✓ 7-day freshness guarantee<br>
+          ✓ Easy returns & refunds
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Success Overlay -->
+  <div class="success-overlay" id="successOverlay" role="alert" aria-live="polite">
+    <canvas class="confetti" id="confettiCanvas" aria-hidden="true"></canvas>
+    <div class="success-icon" aria-hidden="true">✦</div>
+    <h2>Order Placed Successfully!</h2>
+    <p>Thank you for choosing Gourshal. Your order has been confirmed.</p>
+    <p id="successOrderId" style="color:var(--gold);letter-spacing:3px;font-size:13px;margin-top:4px;"></p>
+    <p style="margin-top:8px;">Expected delivery: <strong style="color:var(--white);">3–5 business days</strong></p>
+    <div style="display:flex;gap:16px;margin-top:40px;flex-wrap:wrap;justify-content:center;">
+      <a href="orders.html" class="btn-primary">Track Your Order</a>
+      <a href="shop.html" class="btn-secondary">Continue Shopping</a>
+    </div>
+  </div>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="scripts/config.js"></script>
+  <script src="scripts/utils.js"></script>
+  <script src="scripts/effects.js"></script>
+  <script src="scripts/products.js"></script>
+  <script src="scripts/cart.js"></script>
+  <script src="scripts/auth.js"></script>
+  <script>
+    let selectedPayment = 'razorpay';
+    let addressData = {};
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Require Login for Checkout
+      if (!Auth.isLoggedIn()) {
+        window.location.href = 'login.html?redirect=checkout.html';
+        return;
+      }
+
+      if (window.Effects) {
+        Effects.initParticles(document.getElementById('particles-canvas'));
+        Effects.initCursorGlow(document.getElementById('cursorGlow'));
+      } else {
+        const canvas = document.getElementById('particles-canvas'), ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const pts = Array.from({ length: 30 }, () => ({ x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight, vx: (Math.random() - .5) * .15, vy: (Math.random() - .5) * .15, r: Math.random() * .8 + .2, o: Math.random() * .3 + .1, g: Math.random() > .5 }));
+        (function anim() { ctx.clearRect(0, 0, canvas.width, canvas.height); pts.forEach(p => { p.x += p.vx; p.y += p.vy; if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0; if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fillStyle = p.g ? `rgba(201,168,76,${p.o})` : `rgba(184,184,200,${p.o * .5})`; ctx.fill(); }); requestAnimationFrame(anim); })();
+        document.addEventListener('mousemove', e => { document.getElementById('cursorGlow').style.left = e.clientX + 'px'; document.getElementById('cursorGlow').style.top = e.clientY + 'px'; });
+      }
+      window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', scrollY > 60));
+
+      // Pre-fill from auth
+      const user = Auth.getCurrentUser();
+      if (user) {
+        document.getElementById('firstName').value = user.name.split(' ')[0] || '';
+        document.getElementById('lastName').value = user.name.split(' ').slice(1).join(' ') || '';
+        document.getElementById('email').value = user.email || '';
+        document.getElementById('phone').value = user.phone || '';
+      }
+
+      renderSummary();
+    });
+
+    function renderSummary() {
+      const items = Cart.getItems();
+      const meta = JSON.parse(localStorage.getItem('gourshal_order_meta') || '{}');
+      const subtotal = Cart.total();
+      const shipping = subtotal >= 999 ? 0 : 99;
+      const total = subtotal + shipping - (meta.discountAmt || 0);
+
+      document.getElementById('csSubtotal').textContent = window.Utils?.formatCurrency ? Utils.formatCurrency(subtotal) : `₹${subtotal.toLocaleString()}`;
+      document.getElementById('csShipping').textContent = shipping ? (window.Utils?.formatCurrency ? Utils.formatCurrency(shipping) : `₹${shipping}`) : 'FREE 🎉';
+      document.getElementById('csTotal').textContent = window.Utils?.formatCurrency ? Utils.formatCurrency(total) : `₹${total.toLocaleString()}`;
+      document.getElementById('csSummaryItems').innerHTML = items.map(i =>
+        `<div style="display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid rgba(184,137,42,0.15);">
+      <div style="width:48px;height:48px;background:#ffffff;border:1px solid rgba(184,137,42,0.25);border-radius:6px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">
+        ${i.product.image ? `<img src="${i.product.image}" alt="${i.product.name}" style="width:100%;height:100%;object-fit:contain;padding:4px;">` : `<span style="font-size:18px;">🌿</span>`}
+      </div>
+      <div style="flex:1;font-size:13px;color:#2C1F0E;font-weight:600;line-height:1.4;">${i.product.name} <span style="color:#7A5C1A;font-weight:700;">×${i.qty}</span></div>
+      <div style="font-size:15px;font-family:'Cormorant Garamond',serif;color:#2C1F0E;font-weight:700;">${window.Utils?.formatCurrency ? Utils.formatCurrency(i.product.price * i.qty) : '₹' + (i.product.price * i.qty).toLocaleString()}</div>
+    </div>`).join('');
+
+      document.getElementById('payBtnText').textContent = 'Pay ' + (window.Utils?.formatCurrency ? Utils.formatCurrency(total) : `₹${total.toLocaleString()}`) + ' Securely';
+    }
+
+    function goToStep2() {
+      const fields = ['firstName', 'lastName', 'email', 'phone', 'addr1', 'city', 'state', 'pin'];
+      let valid = true;
+
+      fields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && !el.value.trim()) {
+          valid = false;
+          el.classList.add('error');
+        } else if (el) {
+          el.classList.remove('error');
+        }
+      });
+
+      if (!valid) {
+        const errEl = document.getElementById('paymentError');
+        errEl.textContent = 'Please fill all required fields.';
+        errEl.classList.add('show');
+        setTimeout(() => errEl.classList.remove('show'), 3000);
+        return;
+      }
+
+      addressData = {
+        firstName: document.getElementById('firstName').value.trim(),
+        lastName: document.getElementById('lastName').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        addr1: document.getElementById('addr1').value.trim(),
+        addr2: document.getElementById('addr2').value.trim(),
+        city: document.getElementById('city').value.trim(),
+        state: document.getElementById('state').value.trim(),
+        pin: document.getElementById('pin').value.trim()
+      };
+
+      const items = Cart.getItems();
+      document.getElementById('reviewItems').innerHTML = items.map(i =>
+        `<div class="review-item">
+      <div class="review-item-thumb">${i.product.image ? `<img src="${i.product.image}" alt="${i.product.name}">` : `<span>🌿</span>`}</div>
+      <div class="review-item-name">${i.product.name}<div class="review-item-qty">${i.product.unit} · Qty ${i.qty}</div></div>
+      <div class="review-item-price">${window.Utils?.formatCurrency ? Utils.formatCurrency(i.product.price * i.qty) : '₹' + (i.product.price * i.qty).toLocaleString()}</div>
+    </div>`).join('') +
+        `<div style="padding:16px 0;border-top:1px solid rgba(184,137,42,.2);margin-top:8px;">
+      <div style="font-size:12px;color:#5C4A33;letter-spacing:0.5px;line-height:2;">
+        <strong style="color:#2C1F0E;font-size:13px;">Delivering to:</strong><br>
+        ${addressData.firstName} ${addressData.lastName}<br>
+        ${addressData.addr1}${addressData.addr2 ? ', ' + addressData.addr2 : ''}<br>
+        ${addressData.city}, ${addressData.state} — ${addressData.pin}
+      </div>
+    </div>`;
+      goToStep(2);
+    }
+
+    function goToStep(n) {
+      [1, 2, 3].forEach(i => {
+        document.getElementById(`step${i}`)?.classList.toggle('active', i === n);
+        document.getElementById(`step${i}-ind`)?.classList.toggle('active', i === n);
+        document.getElementById(`step${i}-ind`)?.classList.toggle('done', i < n);
+      });
+    }
+
+    function selectPayment(type) {
+      selectedPayment = type;
+      document.querySelectorAll('.payment-method').forEach(el => {
+        el.classList.remove('selected');
+        el.setAttribute('aria-checked', 'false');
+      });
+      const selectedEl = document.getElementById('pm-' + type);
+      if (selectedEl) {
+        selectedEl.classList.add('selected');
+        selectedEl.setAttribute('aria-checked', 'true');
+      }
+      document.getElementById('payment-note').style.display = (type === 'razorpay' || type === 'upi') ? 'block' : 'none';
+      document.getElementById('upi-field').style.display = (type === 'upi' ? 'block' : 'none');
+      document.getElementById('cod-info').style.display = (type === 'cod' ? 'block' : 'none');
+    }
+
+    function triggerFallbackOrder() {
+      console.warn('Backend unavailable or Razorpay failed, falling back to LocalStorage orders');
+      const btn = document.getElementById('payBtn');
+      setTimeout(() => {
+        const orderIdFallback = 'GOU' + Date.now().toString().slice(-8).toUpperCase();
+        const items = Cart.getItems();
+        const meta = JSON.parse(localStorage.getItem('gourshal_order_meta') || '{}');
+        const subtotal = Cart.total();
+        const shipping = subtotal >= 999 ? 0 : 99;
+        const total = subtotal + shipping - (meta.discountAmt || 0);
+
+        const orders = JSON.parse(localStorage.getItem('gourshal_orders') || '[]');
+        const newOrder = {
+          id: orderIdFallback,
+          items: items.map(i => ({ id: i.id, name: i.product.name, price: i.product.price, qty: i.qty, unit: i.product.unit })),
+          address: addressData,
+          paymentMethod: selectedPayment,
+          subtotal, shipping, total,
+          status: 'confirmed',
+          placedAt: new Date().toISOString(),
+          expectedDelivery: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
+        };
+        orders.unshift(newOrder);
+        localStorage.setItem('gourshal_orders', JSON.stringify(orders));
+
+        const user = Auth.getCurrentUser();
+        if (user && user.id) {
+          const users = Auth.getUsersLocal();
+          const u = users.find(x => x.id === user.id);
+          if (u) { u.orders = u.orders || []; u.orders.unshift(orderIdFallback); Auth.saveUsersLocal(users); }
+        }
+
+        Cart.clear();
+        showSuccess(orderIdFallback);
+      }, 1500);
+    }
+
+    function submitFinalOrder(payload, razorpayData = null) {
+      const apiUrl = window.Config ? Config.API_URL : 'http://localhost:5000/api';
+      const token = Auth.getToken();
+      if (razorpayData) {
+        payload.razorpay_payment_id = razorpayData.razorpay_payment_id;
+        payload.razorpay_order_id = razorpayData.razorpay_order_id;
+        payload.razorpay_signature = razorpayData.razorpay_signature;
+      }
+
+      fetch(apiUrl + '/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': 'Bearer ' + token } : {})
+        },
+        body: JSON.stringify(payload)
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.ok) {
+            Cart.clear();
+            showSuccess(data.orderId);
+          } else {
+            showPaymentError(data.error || 'Order verification failed. Please try again.');
+            const btn = document.getElementById('payBtn');
+            btn.disabled = false;
+            btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span>Try Again</span>`;
+          }
+        })
+        .catch(err => {
+          triggerFallbackOrder();
+        });
+    }
+
+    function showPaymentError(msg) {
+      const errEl = document.getElementById('paymentError');
+      errEl.textContent = msg;
+      errEl.classList.add('show');
+      setTimeout(() => errEl.classList.remove('show'), 5000);
+    }
+
+    function placeOrder() {
+      const btn = document.getElementById('payBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;margin:0;border-width:2px;"></div>';
+
+      const items = Cart.getItems();
+      const meta = JSON.parse(localStorage.getItem('gourshal_order_meta') || '{}');
+      const subtotal = Cart.total();
+      const shipping = subtotal >= 999 ? 0 : 99;
+      const total = subtotal + shipping - (meta.discountAmt || 0);
+      const token = Auth.getToken();
+      const apiUrl = window.Config ? Config.API_URL : 'http://localhost:5000/api';
+
+      const payload = {
+        items: items.map(i => ({ productId: i.id, name: i.product.name, price: i.product.price, qty: i.qty, unit: i.product.unit })),
+        address: addressData,
+        paymentMethod: selectedPayment,
+        subtotal, shipping, total, discountAmt: meta.discountAmt || 0
+      };
+
+      // If Razorpay or UPI, try to initialize gateway first
+      if (selectedPayment === 'razorpay' || selectedPayment === 'upi') {
+        fetch(apiUrl + '/orders/create-payment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': 'Bearer ' + token } : {})
+          },
+          body: JSON.stringify({ amount: total })
+        })
+          .then(res => res.json())
+          .then(data => {
+            const razorpayKey = window.Config ? Config.RAZORPAY_KEY : '';
+            if (!data.ok) throw new Error(data.error);
+
+            const options = {
+              key: razorpayKey || '',
+              amount: data.amount,
+              currency: 'INR',
+              name: 'Gourshal',
+              description: 'Premium Wellness Products',
+              image: window.location.origin + '/neww-logo.jpeg',
+              order_id: data.orderId,
+              handler: function (response) {
+                submitFinalOrder(payload, response);
+              },
+              prefill: {
+                name: addressData.firstName + ' ' + addressData.lastName,
+                email: addressData.email,
+                contact: addressData.phone
+              },
+              theme: { color: '#C9A84C' },
+              modal: {
+                ondismiss: function () {
+                  btn.disabled = false;
+                  btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span>Pay Securely Now</span>`;
+                }
+              }
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.open();
+          })
+          .catch(err => {
+            triggerFallbackOrder();
+          });
+      } else {
+        // COD or EMI
+        submitFinalOrder(payload);
+      }
+    }
+
+    function showSuccess(orderId) {
+      document.getElementById('successOrderId').textContent = `Order ID: #${orderId}`;
+      const overlay = document.getElementById('successOverlay');
+      overlay.style.display = 'flex';
+      // Confetti
+      const cc = document.getElementById('confettiCanvas');
+      cc.width = window.innerWidth; cc.height = window.innerHeight;
+      const cctx = cc.getContext('2d');
+      const confetti = Array.from({ length: 120 }, () => ({
+        x: Math.random() * window.innerWidth, y: -20,
+        vx: (Math.random() - .5) * 4, vy: Math.random() * 4 + 2,
+        size: Math.random() * 8 + 4, color: ['#C9A84C', '#E8CC7A', '#B8B8C8', '#fff'][Math.floor(Math.random() * 4)],
+        rot: Math.random() * 360, rotV: (Math.random() - .5) * 6
+      }));
+      let frame = 0;
+      function drawConfetti() {
+        if (frame++ > 200) return;
+        cctx.clearRect(0, 0, cc.width, cc.height);
+        confetti.forEach(c => {
+          c.x += c.vx; c.y += c.vy; c.vy += .05; c.rot += c.rotV;
+          cctx.save(); cctx.translate(c.x, c.y); cctx.rotate(c.rot * Math.PI / 180);
+          cctx.fillStyle = c.color; cctx.fillRect(-c.size / 2, -c.size / 4, c.size, c.size / 2);
+          cctx.restore();
+        });
+        requestAnimationFrame(drawConfetti);
+      }
+      drawConfetti();
+    }
+  </script>
+</body>
+
+</html>

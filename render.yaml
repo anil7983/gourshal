@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: gourshal-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        fromGroup: gourshal
+      - key: JWT_SECRET
+        fromGroup: gourshal
+      - key: RAZORPAY_KEY_ID
+        fromGroup: gourshal
+      - key: RAZORPAY_KEY_SECRET
+        fromGroup: gourshal
+      - key: ALLOWED_ORIGINS
+        sync: false
+      - key: FIRST_ADMIN_EMAIL
+        sync: false
+      - key: PORT
+        value: 10000
+
+  - type: static
+    name: gourshal-frontend
+    rootDir: backend/public
+    buildCommand: echo "Static build"
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+databases:
+  - name: gourshal-db
+    plan: free
+    databaseName: gourshal
+    cluster: gourshal-cluster
