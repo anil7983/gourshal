@@ -11,6 +11,9 @@ const Config = {
     // Check for global config
     if (window.GOURSHAL_CONFIG?.apiUrl) return window.GOURSHAL_CONFIG.apiUrl;
     // Default based on environment
+    if (window.location.protocol === 'file:' || !window.location.hostname || window.location.origin === 'null') {
+      return 'https://gourshal.com/api';
+    }
     const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     return isLocalhost ? 'http://localhost:5000/api' : window.location.origin + '/api';
   },

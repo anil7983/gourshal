@@ -56,6 +56,7 @@ app.use(helmet({
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
       imgSrc: ["'self'", "data:", "https:", "blob:"],
+      mediaSrc: ["'self'", "data:", "blob:", "https:"],
       scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://checkout.razorpay.com"],
       connectSrc: ["'self'", "https://api.razorpay.com"],
       frameSrc: ["'self'", "https://checkout.razorpay.com"]

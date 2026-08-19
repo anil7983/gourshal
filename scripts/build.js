@@ -108,13 +108,14 @@ const htmlFiles = fs.readdirSync(frontendDir).filter(f => f.endsWith('.html'));
 for (const file of htmlFiles) {
   let html = fs.readFileSync(path.join(frontendDir, file), 'utf8');
   
-  // Update script references for production
+  const cacheVer = Date.now().toString(36);
+  // Update script references for production with cache-busting query
   html = html.replace(/<script src="scripts\/([^"]+)"><\/script>/g, (match, scriptFile) => {
-    return `<script src="/scripts/${scriptFile}"></script>`;
+    return `<script src="/scripts/${scriptFile}?v=${cacheVer}"></script>`;
   });
   
-  // Update stylesheet references for absolute path
-  html = html.replace(/href="styles\/([^"]+)"/g, 'href="/styles/$1"');
+  // Update stylesheet references for absolute path with cache-busting query
+  html = html.replace(/href="styles\/([^"]+)"/g, `href="/styles/$1?v=${cacheVer}"`);
   
   // Fix asset paths: strip public/ prefix for production serving
   html = html.replace(/(src|href)="public\/([^"]+)"/g, '$1="/$2"');

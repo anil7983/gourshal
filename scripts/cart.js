@@ -184,13 +184,20 @@ const Cart = {
   },
 
   showToast(msg) {
-    const toast = document.getElementById('cartToast');
-    const text = document.getElementById('toastText') || (toast ? toast.querySelector('.toast-text, span') : null);
-    if (!toast) return;
+    let toast = document.getElementById('cartToast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'cartToast';
+      toast.className = 'cart-toast';
+      toast.setAttribute('role', 'alert');
+      toast.setAttribute('aria-live', 'polite');
+      document.body.appendChild(toast);
+    }
+    const text = document.getElementById('toastText') || toast.querySelector('.toast-text, span');
     if (text) {
       text.textContent = msg;
     } else {
-      toast.innerHTML = `<div class="toast-icon">✓</div><div class="toast-text">${msg}</div>`;
+      toast.innerHTML = `<div class="toast-icon">✓</div><div class="toast-text" id="toastText">${msg}</div>`;
     }
     toast.classList.add('show');
     clearTimeout(this._toastTimer);
