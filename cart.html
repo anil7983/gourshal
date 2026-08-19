@@ -7,7 +7,7 @@
   <title>Cart — GOURSHAL</title>
   <meta name="description" content="View your Gourshal shopping cart and proceed to checkout.">
   <meta property="og:title" content="Cart — GOURSHAL">
-  <meta property="og:image" content="public/og-image.jpg">
+  <meta property="og:image" content="/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
@@ -265,7 +265,7 @@
   </div>
   <nav id="navbar" role="navigation" aria-label="Main navigation">
     <a href="index.html" class="nav-logo">
-      <img src="public/neww-logo.jpeg" alt="Gourshal" class="nav-logo-img">
+      <img src="/neww-logo.jpeg" alt="Gourshal" class="nav-logo-img">
       <div class="nav-logo-text-wrap">
         <div class="nav-logo-text">GOURSHAL</div><span class="nav-logo-tagline">CRAFTED TO LAST</span>
       </div>
@@ -384,7 +384,7 @@
           (item.product.stock < 10 ? { class: 'low-stock', label: `Only ${item.product.stock} left` } : { class: 'in-stock', label: 'In Stock' });
         const outOfStock = item.product.stock <= 0;
         return `<div class="cart-item">
-      <div class="cart-item-img" onclick="window.location='product.html?id=${item.id}'" role="button" aria-label="View ${item.product.name}">${item.product.image ? `<img src="${item.product.image}" alt="${item.product.name}" onerror="this.onerror=null; this.src='public/ghee.jpg';" style="width:100%;height:100%;object-fit:contain;padding:4px;">` : `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`}</div>
+      <div class="cart-item-img" onclick="window.location='product.html?id=${item.id}'" role="button" aria-label="View ${item.product.name}">${item.product.image ? `<img src="${item.product.image}" alt="${item.product.name}" onerror="this.onerror=null; this.src='/ghee.jpg';" style="width:100%;height:100%;object-fit:contain;padding:4px;">` : `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`}</div>
       <div>
         <div class="cart-item-cat">${item.product.category || 'Pure Vedic'}</div>
         <div class="cart-item-name" onclick="window.location='product.html?id=${item.id}'">${item.product.name}</div>

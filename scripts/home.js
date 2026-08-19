@@ -177,8 +177,9 @@ function renderMasterpiecesGrid() {
     const formattedPrice = window.Utils?.formatCurrency ? Utils.formatCurrency(p.price) : '₹' + p.price;
     const formattedOriginal = window.Utils?.formatCurrency ? Utils.formatCurrency(p.originalPrice) : '₹' + p.originalPrice;
 
+    const pid = p.productId || p.id || p._id;
     return `
-      <div class="modern-product-card" onclick="window.location='product.html?id=${p.id}'">
+      <div class="modern-product-card" onclick="window.location='product.html?id=${pid}'">
         ${p.badge ? `<div class="card-badge">${p.badge}</div>` : ''}
         <div class="card-img-wrap">
           <img src="${p.image}" alt="${p.name}" loading="lazy">
@@ -194,7 +195,7 @@ function renderMasterpiecesGrid() {
             <span class="price-current">${formattedPrice} <small style="font-size:11px;font-weight:400;color:var(--muted-ink);">/ ${p.unit}</small></span>
             <span class="price-original">${formattedOriginal}</span>
           </div>
-          <button class="btn-card-add" onclick="event.stopPropagation(); quickAddToCart('${p.id}', '${p.name.replace(/'/g, "\\'")}')" aria-label="Add ${p.name} to cart">
+          <button class="btn-card-add" onclick="event.stopPropagation(); quickAddToCart('${pid}', '${(p.name || '').replace(/'/g, "\\'")}')" aria-label="Add ${p.name} to cart">
             <span>Add</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           </button>
@@ -402,7 +403,7 @@ function openStoryVideo(videoSrc, title, tag) {
   document.body.style.overflow = 'hidden';
 
   if (videoEl) {
-    let src = videoSrc || 'public/videos/farm-nature.webm';
+    let src = videoSrc || '/videos/farm-nature.webm';
     
     // Normalize path to work whether hosted locally, with /public, or under root
     let resolvedSrc = src;
@@ -515,7 +516,13 @@ function switchModalChapter(videoSrc, title, tag, btn) {
     };
 
     videoEl.addEventListener('loadeddata', tryPlay, { once: true });
-    try { videoEl.load(); } catch (e) {}
+    videoEl.addEventListener('canplay', tryPlay, { once: true });
+    try { 
+      videoEl.load(); 
+      tryPlay();
+    } catch (e) {
+      tryPlay();
+    }
   }
 
   const chapterBtns = document.querySelectorAll('.video-chapter-btn');
