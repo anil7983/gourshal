@@ -389,29 +389,10 @@ function openStoryVideo(videoSrc, title, tag) {
   const titleEl = document.getElementById('modalVideoTitle');
   const tagEl = document.getElementById('modalVideoTag');
 
-  if (!modal || !videoEl) {
-    console.error('Modal or video element not found');
-    return;
-  }
-
-  // Normalize path
-  let src = videoSrc || '/videos/farm-nature.webm';
-  if (src.startsWith('public/')) {
-    src = '/' + src.replace(/^public\//, '');
-  } else if (!src.startsWith('/') && !src.startsWith('http')) {
-    src = '/' + src;
-  }
+  if (!modal) return;
 
   if (titleEl) titleEl.innerText = title || 'GOURSHAL Brand Documentary';
   if (tagEl) tagEl.innerText = tag || 'Craft Film';
-
-  const sourceEl = videoEl.querySelector('source');
-  if (sourceEl) {
-    sourceEl.src = src;
-    sourceEl.type = src.endsWith('.mp4') ? 'video/mp4' : 'video/webm';
-  }
-  videoEl.src = src;
-  videoEl.load();
 
   modal.classList.add('active');
   modal.style.display = 'flex';
@@ -419,22 +400,52 @@ function openStoryVideo(videoSrc, title, tag) {
   modal.style.visibility = 'visible';
   document.body.style.overflow = 'hidden';
 
-  // Play with sound (fallback to muted if browser blocks unmuted play)
-  videoEl.muted = false;
-  const playPromise = videoEl.play();
-  if (playPromise !== undefined) {
-    playPromise.catch(err => {
-      console.warn('Unmuted play blocked by browser policy, falling back to muted play:', err);
-      videoEl.muted = true;
-      videoEl.play();
-    });
+  if (videoEl) {
+    let src = videoSrc || 'public/videos/farm-nature.webm';
+    
+    // Normalize path to work whether hosted locally, with /public, or under root
+    let resolvedSrc = src;
+    if (window.location.protocol === 'file:') {
+      resolvedSrc = src.replace(/^\/+/, '');
+    } else {
+      if (src.startsWith('/')) {
+        resolvedSrc = src;
+      } else {
+        resolvedSrc = '/' + src.replace(/^public\//, '');
+      }
+    }
+
+    const sourceEl = videoEl.querySelector('source') || document.getElementById('modalVideoSource');
+    if (sourceEl) {
+      sourceEl.src = resolvedSrc;
+      sourceEl.type = resolvedSrc.endsWith('.mp4') ? 'video/mp4' : 'video/webm';
+    }
+    videoEl.src = resolvedSrc;
+    
+    // Attempt playback cleanly
+    videoEl.currentTime = 0;
+    videoEl.muted = false;
+
+    const tryPlay = () => {
+      const playPromise = videoEl.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(err => {
+          console.warn('Playback with audio blocked by browser policy, trying muted:', err);
+          videoEl.muted = true;
+          videoEl.play().catch(e => console.warn('Muted playback also blocked:', e));
+        });
+      }
+    };
+
+    videoEl.addEventListener('loadeddata', tryPlay, { once: true });
+    try { videoEl.load(); } catch (e) {}
   }
 
-  // Highlight matching chapter button
+  // Highlight active chapter button
   const chapterBtns = document.querySelectorAll('.video-chapter-btn');
   chapterBtns.forEach(btn => {
     const attr = btn.getAttribute('onclick') || '';
-    btn.classList.toggle('active', attr.includes(videoSrc) || attr.includes(src));
+    btn.classList.toggle('active', attr.includes(videoSrc));
   });
 }
 
@@ -449,8 +460,10 @@ function closeStoryVideo() {
     document.body.style.overflow = '';
   }
   if (videoEl) {
-    videoEl.pause();
-    videoEl.currentTime = 0;
+    try {
+      videoEl.pause();
+      videoEl.currentTime = 0;
+    } catch (e) {}
   }
 }
 
@@ -462,30 +475,40 @@ function switchModalChapter(videoSrc, title, tag, btn) {
   if (titleEl) titleEl.innerText = title;
   if (tagEl) tagEl.innerText = tag;
 
-  let src = videoSrc;
-  if (src.startsWith('public/')) {
-    src = '/' + src.replace(/^public\//, '');
-  } else if (!src.startsWith('/') && !src.startsWith('http')) {
-    src = '/' + src;
-  }
-
   if (videoEl) {
-    const sourceEl = videoEl.querySelector('source');
-    if (sourceEl) {
-      sourceEl.src = src;
-      sourceEl.type = src.endsWith('.mp4') ? 'video/mp4' : 'video/webm';
+    let src = videoSrc;
+    let resolvedSrc = src;
+    if (window.location.protocol === 'file:') {
+      resolvedSrc = src.replace(/^\/+/, '');
+    } else {
+      if (src.startsWith('/')) {
+        resolvedSrc = src;
+      } else {
+        resolvedSrc = '/' + src.replace(/^public\//, '');
+      }
     }
-    videoEl.src = src;
-    videoEl.load();
+
+    const sourceEl = videoEl.querySelector('source') || document.getElementById('modalVideoSource');
+    if (sourceEl) {
+      sourceEl.src = resolvedSrc;
+      sourceEl.type = resolvedSrc.endsWith('.mp4') ? 'video/mp4' : 'video/webm';
+    }
+    videoEl.src = resolvedSrc;
     videoEl.currentTime = 0;
     videoEl.muted = false;
-    const playPromise = videoEl.play();
-    if (playPromise !== undefined) {
-      playPromise.catch(() => {
-        videoEl.muted = true;
-        videoEl.play();
-      });
-    }
+
+    const tryPlay = () => {
+      const playPromise = videoEl.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          videoEl.muted = true;
+          videoEl.play().catch(() => {});
+        });
+      }
+    };
+
+    videoEl.addEventListener('loadeddata', tryPlay, { once: true });
+    try { videoEl.load(); } catch (e) {}
   }
 
   const chapterBtns = document.querySelectorAll('.video-chapter-btn');

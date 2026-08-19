@@ -22,16 +22,25 @@ const Cart = {
   add(productId, qty = 1) {
     const items = this.get();
     const productList = window.GOURSHAL_PRODUCTS || window.GOURSHAL_PRODUCTS_LOCAL || [];
-    const product = productList.find(p => p.id === productId || p.productId === productId || p._id === productId);
+    const product = productList.find(p => p && (p.id === productId || p.productId === productId || p._id === productId || String(p._id) === String(productId)));
     
     if (!product) {
-      console.warn('Product not found:', productId);
-      // Fallback create minimal item if ID exists
-      const existing = items.find(i => i.id === productId);
+      console.warn('Product not found in active list:', productId);
+      const existing = items.find(i => i.id === productId || i.productId === productId);
       if (existing) {
-        existing.qty += (qty || 1);
+        existing.qty = (Number(existing.qty) || 1) + (Number(qty) || 1);
       } else {
-        items.push({ id: productId, qty: qty || 1, name: 'Gourshal Item', price: 899, stock: 50 });
+        items.push({ 
+          id: productId, 
+          productId: productId,
+          qty: Number(qty) || 1, 
+          name: 'Gourshal Vedic Creation', 
+          price: 899, 
+          stock: 50,
+          unit: '500ml',
+          image: 'public/ghee.jpg',
+          category: 'Pure Vedic'
+        });
       }
       this.save(items);
       this.showToast('Item added to cart');
@@ -46,17 +55,30 @@ const Cart = {
     }
 
     const pId = product.id || product.productId || productId;
-    const existing = items.find(i => i.id === pId || i.id === productId);
+    const existing = items.find(i => i.id === pId || i.productId === pId || i.id === productId);
     
     if (existing) {
-      const newQty = Math.min(existing.qty + (qty || 1), safeStock);
+      const newQty = Math.min((Number(existing.qty) || 1) + (Number(qty) || 1), safeStock);
       existing.qty = newQty;
+      existing.price = Number(product.price) || existing.price || 899;
+      existing.name = product.name || existing.name;
+      existing.image = product.image || existing.image || 'public/ghee.jpg';
       if (newQty >= safeStock) {
         this.showToast(`Maximum available stock reached for ${product.name}`);
       }
     } else {
-      const safeQty = Math.min(qty || 1, safeStock);
-      items.push({ id: pId, qty: safeQty, name: product.name, price: product.price, stock: safeStock });
+      const safeQty = Math.min(Number(qty) || 1, safeStock);
+      items.push({ 
+        id: pId, 
+        productId: product.productId || pId,
+        qty: safeQty, 
+        name: product.name, 
+        price: Number(product.price) || 899, 
+        stock: safeStock,
+        unit: product.unit || '500ml',
+        image: product.image || 'public/ghee.jpg',
+        category: product.category || 'Pure Vedic'
+      });
     }
     
     this.save(items);
@@ -65,30 +87,31 @@ const Cart = {
   },
 
   remove(productId) {
-    const items = this.get().filter(i => i.id !== productId && i.productId !== productId);
+    const items = this.get().filter(i => i.id !== productId && i.productId !== productId && i._id !== productId);
     this.save(items);
     window.dispatchEvent(new CustomEvent('cartUpdated', { detail: { items, count: this.count() } }));
   },
 
   updateQty(productId, qty) {
     const items = this.get();
-    const item = items.find(i => i.id === productId || i.productId === productId);
+    const item = items.find(i => i.id === productId || i.productId === productId || i._id === productId);
     if (!item) return;
     
-    if (qty <= 0) {
+    const parsedQty = Number(qty);
+    if (parsedQty <= 0) {
       this.remove(productId);
       return;
     }
 
     const productList = window.GOURSHAL_PRODUCTS || window.GOURSHAL_PRODUCTS_LOCAL || [];
-    const product = productList.find(p => p.id === productId || p.productId === productId);
-    const maxQty = product?.stock || 50;
+    const product = productList.find(p => p && (p.id === productId || p.productId === productId));
+    const maxStock = product?.stock || item.stock || 50;
     
-    if (qty > maxQty) {
-      item.qty = maxQty;
-      this.showToast(`Limited to ${maxQty} units in stock`);
+    if (parsedQty > maxStock) {
+      item.qty = maxStock;
+      this.showToast(`Limited to ${maxStock} units in stock`);
     } else {
-      item.qty = qty;
+      item.qty = parsedQty;
     }
     
     this.save(items);
@@ -108,7 +131,7 @@ const Cart = {
   total() {
     const productList = window.GOURSHAL_PRODUCTS || window.GOURSHAL_PRODUCTS_LOCAL || [];
     return this.get().reduce((s, i) => {
-      const p = productList.find(pr => pr.id === i.id || pr.productId === i.id || pr._id === i.id);
+      const p = productList.find(pr => pr && (pr.id === i.id || pr.productId === i.id || pr._id === i.id));
       const price = p ? (Number(p.price) || 0) : (Number(i.price) || 0);
       return s + price * (Number(i.qty) || 1);
     }, 0);
@@ -117,23 +140,29 @@ const Cart = {
   getItems() {
     const productList = window.GOURSHAL_PRODUCTS || window.GOURSHAL_PRODUCTS_LOCAL || [];
     return this.get().map(item => {
-      const product = productList.find(p => p.id === item.id || p.productId === item.id || p._id === item.id);
+      const product = productList.find(p => p && (p.id === item.id || p.productId === item.id || p._id === item.id || String(p._id) === String(item.id)));
       if (!product) {
         return {
           ...item,
           product: {
-            id: item.id,
-            productId: item.id,
-            name: item.name || 'Gourshal Product',
-            price: item.price || 899,
-            stock: 50,
-            unit: '500ml',
-            image: '/ghee.jpg',
-            category: 'Pure Vedic'
+            id: item.id || item.productId,
+            productId: item.productId || item.id,
+            name: item.name || 'Gourshal Vedic Creation',
+            price: Number(item.price) || 899,
+            stock: Number(item.stock) || 50,
+            unit: item.unit || '500ml',
+            image: item.image || 'public/ghee.jpg',
+            category: item.category || 'Pure Vedic'
           }
         };
       }
-      return { ...item, product };
+      return { 
+        ...item, 
+        product: {
+          ...product,
+          image: product.image || item.image || 'public/ghee.jpg'
+        }
+      };
     });
   },
 
