@@ -398,6 +398,7 @@ function openStoryVideo(videoSrc, title, tag) {
   modal.style.display = 'flex';
   modal.style.opacity = '1';
   modal.style.visibility = 'visible';
+  modal.style.pointerEvents = 'auto';
   document.body.style.overflow = 'hidden';
 
   if (videoEl) {
@@ -421,8 +422,7 @@ function openStoryVideo(videoSrc, title, tag) {
       sourceEl.type = resolvedSrc.endsWith('.mp4') ? 'video/mp4' : 'video/webm';
     }
     videoEl.src = resolvedSrc;
-    
-    // Attempt playback cleanly
+    videoEl.controls = true;
     videoEl.currentTime = 0;
     videoEl.muted = false;
 
@@ -430,15 +430,21 @@ function openStoryVideo(videoSrc, title, tag) {
       const playPromise = videoEl.play();
       if (playPromise !== undefined) {
         playPromise.catch(err => {
-          console.warn('Playback with audio blocked by browser policy, trying muted:', err);
+          console.warn('Playback with audio blocked by browser autoplay policy, falling back to muted:', err);
           videoEl.muted = true;
-          videoEl.play().catch(e => console.warn('Muted playback also blocked:', e));
+          videoEl.play().catch(() => {});
         });
       }
     };
 
     videoEl.addEventListener('loadeddata', tryPlay, { once: true });
-    try { videoEl.load(); } catch (e) {}
+    videoEl.addEventListener('canplay', tryPlay, { once: true });
+    try { 
+      videoEl.load(); 
+      tryPlay();
+    } catch (e) {
+      tryPlay();
+    }
   }
 
   // Highlight active chapter button
@@ -457,8 +463,9 @@ function closeStoryVideo() {
     modal.style.display = 'none';
     modal.style.opacity = '0';
     modal.style.visibility = 'hidden';
-    document.body.style.overflow = '';
+    modal.style.pointerEvents = 'none';
   }
+  document.body.style.overflow = '';
   if (videoEl) {
     try {
       videoEl.pause();
