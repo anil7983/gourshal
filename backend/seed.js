@@ -321,12 +321,15 @@ async function seed() {
     await mongoose.connect(MONGO_URI);
     console.log('Connected to MongoDB for Seeding...');
     
+    const bcrypt = require('bcryptjs');
     let admin = await User.findOne({ role: 'admin' });
     if (!admin) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash('AdminPassword@123', salt);
       admin = await User.create({
         name: 'Gourshal Admin',
         email: process.env.FIRST_ADMIN_EMAIL || 'admin@gourshal.com',
-        password: 'AdminPassword@123',
+        password: hashedPassword,
         role: 'admin'
       });
       console.log('Created default admin user for seeding.');

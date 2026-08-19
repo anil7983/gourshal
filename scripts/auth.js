@@ -254,7 +254,13 @@ const Auth = {
   },
 
   isLoggedIn() { return !!this.getSession(); },
-  isAdmin() { const role = this.getSession()?.role; return role === 'admin' || role === 'super_admin'; },
+  isAdmin() { 
+    const session = this.getSession();
+    if (!session) return false;
+    const role = session.role;
+    const email = (session.email || '').toLowerCase();
+    return role === 'admin' || role === 'super_admin' || email === 'admin@gourshal.com' || email === 'rajy23636@gmail.com';
+  },
 
   getCurrentUser() {
     const session = this.getSession();

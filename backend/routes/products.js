@@ -50,7 +50,7 @@ router.get('/', optionalAuth, asyncHandler(async (req, res) => {
 
 // @route   POST /api/products
 // @desc    Create a product
-router.post('/', requireAdmin, sanitize, validate(productFields), asyncHandler(async (req, res) => {
+router.post('/', authenticate, requireAdmin, sanitize, validate(productFields), asyncHandler(async (req, res) => {
   const { name, category, categorySlug, price, stock, ...rest } = req.body;
   
   if (isNaN(price) || isNaN(stock) || Number(price) < 0 || Number(stock) < 0) {
@@ -73,7 +73,7 @@ router.post('/', requireAdmin, sanitize, validate(productFields), asyncHandler(a
 
 // @route   DELETE /api/products/:productId
 // @desc    Delete a product
-router.delete('/:productId', requireAdmin, asyncHandler(async (req, res) => {
+router.delete('/:productId', authenticate, requireAdmin, asyncHandler(async (req, res) => {
   const query = { productId: req.params.productId };
   if (req.user.role !== 'super_admin') {
     query.adminId = req.user.userId;
