@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GOURSHAL — Crafted to Last | Pure Vedic Natural Wellness</title>
+  <meta name="description"
+    content="Experience authentic Vedic wellness with Gourshal. 100% pure A2 Vedic Bilona Ghee, Cold-Pressed Mustard Oil, Bulletproof Ghee Coffee, Himalayan Green Tea, Stone-Ground Masale &amp; Raw Wild Honey.">
+  <meta name="keywords"
+    content="Gourshal, A2 Bilona Ghee, Kachi Ghani Mustard Oil, Bulletproof Coffee, Himalayan Green Tea, Lakadong Turmeric, Raw Forest Honey, Vedic wellness">
+  <meta property="og:title" content="GOURSHAL — Pure Natural Living | Vedic Heritage Wellness">
+  <meta property="og:description"
+    content="Traditionally crafted A2 Ghee, Cold-Pressed Oils, Single-Origin Coffee, High-Altitude Teas, Pure Spices and Wild Honey.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="public/neww-logo.jpeg">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/home.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Gourshal",
+    "description": "Pure Vedic wellness products — A2 Bilona Ghee, Cold-Pressed Mustard Oil, Artisanal Coffee, Himalayan Green Tea, Stone-Ground Spices, and Raw Forest Honey.",
+    "url": "https://gourshal.com",
+    "logo": "https://gourshal.com/public/neww-logo.jpeg"
+  }
+  </script>
+</head>
+
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-announcement-bar">
+    <span>🌿 100% PURE & VEDICALLY CRAFTED</span>
+    <span>•</span>
+    <span>FREE SHIPPING ON ORDERS OVER ₹999</span>
+    <span>•</span>
+    <span><span class="badge-highlight">FLAT 15% OFF</span> USE CODE: <strong>PURE15</strong></span>
+  </div>
+
+  <!-- Cursor Glow -->
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+  <!-- Fixed Cart Pill -->
+  <div class="cart-pill" id="cartPill" onclick="window.location='cart.html'" role="button" aria-label="View cart"
+    tabindex="0">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+      aria-hidden="true">
+      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <path d="M16 10a4 4 0 01-8 0" />
+    </svg>
+    <span id="cartCount" aria-live="polite">0</span>
+  </div>
+
+  <!-- NAVIGATION -->
+  <nav id="navbar" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">
+      <img src="public/neww-logo.jpeg" alt="Gourshal Logo" class="nav-logo-img">
+      <div class="nav-logo-text-wrap">
+        <div class="nav-logo-text">GOURSHAL</div>
+        <span class="nav-logo-tagline">CRAFTED TO LAST</span>
+      </div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="about.html">Our Story</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="cart.html" class="nav-cart-link">Cart (<span id="navCartCount">0</span>)</a></li>
+      <li id="authNavItem"><a href="login.html" class="nav-cta">Sign In</a></li>
+    </ul>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Toggle Navigation Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <main id="main-content">
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SIGNATURE LUXURY DYNAMIC HERO SECTION       -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="hero">
+      <!-- Ambient Botanical Leaf Shadows -->
+      <svg class="hero-ambient-leaf top-left" viewBox="0 0 200 200" fill="currentColor">
+        <path d="M45,20 C80,10 130,40 150,90 C170,140 140,180 90,185 C40,190 10,140 5,90 C0,40 20,25 45,20 Z" />
+      </svg>
+      <svg class="hero-ambient-leaf bottom-right" viewBox="0 0 200 200" fill="currentColor">
+        <path d="M120,10 C160,30 190,80 180,130 C170,180 120,190 70,175 C20,160 5,110 15,60 C25,10 80,-10 120,10 Z" />
+      </svg>
+
+      <!-- Multi-Product Hero Switcher Pills -->
+      <div class="hero-product-switcher" id="heroSwitcher" role="tablist" aria-label="Select Flagship Product">
+        <!-- Injected via JavaScript from GOURSHAL_HERO_PRODUCTS -->
+      </div>
+
+      <!-- Main Split Hero Content -->
+      <div class="hero-main-container">
+        <!-- Left Column: Typography & Badges -->
+        <div class="hero-left">
+          <div class="hero-eyebrow" id="heroEyebrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+            <span>PURE • NATURAL • TIMELESS</span>
+          </div>
+
+          <h1 class="hero-title" id="heroTitle">
+            PURE GHEE,<br>CRAFTED TO LAST
+          </h1>
+
+          <p class="hero-sub" id="heroSub">
+            Made from A2 cow milk using the traditional Bilona method for rich aroma, granular texture, and unmatched nutritional purity.
+          </p>
+
+          <!-- 4 Circular Badges -->
+          <div class="hero-badges-row" id="heroBadges">
+            <!-- Dynamic Badges -->
+          </div>
+
+          <!-- Hero Actions -->
+          <div class="hero-actions">
+            <a href="shop.html" class="btn-forest-primary" id="heroShopBtn">
+              <span>SHOP NOW</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+            <a href="#vedic-craft" class="btn-hero-outline">OUR VEDIC CRAFT</a>
+          </div>
+        </div>
+
+        <!-- Right Column: Visual Stage -->
+        <div class="hero-right">
+          <div class="hero-product-stage">
+            <div class="hero-glow-backdrop" id="heroGlow"></div>
+            <div class="hero-product-img-wrap">
+              <img src="public/ghee.jpg" alt="Gourshal Hero Product" id="heroImg" class="hero-main-img">
+            </div>
+
+            <!-- Floating Purity Certificate Pill -->
+            <div class="hero-floating-pill" id="heroFloatingPill">
+              <div class="floating-pill-icon">✓</div>
+              <div>
+                <div class="floating-pill-text">100% VEDIC TESTED</div>
+                <div class="floating-pill-sub">Zero Adulteration Guarantee</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Signature Forest Green Benefit Bar -->
+      <div class="hero-benefit-bar-wrap">
+        <div class="hero-benefit-bar" id="heroBenefitBar" role="list">
+          <!-- Dynamic 4 Benefits -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION 2: EXPLORE BY CATEGORY             -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="categories">
+      <div class="section-header-centered">
+        <span class="section-tag">Pure Natural Living</span>
+        <h2 class="section-heading">Explore By Sacred Craft</h2>
+        <p class="section-lead">Every product in our catalog represents an unbroken lineage of traditional Indian culinary wisdom and chemical-free wellness.</p>
+      </div>
+
+      <div class="category-cards-grid">
+        <a href="shop.html?category=ghee" class="category-card" onclick="filterHomeCategory('ghee');">
+          <div class="category-card-thumb">
+            <img src="public/ghee.jpg" alt="A2 Bilona Ghee" loading="lazy">
+            <span class="category-pill-tag">VEDIC A2</span>
+          </div>
+          <div class="category-card-info">
+            <span class="category-meta-tag">PURE DAIRY</span>
+            <h3 class="category-name">A2 Bilona Ghee</h3>
+            <p class="category-subtext">Vedic Cultured Butter</p>
+            <span class="category-link-cta">Explore <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </div>
+        </a>
+
+        <a href="shop.html?category=oils" class="category-card" onclick="filterHomeCategory('oils');">
+          <div class="category-card-thumb">
+            <img src="public/products/mustard-oil.jpg" alt="Cold-Pressed Mustard Oil" loading="lazy">
+            <span class="category-pill-tag">COLD-PRESSED</span>
+          </div>
+          <div class="category-card-info">
+            <span class="category-meta-tag">PURE OIL</span>
+            <h3 class="category-name">Mustard Oils</h3>
+            <p class="category-subtext">Cold-Pressed Kachi Ghani</p>
+            <span class="category-link-cta">Explore <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </div>
+        </a>
+
+        <a href="shop.html?category=coffee" class="category-card" onclick="filterHomeCategory('coffee');">
+          <div class="category-card-thumb">
+            <img src="public/coffee.jpg" alt="GOURSHAL Premium Coffee" loading="lazy">
+            <span class="category-pill-tag">100% PURE</span>
+          </div>
+          <div class="category-card-info">
+            <span class="category-meta-tag">ARTISAN COFFEE</span>
+            <h3 class="category-name">Premium Coffee</h3>
+            <p class="category-subtext">No Added Chicory</p>
+            <span class="category-link-cta">Explore <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </div>
+        </a>
+
+        <a href="shop.html?category=tea" class="category-card" onclick="filterHomeCategory('tea');">
+          <div class="category-card-thumb">
+            <img src="public/products/tea-tulsi.jpg" alt="GOURSHAL Green Tea" loading="lazy">
+            <span class="category-pill-tag">100% NATURAL</span>
+          </div>
+          <div class="category-card-info">
+            <span class="category-meta-tag">WHOLE LEAF TEA</span>
+            <h3 class="category-name">Green Teas</h3>
+            <p class="category-subtext">5 Ayurvedic Blends</p>
+            <span class="category-link-cta">Explore <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </div>
+        </a>
+
+        <a href="shop.html?category=spices" class="category-card" onclick="filterHomeCategory('spices');">
+          <div class="category-card-thumb">
+            <img src="public/products/garam-masala.jpg" alt="GOURSHAL Premium Spices" loading="lazy">
+            <span class="category-pill-tag">100% NATURAL</span>
+          </div>
+          <div class="category-card-info">
+            <span class="category-meta-tag">ROYAL SPICES</span>
+            <h3 class="category-name">Vedic Spices</h3>
+            <p class="category-subtext">Sun-Dried & Pure</p>
+            <span class="category-link-cta">Explore <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </div>
+        </a>
+
+        <a href="shop.html?category=honey" class="category-card" onclick="filterHomeCategory('honey');">
+          <div class="category-card-thumb">
+            <img src="public/honey.jpg" alt="Wild Jungle Honey" loading="lazy">
+            <span class="category-pill-tag">100% UNHEATED</span>
+          </div>
+          <div class="category-card-info">
+            <span class="category-meta-tag">WILD FOREST</span>
+            <h3 class="category-name">Jungle Honey</h3>
+            <p class="category-subtext">Raw & Unfiltered</p>
+            <span class="category-link-cta">Explore <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION 3: MASTERPIECES PRODUCT GRID        -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="products">
+      <div class="section-header-centered">
+        <span class="section-tag">Direct from Nature</span>
+        <h2 class="section-heading">Our Pure Creations</h2>
+        <p class="section-lead">Handcrafted in small batches with zero preservatives, synthetic flavorings, or chemical extraction.</p>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="products-filter-bar" id="productFilterBar">
+        <button class="filter-pill active" data-category="all">All Masterpieces</button>
+        <button class="filter-pill" data-category="ghee">Pure Ghee</button>
+        <button class="filter-pill" data-category="oils">Cold-Pressed Oils</button>
+        <button class="filter-pill" data-category="coffee">Ghee Coffee</button>
+        <button class="filter-pill" data-category="tea">Himalayan Teas</button>
+        <button class="filter-pill" data-category="spices">Vedic Spices</button>
+        <button class="filter-pill" data-category="honey">Wild Honey</button>
+      </div>
+
+      <!-- Product Cards Grid -->
+      <div class="masterpieces-grid" id="homeProductsGrid">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION 4: THE 5 SACRED VEDIC PILLARS       -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="vedic-craft">
+      <div class="section-header-centered">
+        <span class="section-tag">Ancient Wisdom • Modern Purity</span>
+        <h2 class="section-heading">The 5 Sacred Vedic Pillars</h2>
+        <p class="section-lead">We reject commercial shortcuts, refining machines, and solvent chemicals in favor of timeless hand craftsmanship passed down for generations.</p>
+      </div>
+
+      <div class="pillars-gold-divider"></div>
+
+      <div class="pillars-grid">
+        <div class="pillar-card">
+          <div class="pillar-step-badge">PILLAR 01</div>
+          <div class="pillar-icon">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2C8 2 5 5 5 9c0 3 1.5 5.5 4 7v2h6v-2c2.5-1.5 4-4 4-7 0-4-3-7-7-7z"/><line x1="9" y1="18" x2="15" y2="18"/></svg>
+          </div>
+          <div class="pillar-title">Vedic Bilona</div>
+          <div class="pillar-desc">Culturing A2 Gir cow milk into curd, hand-churning makkhan bidirectional before slow wood-fire cooking.</div>
+          <div class="pillar-num-watermark">01</div>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-step-badge">PILLAR 02</div>
+          <div class="pillar-icon">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+          </div>
+          <div class="pillar-title">Cold-Pressed</div>
+          <div class="pillar-desc">Cold-expelling mustard and oilseeds in traditional wooden churns under 35°C to preserve volatile oils and nutrients.</div>
+          <div class="pillar-num-watermark">02</div>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-step-badge">PILLAR 03</div>
+          <div class="pillar-icon">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 3l4 8 5-5 1 10H6L7 8l4 4-3-9z"/></svg>
+          </div>
+          <div class="pillar-title">High Altitude</div>
+          <div class="pillar-desc">Hand-plucking tender first-flush tea leaves at 2,000m+ Himalayan elevations for maximum EGCG antioxidants.</div>
+          <div class="pillar-num-watermark">03</div>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-step-badge">PILLAR 04</div>
+          <div class="pillar-icon">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <div class="pillar-title">Stone Pounding</div>
+          <div class="pillar-desc">Sun-drying and low-speed stone-grinding native Lakadong turmeric to retain natural essential aromatic oils.</div>
+          <div class="pillar-num-watermark">04</div>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-step-badge">PILLAR 05</div>
+          <div class="pillar-icon">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3C7 3 4 7 4 12s3 7 8 9c5-2 8-4 8-9s-3-9-8-9z"/><path d="M12 8v4l3 3"/></svg>
+          </div>
+          <div class="pillar-title">Raw & Unheated</div>
+          <div class="pillar-desc">Wild-foraging raw jungle honey without micro-filters or pasteurization, preserving active live enzymes.</div>
+          <div class="pillar-num-watermark">05</div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION 5: INTERACTIVE LAB PURITY CHECKER   -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="purity-verifier">
+      <div class="section-header-centered">
+        <span class="section-tag">Radical Transparency</span>
+        <h2 class="section-heading">Verify Your Batch Purity</h2>
+        <p class="section-lead">Every single Gourshal jar comes with a certified FSSAI lab report. Enter your batch code or tap a demo batch below to inspect the chemical analysis.</p>
+      </div>
+
+      <div class="verifier-box">
+        <div class="batch-quick-tags">
+          <span>Quick Demo Batches:</span>
+          <button class="batch-chip" onclick="verifyDemoBatch('FL/07/026/F011')">⭐ NABL Report: FL/07/026/F011</button>
+          <button class="batch-chip" onclick="verifyDemoBatch('GRL-2026-MUSTARD-OIL')">GRL-2026-MUSTARD-OIL</button>
+          <button class="batch-chip" onclick="verifyDemoBatch('GRL-2026-GHEE-A2')">GRL-2026-GHEE-A2</button>
+          <button class="batch-chip" onclick="verifyDemoBatch('GRL-2026-TURMERIC-85')">GRL-2026-TURMERIC-85</button>
+        </div>
+
+        <div class="verifier-input-wrap">
+          <input type="text" id="batchCodeInput" class="verifier-input" placeholder="Enter Batch or Report ID (e.g. FL/07/026/F011)" value="FL/07/026/F011">
+          <button class="btn-forest-primary" onclick="verifyBatchCode()">Verify Purity</button>
+        </div>
+
+        <div class="lab-result-display active" id="labResultDisplay">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(197,154,70,0.2); padding-bottom:12px;">
+            <div>
+              <strong id="labProductName" style="color:var(--forest-green); font-size:16px;">GOURSHAL Pure Black Mustard Oil (Kachi Ghani)</strong>
+              <div style="font-size:11px; color:var(--muted-ink); margin-top:2px;">Report ID: <span id="labBatchId">FL/07/026/F011</span> • <span id="labTestedBy">FAST LABS (NABL &amp; FSSAI Accredited)</span></div>
+            </div>
+            <span style="background:rgba(46,111,64,0.12); color:#2E6F40; font-weight:700; font-size:11px; padding:6px 12px; border-radius:20px;">✓ 100% PASSED</span>
+          </div>
+
+          <div class="lab-stats-grid">
+            <div class="lab-stat-box">
+              <div class="lab-stat-num" id="labPurityScore">99.9%</div>
+              <div class="lab-stat-label">Purity Index</div>
+            </div>
+            <div class="lab-stat-box">
+              <div class="lab-stat-num" id="labAdulteration">0.0%</div>
+              <div class="lab-stat-label">Adulteration / Fillers</div>
+            </div>
+            <div class="lab-stat-box">
+              <div class="lab-stat-num" id="labKeyNutrient">8.2g CLA</div>
+              <div class="lab-stat-label" id="labNutrientLabel">Active Fatty Acids / 100g</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION 6: WELLNESS RECIPES & RITUALS       -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="rituals">
+      <div class="section-header-centered">
+        <span class="section-tag">Daily Nourishment</span>
+        <h2 class="section-heading">Ayurvedic Rituals & Recipes</h2>
+        <p class="section-lead">Transform your daily nutrition with these revered Indian holistic health practices.</p>
+      </div>
+
+      <div class="rituals-grid">
+        <div class="ritual-card">
+          <img src="public/coffee.jpg" alt="Bulletproof Coffee Ritual" class="ritual-img">
+          <div class="ritual-body">
+            <div class="ritual-time">Morning Ritual • 5 Mins</div>
+            <div class="ritual-title">Vedic Bulletproof Coffee</div>
+            <div class="ritual-desc">Blend 1 tbsp Gourshal A2 Ghee with hot brewed single-origin Arabica coffee for a creamy, froth-rich elixir that fuels cognitive focus for 6 hours.</div>
+          </div>
+        </div>
+
+        <div class="ritual-card">
+          <img src="public/products/mustard-oil.jpg" alt="Mustard Oil Tadka" class="ritual-img">
+          <div class="ritual-body">
+            <div class="ritual-time">Lunch & Dinner • Traditional</div>
+            <div class="ritual-title">Heritage Mustard Oil Tadka</div>
+            <div class="ritual-desc">Heat Kachi Ghani wood-pressed mustard oil to its gentle smoking point with cumin and whole red chillies to release deep antimicrobial aroma and ignite digestion.</div>
+          </div>
+        </div>
+
+        <div class="ritual-card">
+          <img src="public/products/turmeric-powder.jpg" alt="Golden Turmeric Elixir" class="ritual-img">
+          <div class="ritual-body">
+            <div class="ritual-time">Night Elixir • Bedtime</div>
+            <div class="ritual-title">Golden Lakadong Milk</div>
+            <div class="ritual-desc">Warm cow milk with 1/2 tsp Lakadong Turmeric, a pinch of black pepper and 1/2 tsp A2 Ghee. Promotes deep cellular repair, joint comfort, and peaceful sleep.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION 7: CUSTOMER TESTIMONIALS           -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="testimonials">
+      <div class="section-header-centered">
+        <span class="section-tag">Loved Across India</span>
+        <h2 class="section-heading">What Our Patrons Say</h2>
+        <p class="section-lead">Over 15,000 discerning families trust Gourshal for their daily health and kitchen purity.</p>
+      </div>
+
+      <div class="testimonials-track">
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <div class="testi-text">"The A2 Bilona Ghee has that authentic grainy texture and nutty aroma my grandmother used to make in the village. Nothing in the modern market compares."</div>
+          <div class="testi-author">
+            <div class="testi-avatar">P</div>
+            <div>
+              <div class="testi-name">Dr. Priya Sharma</div>
+              <div class="testi-loc">Ayurvedic Physician • New Delhi</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <div class="testi-text">"Their Cold-Pressed Mustard Oil is sensational. The sharp pungency and golden clarity are proof that it is 100% raw cold-pressed. My cooking has reached a new level."</div>
+          <div class="testi-author">
+            <div class="testi-avatar">R</div>
+            <div>
+              <div class="testi-name">Rajeshwar Sen</div>
+              <div class="testi-loc">Culinary Enthusiast • Kolkata</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <div class="testi-text">"The Ghee Coffee transformed my morning routine! No heart palpitations or afternoon crash. Just steady, crystal-clear energy until lunch."</div>
+          <div class="testi-author">
+            <div class="testi-avatar">A</div>
+            <div>
+              <div class="testi-name">Ananya Krishna</div>
+              <div class="testi-loc">Product Architect • Bengaluru</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- FOOTER                                      -->
+  <!-- ═══════════════════════════════════════════ -->
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-brand-name">GOURSHAL</div>
+        <div class="footer-brand-tag">CRAFTED TO LAST</div>
+        <p class="footer-desc">Preserving sacred Indian Vedic traditions through chemical-free A2 Bilona Ghee, Cold-Pressed Mustard Oil, Artisanal Ghee Coffee, Himalayan Green Teas, High-Curcumin Spices, and Raw Wild Honey.</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="Instagram" class="social-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 0112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" aria-label="Facebook" class="social-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+          </a>
+          <a href="https://wa.me/917505906564" aria-label="WhatsApp" class="social-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title">Our Products</div>
+        <ul class="footer-links">
+          <li><a href="shop.html?category=ghee">A2 Vedic Bilona Ghee</a></li>
+          <li><a href="shop.html?category=oils">Wood-Pressed Mustard Oil</a></li>
+          <li><a href="shop.html?category=coffee">Bulletproof Ghee Coffee</a></li>
+          <li><a href="shop.html?category=tea">Himalayan Green Tea</a></li>
+          <li><a href="shop.html?category=spices">Lakadong Turmeric & Spices</a></li>
+          <li><a href="shop.html?category=honey">Raw Wild Forest Honey</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title">Vedic Craft</div>
+        <ul class="footer-links">
+          <li><a href="#vedic-craft">The 5 Sacred Pillars</a></li>
+          <li><a href="#purity-verifier">Certified Lab Reports</a></li>
+          <li><a href="#rituals">Ayurvedic Recipes</a></li>
+          <li><a href="about.html">Our Farm Story</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title">Patron Support</div>
+        <ul class="footer-links">
+          <li><a href="orders.html">Track Order</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="contact.html">Shipping &amp; Returns</a></li>
+          <li><a href="contact.html">Purity FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Gourshal Wellness Pvt Ltd. All rights reserved. FSSAI Certified.</div>
+      <div class="footer-legal">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Vedic Craft</a>
+        <a href="#">Lab Certifications</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div class="cart-toast" id="cartToast" role="alert" aria-live="polite">
+    <div class="toast-icon">✓</div>
+    <div class="toast-text" id="toastText">Added to cart</div>
+  </div>
+
+
+
+  <script src="scripts/config.js"></script>
+  <script src="scripts/utils.js"></script>
+  <script src="scripts/products.js"></script>
+  <script src="scripts/cart.js"></script>
+  <script src="scripts/home.js"></script>
+  <script src="scripts/auth.js"></script>
+</body>
+</html>

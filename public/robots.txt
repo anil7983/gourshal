@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Disallow admin and private pages
+Disallow: /admin.html
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://gourshal.com/sitemap.xml
