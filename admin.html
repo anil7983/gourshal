@@ -839,8 +839,8 @@
         users = Auth.getUsersLocal();
       }
 
-      // Dashboard Stats
-      const revenue = orders.reduce((sum, o) => sum + o.total, 0);
+      // Dashboard Stats (Exclude cancelled orders from revenue)
+      const revenue = orders.filter(o => o.status !== 'cancelled').reduce((sum, o) => sum + (o.total || 0), 0);
       document.getElementById('statRev').textContent = window.Utils?.formatCurrency ? Utils.formatCurrency(revenue) : '₹' + revenue.toLocaleString();
       document.getElementById('statOrders').textContent = orders.length;
       document.getElementById('statUsers').textContent = users.length;
