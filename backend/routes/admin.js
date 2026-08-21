@@ -81,6 +81,7 @@ router.get('/dashboard', authenticate, requireAdmin, asyncHandler(async (req, re
   const todayOrders = await Order.countDocuments({ createdAt: { $gte: startOfDay } });
   
   const revenueResult = await Order.aggregate([
+    { $match: { status: { $ne: 'cancelled' } } },
     { $group: { _id: null, total: { $sum: '$total' } } }
   ]);
   const revenue = revenueResult[0]?.total || 0;
