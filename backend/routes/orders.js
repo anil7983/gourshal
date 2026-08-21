@@ -43,7 +43,7 @@ router.post('/create-payment', optionalAuth, sanitize, validate([{ name: 'amount
   };
 
   const order = await razorpayInstance.orders.create(options);
-  res.json({ ok: true, orderId: order.id, amount: order.amount });
+  res.json({ ok: true, orderId: order.id, amount: order.amount, key: process.env.RAZORPAY_KEY_ID });
 }));
 
 // @route   POST /api/orders
