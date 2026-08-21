@@ -3,7 +3,19 @@
 // ═══════════════════════════════════════════════════
 
 const Cart = {
-  STORAGE_KEY: 'gourshal_cart',
+  BASE_STORAGE_KEY: 'gourshal_cart',
+
+  // Returns a user-specific storage key so each user has their own separate cart
+  get STORAGE_KEY() {
+    try {
+      const session = JSON.parse(localStorage.getItem('gourshal_session'));
+      if (session && session.userId) {
+        return `gourshal_cart_${session.userId}`;
+      }
+    } catch (e) { /* ignore */ }
+    // Guest/logged-out cart
+    return 'gourshal_cart_guest';
+  },
 
   get API_URL() {
     return window.Config ? Config.API_URL : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5000/api' : window.location.origin + '/api');

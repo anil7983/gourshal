@@ -221,6 +221,49 @@ const Auth = {
     }
   },
 
+  async demoLogin() {
+    try {
+      const res = await fetch(`${this.API_URL}/auth/demo-login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': window.Utils?.getCSRFToken() || ''
+        }
+      });
+      const data = await res.json();
+      if (res.ok && data.ok) {
+        // IMPORTANT: Always force role='user' for demo — never admin
+        const demoUser = {
+          ...data.user,
+          role: 'user',
+          id: data.user.id || 'u_demo_customer',
+          email: data.user.email || 'demo@gourshal.com'
+        };
+        // Double-check: override any admin emails with safe demo email
+        if (demoUser.email === 'admin@gourshal.com' || demoUser.email === 'rajy23636@gmail.com') {
+          demoUser.email = 'demo@gourshal.com';
+          demoUser.id = 'u_demo_customer';
+        }
+        this.createSession(demoUser);
+        return { ok: true, user: demoUser };
+      }
+      return { ok: false, error: data.error || 'Demo login failed' };
+    } catch (e) {
+      console.warn('Backend unavailable, falling back to LocalStorage demo auth');
+      // Fixed demo user — never admin role
+      const demoUser = {
+        id: 'u_demo_customer',
+        name: 'Demo Customer',
+        email: 'demo@gourshal.com',
+        role: 'user',
+        createdAt: new Date().toISOString(),
+        orders: []
+      };
+      this.createSession(demoUser);
+      return { ok: true, user: demoUser };
+    }
+  },
+
   createSession(user) {
     const session = {
       userId: user.id,
@@ -249,6 +292,13 @@ const Auth = {
   },
 
   logout() {
+    // Clear this user's cart before logging out
+    try {
+      const session = JSON.parse(localStorage.getItem(this.SESSION_KEY));
+      if (session && session.userId) {
+        localStorage.removeItem(`gourshal_cart_${session.userId}`);
+      }
+    } catch (e) { /* ignore */ }
     localStorage.removeItem(this.SESSION_KEY);
     window.location.href = 'index.html';
   },
