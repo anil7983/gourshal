@@ -865,11 +865,10 @@
         })
           .then(res => res.json())
           .then(data => {
-            const razorpayKey = window.Config ? Config.RAZORPAY_KEY : '';
             if (!data.ok) throw new Error(data.error);
 
             const options = {
-              key: razorpayKey || '',
+              key: data.key || (window.Config ? Config.RAZORPAY_KEY : ''),
               amount: data.amount,
               currency: 'INR',
               name: 'Gourshal',
