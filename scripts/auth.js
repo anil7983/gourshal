@@ -119,7 +119,7 @@ const Auth = {
         email: cleanEmail,
         phone: cleanPhone,
         passwordHash: await this.hashPassword(password),
-        role: (cleanEmail === 'admin@gourshal.com' || cleanEmail === 'rajy23636@gmail.com') ? 'admin' : 'user',
+        role: 'user',
         createdAt: new Date().toISOString(),
         orders: []
       };
@@ -240,7 +240,7 @@ const Auth = {
           email: data.user.email || 'demo@gourshal.com'
         };
         // Double-check: override any admin emails with safe demo email
-        if (demoUser.email === 'admin@gourshal.com' || demoUser.email === 'rajy23636@gmail.com') {
+        if (demoUser.email === 'admin@gourshal.com') {
           demoUser.email = 'demo@gourshal.com';
           demoUser.id = 'u_demo_customer';
         }
@@ -308,8 +308,7 @@ const Auth = {
     const session = this.getSession();
     if (!session) return false;
     const role = session.role;
-    const email = (session.email || '').toLowerCase();
-    return role === 'admin' || role === 'super_admin' || email === 'admin@gourshal.com' || email === 'rajy23636@gmail.com';
+    return role === 'admin' || role === 'super_admin';
   },
 
   getCurrentUser() {
