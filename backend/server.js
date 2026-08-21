@@ -58,6 +58,7 @@ app.use(helmet({
       imgSrc: ["'self'", "data:", "https:", "blob:"],
       mediaSrc: ["'self'", "data:", "blob:", "https:"],
       scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://checkout.razorpay.com"],
+      scriptSrcAttr: ["'unsafe-inline'"],
       connectSrc: ["'self'", "https://api.razorpay.com"],
       frameSrc: ["'self'", "https://checkout.razorpay.com"]
     }

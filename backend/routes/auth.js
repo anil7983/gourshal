@@ -168,4 +168,45 @@ router.post('/reset-password', sanitize, asyncHandler(async (req, res) => {
   res.json({ ok: true, message: 'Password has been updated.' });
 }));
 
+// @route   POST /api/auth/demo-login
+// @desc    Authenticate as a non-privileged demo customer
+const handleDemoLogin = asyncHandler(async (req, res) => {
+  const demoEmail = 'demo@gourshal.com';
+  let demoUser = await User.findOne({ email: demoEmail });
+
+  if (!demoUser) {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(Math.random().toString(36) + 'GourshalDemo2026!', salt);
+    demoUser = new User({
+      name: 'Demo Customer',
+      email: demoEmail,
+      password: hashedPassword,
+      phone: '9876543210',
+      role: 'user'
+    });
+    await demoUser.save();
+  } else if (demoUser.role !== 'user') {
+    // Strictly enforce non-admin customer role for demo account
+    demoUser.role = 'user';
+    await demoUser.save();
+  }
+
+  const payload = { userId: demoUser.id, role: 'user' };
+  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+  res.json({
+    ok: true,
+    user: {
+      id: demoUser.id,
+      name: demoUser.name,
+      email: demoUser.email,
+      role: 'user',
+      token
+    }
+  });
+});
+
+router.post('/demo-login', handleDemoLogin);
+router.post('/demo', handleDemoLogin);
+
 module.exports = router;

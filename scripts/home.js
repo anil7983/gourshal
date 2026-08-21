@@ -355,10 +355,16 @@ function initNavbarAndCart() {
 function updateCartCounters() {
   let count = 0;
   try {
-    const raw = localStorage.getItem('gourshal_cart');
-    if (raw) {
-      const items = JSON.parse(raw);
-      count = items.reduce((sum, item) => sum + (item.qty || 1), 0);
+    if (window.Cart && typeof window.Cart.count === 'function') {
+      count = window.Cart.count();
+    } else {
+      const session = JSON.parse(localStorage.getItem('gourshal_session') || 'null');
+      const storageKey = session && session.userId ? `gourshal_cart_${session.userId}` : 'gourshal_cart_guest';
+      const raw = localStorage.getItem(storageKey);
+      if (raw) {
+        const items = JSON.parse(raw);
+        count = items.reduce((sum, item) => sum + (item.qty || 1), 0);
+      }
     }
   } catch (e) {}
 
