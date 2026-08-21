@@ -239,11 +239,6 @@ const Auth = {
           id: data.user.id || 'u_demo_customer',
           email: data.user.email || 'demo@gourshal.com'
         };
-        // Double-check: override any admin emails with safe demo email
-        if (demoUser.email === 'admin@gourshal.com') {
-          demoUser.email = 'demo@gourshal.com';
-          demoUser.id = 'u_demo_customer';
-        }
         this.createSession(demoUser);
         return { ok: true, user: demoUser };
       }
