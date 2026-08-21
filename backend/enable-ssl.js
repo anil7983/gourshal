@@ -12,7 +12,7 @@ const conn = new Client();
 conn.on('ready', () => {
   console.log('Connected! Enabling SSL/HTTPS on Nginx via Certbot...');
   conn.exec(`
-    certbot --nginx -d gourshal.com -d www.gourshal.com --non-interactive --agree-tos --email rajy23636@gmail.com --redirect --reinstall
+    certbot --nginx -d gourshal.com -d www.gourshal.com --non-interactive --agree-tos --email admin@gourshal.com --redirect --reinstall
     nginx -t
     systemctl reload nginx
     echo ""

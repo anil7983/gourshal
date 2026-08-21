@@ -30,7 +30,7 @@ async function clean() {
   // 2. Delete test users (keep admin accounts)
   const usersDeleted = await User.deleteMany({
     role: 'user',
-    email: { $nin: ['admin@gourshal.com', 'rajy23636@gmail.com'] }
+    email: { $ne: 'admin@gourshal.com' }
   });
   console.log('Deleted test users:', usersDeleted.deletedCount);
   

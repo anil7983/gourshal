@@ -18,9 +18,6 @@ const loginFields = [
   { name: 'password', required: true, message: 'Password is required.' }
 ];
 
-// First admin email configurable via env, default preserved for backward compatibility
-const FIRST_ADMIN_EMAIL = process.env.FIRST_ADMIN_EMAIL || 'admin@gourshal.com';
-
 // @route   POST /api/auth/register
 router.post('/register', sanitize, validate(authFields), asyncHandler(async (req, res) => {
   const { name, email, password, phone } = req.body;
@@ -34,11 +31,12 @@ router.post('/register', sanitize, validate(authFields), asyncHandler(async (req
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
-  const isAdminEmail = cleanEmail === 'admin@gourshal.com' || cleanEmail === 'rajy23636@gmail.com' || cleanEmail === FIRST_ADMIN_EMAIL.toLowerCase();
-  const role = isAdminEmail ? 'admin' : 'user';
-
   user = new User({
-    name, email: cleanEmail, password: hashedPassword, phone, role
+    name,
+    email: cleanEmail,
+    password: hashedPassword,
+    phone,
+    role: 'user'
   });
   await user.save();
 
@@ -63,22 +61,9 @@ router.post('/login', sanitize, validate(loginFields), asyncHandler(async (req, 
   const cleanEmail = email.toLowerCase().trim();
   
   let user = await User.findOne({ email: cleanEmail });
-  const isAdminEmail = cleanEmail === 'admin@gourshal.com' || cleanEmail === 'rajy23636@gmail.com' || cleanEmail === FIRST_ADMIN_EMAIL.toLowerCase();
 
   if (!user) {
-    if (isAdminEmail) {
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
-      user = new User({
-        name: 'Gourshal Admin',
-        email: cleanEmail,
-        password: hashedPassword,
-        role: 'admin'
-      });
-      await user.save();
-    } else {
-      return res.status(400).json({ ok: false, error: 'No account found with this email.' });
-    }
+    return res.status(400).json({ ok: false, error: 'No account found with this email.' });
   }
 
   let isMatch = false;
@@ -91,16 +76,12 @@ router.post('/login', sanitize, validate(loginFields), asyncHandler(async (req, 
     isMatch = true;
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
+    await user.save();
   }
 
   if (!isMatch) {
     return res.status(400).json({ ok: false, error: 'Incorrect password. Please try again.' });
   }
-
-  if (isAdminEmail && user.role !== 'admin' && user.role !== 'super_admin') {
-    user.role = 'admin';
-  }
-  await user.save();
 
   const payload = { userId: user.id, role: user.role };
   const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
