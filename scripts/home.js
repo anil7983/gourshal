@@ -571,16 +571,32 @@ function initTestimonialSlider() {
   const cards = slider.querySelectorAll('.testi-card');
   if (!cards.length) return;
 
-  if (dotsContainer) {
-    dotsContainer.innerHTML = Array.from(cards).map((_, idx) => `
-      <button class="testi-dot ${idx === 0 ? 'active' : ''}" onclick="goToTestimonial(${idx})" aria-label="Go to review ${idx + 1}"></button>
+  const updateDotsCount = () => {
+    if (!dotsContainer) return;
+    const cardWidth = cards[0].offsetWidth + 28;
+    const maxScroll = slider.scrollWidth - slider.clientWidth;
+    const totalSteps = Math.max(1, Math.ceil(maxScroll / cardWidth) + 1);
+
+    dotsContainer.innerHTML = Array.from({ length: totalSteps }).map((_, idx) => `
+      <button class="testi-dot ${idx === 0 ? 'active' : ''}" onclick="goToTestimonial(${idx})" aria-label="Go to slide ${idx + 1}"></button>
     `).join('');
-  }
+  };
+
+  updateDotsCount();
+  window.addEventListener('resize', updateDotsCount);
 
   slider.addEventListener('scroll', () => {
     const cardWidth = cards[0].offsetWidth + 28;
-    const activeIndex = Math.min(Math.round(slider.scrollLeft / cardWidth), cards.length - 1);
-    updateTestiDots(activeIndex);
+    const maxScroll = slider.scrollWidth - slider.clientWidth;
+    if (maxScroll <= 0) return;
+
+    if (slider.scrollLeft >= maxScroll - 15) {
+      const dots = document.querySelectorAll('.testi-dot');
+      if (dots.length) updateTestiDots(dots.length - 1);
+    } else {
+      const activeIndex = Math.round(slider.scrollLeft / cardWidth);
+      updateTestiDots(activeIndex);
+    }
   }, { passive: true });
 }
 
@@ -591,17 +607,26 @@ function moveTestimonials(direction) {
   if (!cards.length) return;
 
   const cardWidth = cards[0].offsetWidth + 28;
-  slider.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+  const maxScroll = slider.scrollWidth - slider.clientWidth;
+
+  if (direction === 1 && slider.scrollLeft >= maxScroll - 15) {
+    slider.scrollTo({ left: 0, behavior: 'smooth' });
+  } else if (direction === -1 && slider.scrollLeft <= 15) {
+    slider.scrollTo({ left: maxScroll, behavior: 'smooth' });
+  } else {
+    slider.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+  }
 }
 
 function goToTestimonial(index) {
   const slider = document.getElementById('testiSlider');
   if (!slider) return;
   const cards = slider.querySelectorAll('.testi-card');
-  if (!cards[index]) return;
+  if (!cards.length) return;
 
   const cardWidth = cards[0].offsetWidth + 28;
-  slider.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
+  const targetLeft = index * cardWidth;
+  slider.scrollTo({ left: targetLeft, behavior: 'smooth' });
   updateTestiDots(index);
 }
 
