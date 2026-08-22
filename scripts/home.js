@@ -646,6 +646,8 @@ window.closeStoryVideo = closeStoryVideo;
 window.switchModalChapter = switchModalChapter;
 window.moveTestimonials = moveTestimonials;
 window.goToTestimonial = goToTestimonial;
+window.verifyDemoBatch = verifyDemoBatch;
+window.verifyBatchCode = verifyBatchCode;
 
 // Close modal on Escape key or backdrop click
 document.addEventListener('keydown', e => {
