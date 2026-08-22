@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCategoryFilters();
   initNavbarAndCart();
   initCursorGlow();
+  initTestimonialSlider();
 });
 
 // Global state for active hero product
@@ -178,6 +179,7 @@ function renderMasterpiecesGrid() {
     const formattedOriginal = window.Utils?.formatCurrency ? Utils.formatCurrency(p.originalPrice) : '₹' + p.originalPrice;
 
     const pid = p.productId || p.id || p._id;
+    const cartQty = window.Cart ? Cart.getItemQty(pid) : 0;
     return `
       <div class="modern-product-card" onclick="window.location='product.html?id=${pid}'">
         ${p.badge ? `<div class="card-badge">${p.badge}</div>` : ''}
@@ -195,15 +197,27 @@ function renderMasterpiecesGrid() {
             <span class="price-current">${formattedPrice} <small style="font-size:11px;font-weight:400;color:var(--muted-ink);">/ ${p.unit}</small></span>
             <span class="price-original">${formattedOriginal}</span>
           </div>
-          <button class="btn-card-add" onclick="event.stopPropagation(); quickAddToCart('${pid}', '${(p.name || '').replace(/'/g, "\\'")}')" aria-label="Add ${p.name} to cart">
-            <span>Add</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-          </button>
+          ${cartQty > 0 ? `
+            <div class="card-stepper" onclick="event.stopPropagation();" role="group" aria-label="Adjust quantity">
+              <button class="stepper-btn" onclick="Cart.updateQty('${pid}', ${cartQty - 1}); renderMasterpiecesGrid();" aria-label="Decrease quantity">−</button>
+              <span class="stepper-count" aria-live="polite">${cartQty}</span>
+              <button class="stepper-btn" onclick="Cart.add('${pid}', 1); renderMasterpiecesGrid();" aria-label="Increase quantity">+</button>
+            </div>
+          ` : `
+            <button class="btn-card-add" onclick="event.stopPropagation(); quickAddToCart('${pid}', '${(p.name || '').replace(/'/g, "\\'")}'); renderMasterpiecesGrid();" aria-label="Add ${p.name} to cart">
+              <span>Add</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+          `}
         </div>
       </div>
     `;
   }).join('');
 }
+
+window.addEventListener('cartUpdated', () => {
+  if (typeof renderMasterpiecesGrid === 'function') renderMasterpiecesGrid();
+});
 
 function initCategoryFilters() {
   const filterBtns = document.querySelectorAll('#productFilterBar .filter-pill');
@@ -454,12 +468,20 @@ function openStoryVideo(videoSrc, title, tag) {
     }
   }
 
-  // Highlight active chapter button
+  // Highlight active chapter button (strictly one active)
   const chapterBtns = document.querySelectorAll('.video-chapter-btn');
+  let matched = false;
   chapterBtns.forEach(btn => {
+    btn.classList.remove('active');
     const attr = btn.getAttribute('onclick') || '';
-    btn.classList.toggle('active', attr.includes(videoSrc));
+    if (!matched && tag && attr.includes(tag)) {
+      btn.classList.add('active');
+      matched = true;
+    }
   });
+  if (!matched && chapterBtns.length > 0) {
+    chapterBtns[0].classList.add('active');
+  }
 }
 
 function closeStoryVideo() {
@@ -488,6 +510,10 @@ function switchModalChapter(videoSrc, title, tag, btn) {
 
   if (titleEl) titleEl.innerText = title;
   if (tagEl) tagEl.innerText = tag;
+
+  // Ensure strictly one chapter button is active
+  document.querySelectorAll('.video-chapter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
 
   if (videoEl) {
     let src = videoSrc;
@@ -536,6 +562,56 @@ function switchModalChapter(videoSrc, title, tag, btn) {
   if (btn) btn.classList.add('active');
 }
 
+// ─── 8. TESTIMONIALS SLIDER / CAROUSEL ───
+function initTestimonialSlider() {
+  const slider = document.getElementById('testiSlider');
+  const dotsContainer = document.getElementById('testiDots');
+  if (!slider) return;
+
+  const cards = slider.querySelectorAll('.testi-card');
+  if (!cards.length) return;
+
+  if (dotsContainer) {
+    dotsContainer.innerHTML = Array.from(cards).map((_, idx) => `
+      <button class="testi-dot ${idx === 0 ? 'active' : ''}" onclick="goToTestimonial(${idx})" aria-label="Go to review ${idx + 1}"></button>
+    `).join('');
+  }
+
+  slider.addEventListener('scroll', () => {
+    const cardWidth = cards[0].offsetWidth + 28;
+    const activeIndex = Math.min(Math.round(slider.scrollLeft / cardWidth), cards.length - 1);
+    updateTestiDots(activeIndex);
+  }, { passive: true });
+}
+
+function moveTestimonials(direction) {
+  const slider = document.getElementById('testiSlider');
+  if (!slider) return;
+  const cards = slider.querySelectorAll('.testi-card');
+  if (!cards.length) return;
+
+  const cardWidth = cards[0].offsetWidth + 28;
+  slider.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+}
+
+function goToTestimonial(index) {
+  const slider = document.getElementById('testiSlider');
+  if (!slider) return;
+  const cards = slider.querySelectorAll('.testi-card');
+  if (!cards[index]) return;
+
+  const cardWidth = cards[0].offsetWidth + 28;
+  slider.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
+  updateTestiDots(index);
+}
+
+function updateTestiDots(activeIndex) {
+  const dots = document.querySelectorAll('.testi-dot');
+  dots.forEach((dot, idx) => {
+    dot.classList.toggle('active', idx === activeIndex);
+  });
+}
+
 // Global bindings
 window.quickAddToCart = quickAddToCart;
 window.switchHeroProduct = switchHeroProduct;
@@ -543,6 +619,8 @@ window.filterHomeCategory = filterHomeCategory;
 window.openStoryVideo = openStoryVideo;
 window.closeStoryVideo = closeStoryVideo;
 window.switchModalChapter = switchModalChapter;
+window.moveTestimonials = moveTestimonials;
+window.goToTestimonial = goToTestimonial;
 
 // Close modal on Escape key or backdrop click
 document.addEventListener('keydown', e => {

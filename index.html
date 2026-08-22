@@ -449,43 +449,81 @@
         <p class="section-lead">Over 15,000 discerning families trust Gourshal for their daily health and kitchen purity.</p>
       </div>
 
-      <div class="testimonials-track">
-        <div class="testi-card">
-          <div class="testi-stars">★★★★★</div>
-          <div class="testi-text">"The A2 Bilona Ghee has that authentic grainy texture and nutty aroma my grandmother used to make in the village. Nothing in the modern market compares."</div>
-          <div class="testi-author">
-            <div class="testi-avatar">P</div>
-            <div>
-              <div class="testi-name">Dr. Priya Sharma</div>
-              <div class="testi-loc">Ayurvedic Physician • New Delhi</div>
+      <div class="testimonials-carousel-wrapper">
+        <button class="testi-nav-btn prev" onclick="moveTestimonials(-1)" aria-label="Previous review">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+
+        <div class="testimonials-slider" id="testiSlider">
+          <div class="testimonials-track" id="testiTrack">
+            <div class="testi-card">
+              <div class="testi-stars">★★★★★</div>
+              <div class="testi-text">"The A2 Bilona Ghee has that authentic grainy texture and nutty aroma my grandmother used to make in the village. Nothing in the modern market compares."</div>
+              <div class="testi-author">
+                <div class="testi-avatar">P</div>
+                <div>
+                  <div class="testi-name">Dr. Priya Sharma</div>
+                  <div class="testi-loc">Ayurvedic Physician • New Delhi</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="testi-card">
+              <div class="testi-stars">★★★★★</div>
+              <div class="testi-text">"Their Cold-Pressed Mustard Oil is sensational. The sharp pungency and golden clarity are proof that it is 100% raw cold-pressed. My cooking has reached a new level."</div>
+              <div class="testi-author">
+                <div class="testi-avatar">R</div>
+                <div>
+                  <div class="testi-name">Rajeshwar Sen</div>
+                  <div class="testi-loc">Culinary Enthusiast • Kolkata</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="testi-card">
+              <div class="testi-stars">★★★★★</div>
+              <div class="testi-text">"The Ghee Coffee transformed my morning routine! No heart palpitations or afternoon crash. Just steady, crystal-clear energy until lunch."</div>
+              <div class="testi-author">
+                <div class="testi-avatar">A</div>
+                <div>
+                  <div class="testi-name">Ananya Krishna</div>
+                  <div class="testi-loc">Product Architect • Bengaluru</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="testi-card">
+              <div class="testi-stars">★★★★★</div>
+              <div class="testi-text">"The Lakadong Turmeric is visibly richer in natural golden colour and aroma than commercial store-bought turmeric. Just a pinch is deeply potent."</div>
+              <div class="testi-author">
+                <div class="testi-avatar">S</div>
+                <div>
+                  <div class="testi-name">Suresh Verma</div>
+                  <div class="testi-loc">Yoga Practitioner • Rishikesh</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="testi-card">
+              <div class="testi-stars">★★★★★</div>
+              <div class="testi-text">"The Himalayan Green Tea leaves are whole and fragrant. Such pure, clean taste with zero bitterness. Absolutely outstanding craftsmanship."</div>
+              <div class="testi-author">
+                <div class="testi-avatar">M</div>
+                <div>
+                  <div class="testi-name">Meera Nair</div>
+                  <div class="testi-loc">Nutritionist • Kochi</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="testi-card">
-          <div class="testi-stars">★★★★★</div>
-          <div class="testi-text">"Their Cold-Pressed Mustard Oil is sensational. The sharp pungency and golden clarity are proof that it is 100% raw cold-pressed. My cooking has reached a new level."</div>
-          <div class="testi-author">
-            <div class="testi-avatar">R</div>
-            <div>
-              <div class="testi-name">Rajeshwar Sen</div>
-              <div class="testi-loc">Culinary Enthusiast • Kolkata</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="testi-card">
-          <div class="testi-stars">★★★★★</div>
-          <div class="testi-text">"The Ghee Coffee transformed my morning routine! No heart palpitations or afternoon crash. Just steady, crystal-clear energy until lunch."</div>
-          <div class="testi-author">
-            <div class="testi-avatar">A</div>
-            <div>
-              <div class="testi-name">Ananya Krishna</div>
-              <div class="testi-loc">Product Architect • Bengaluru</div>
-            </div>
-          </div>
-        </div>
+        <button class="testi-nav-btn next" onclick="moveTestimonials(1)" aria-label="Next review">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
       </div>
+
+      <div class="testi-dots" id="testiDots"></div>
     </section>
   </main>
 
@@ -538,18 +576,17 @@
         <ul class="footer-links">
           <li><a href="orders.html">Track Order</a></li>
           <li><a href="contact.html">Contact Us</a></li>
-          <li><a href="contact.html">Shipping &amp; Returns</a></li>
-          <li><a href="contact.html">Purity FAQ</a></li>
+          <li><a href="shop.html">Shop All Products</a></li>
         </ul>
       </div>
     </div>
 
     <div class="footer-bottom">
-      <div class="footer-copy">© 2026 Gourshal Wellness Pvt Ltd. All rights reserved. FSSAI Certified.</div>
+      <div class="footer-copy" style="font-weight: 700; color: #FFFFFF;">© 2026 Gourshal. Crafted to Last. All rights reserved. FSSAI Certified.</div>
       <div class="footer-legal">
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms of Vedic Craft</a>
-        <a href="#">Lab Certifications</a>
+        <a href="privacy.html" style="color: rgba(255,255,255,0.85); font-weight: 600;">Privacy Policy</a>
+        <a href="terms.html" style="color: rgba(255,255,255,0.85); font-weight: 600;">Terms of Service</a>
+        <a href="about.html#purity-verifier" style="color: rgba(255,255,255,0.85); font-weight: 600;">Lab Certifications</a>
       </div>
     </div>
   </footer>

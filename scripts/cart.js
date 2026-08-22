@@ -148,6 +148,12 @@ const Cart = {
     return this.get().reduce((s, i) => s + (Number(i.qty) || 0), 0);
   },
 
+  getItemQty(productId) {
+    const items = this.get();
+    const item = items.find(i => i && (i.id === productId || i.productId === productId || i._id === productId || String(i._id) === String(productId)));
+    return item ? (Number(item.qty) || 0) : 0;
+  },
+
   total() {
     const productList = window.GOURSHAL_PRODUCTS || window.GOURSHAL_PRODUCTS_LOCAL || [];
     return this.get().reduce((s, i) => {

@@ -430,19 +430,25 @@
 
       <div class="ethos-grid">
         <div class="ethos-card">
-          <div class="ethos-icon">🌱</div>
+          <div class="ethos-icon-wrap" style="width:68px; height:68px; margin:0 auto 20px; border-radius:50%; background:rgba(216,175,93,0.12); border:1.5px solid var(--gold-vibrant); display:flex; align-items:center; justify-content:center; color:var(--forest-green);">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+          </div>
           <h3 class="ethos-title">Ethical Direct Sourcing</h3>
           <p class="ethos-text">We partner directly with traditional gaushalas, mountain tea estates, and tribal honey foragers, paying fair above-market compensation.</p>
         </div>
 
         <div class="ethos-card">
-          <div class="ethos-icon">🪵</div>
+          <div class="ethos-icon-wrap" style="width:68px; height:68px; margin:0 auto 20px; border-radius:50%; background:rgba(216,175,93,0.12); border:1.5px solid var(--gold-vibrant); display:flex; align-items:center; justify-content:center; color:var(--forest-green);">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
           <h3 class="ethos-title">Zero Machine Refining</h3>
           <p class="ethos-text">No chemical solvents, synthetic bleaching, or micro-filtering. We extract our products using slow wooden churns and low flames.</p>
         </div>
 
         <div class="ethos-card">
-          <div class="ethos-icon">🔬</div>
+          <div class="ethos-icon-wrap" style="width:68px; height:68px; margin:0 auto 20px; border-radius:50%; background:rgba(216,175,93,0.12); border:1.5px solid var(--gold-vibrant); display:flex; align-items:center; justify-content:center; color:var(--forest-green);">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2v6.5a2 2 0 0 0 2 2H22"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14v6a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-6"/></svg>
+          </div>
           <h3 class="ethos-title">100% NABL Lab Certified</h3>
           <p class="ethos-text">Every single batch is tested for zero adulteration, pesticides, or heavy metals. Complete transparency in every single jar.</p>
         </div>
@@ -496,13 +502,65 @@
       </div>
     </section>
 
+    <!-- Interactive Lab Purity Checker in About Page -->
+    <section id="purity-verifier" style="padding: 90px 48px; background: #FAF7F2; border-bottom: 1px solid rgba(197, 154, 70, 0.2);">
+      <div class="section-header-centered">
+        <span class="section-tag">Radical Transparency</span>
+        <h2 class="section-heading">Verify Your Batch Purity</h2>
+        <p class="section-lead">Every single Gourshal jar comes with a certified FSSAI lab report. Enter your batch code or tap a demo batch below to inspect the chemical analysis.</p>
+      </div>
+
+      <div class="verifier-box">
+        <div class="batch-quick-tags">
+          <span>Quick Demo Batches:</span>
+          <button class="batch-chip" onclick="verifyDemoBatch('FL/07/026/F011')">⭐ NABL Report: FL/07/026/F011</button>
+          <button class="batch-chip" onclick="verifyDemoBatch('GRL-2026-MUSTARD-OIL')">GRL-2026-MUSTARD-OIL</button>
+          <button class="batch-chip" onclick="verifyDemoBatch('GRL-2026-GHEE-A2')">GRL-2026-GHEE-A2</button>
+          <button class="batch-chip" onclick="verifyDemoBatch('GRL-2026-TURMERIC-85')">GRL-2026-TURMERIC-85</button>
+        </div>
+
+        <div class="verifier-input-wrap">
+          <input type="text" id="batchCodeInput" class="verifier-input" placeholder="Enter Batch or Report ID (e.g. FL/07/026/F011)" value="FL/07/026/F011">
+          <button class="btn-forest-primary" onclick="verifyBatchCode()">Verify Purity</button>
+        </div>
+
+        <div class="lab-result-display active" id="labResultDisplay">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(197,154,70,0.2); padding-bottom:12px;">
+            <div>
+              <strong id="labProductName" style="color:var(--forest-green); font-size:16px;">GOURSHAL Pure Black Mustard Oil (Kachi Ghani)</strong>
+              <div style="font-size:11px; color:var(--muted-ink); margin-top:2px;">Report ID: <span id="labBatchId">FL/07/026/F011</span> • <span id="labTestedBy">FAST LABS (NABL &amp; FSSAI Accredited)</span></div>
+            </div>
+            <span style="background:rgba(46,111,64,0.12); color:#2E6F40; font-weight:700; font-size:11px; padding:6px 12px; border-radius:20px;">✓ 100% PASSED</span>
+          </div>
+
+          <div class="lab-stats-grid">
+            <div class="lab-stat-box">
+              <div class="lab-stat-num" id="labPurityScore">99.9%</div>
+              <div class="lab-stat-label">Purity Index</div>
+            </div>
+            <div class="lab-stat-box">
+              <div class="lab-stat-num" id="labAdulteration">0.0%</div>
+              <div class="lab-stat-label">Adulteration / Fillers</div>
+            </div>
+            <div class="lab-stat-box">
+              <div class="lab-stat-num" id="labKeyNutrient">8.2g CLA</div>
+              <div class="lab-stat-label" id="labNutrientLabel">Active Fatty Acids / 100g</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Bottom CTA Banner -->
     <section style="padding: 80px 48px; background: var(--forest-green); color: #FFFFFF; text-align: center;">
       <div style="max-width: 700px; margin: 0 auto;">
         <span class="section-tag" style="color: var(--gold-vibrant);">Taste The Difference</span>
         <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 42px; margin: 16px 0; color: #FFFFFF;">Experience Genuine Purity Today</h2>
         <p style="color: #D6CFBE; margin-bottom: 30px; font-size: 15px;">Explore our handcrafted selection of pure Ghee, Cold-Pressed Oils, Artisan Coffee, Green Teas, and Vedic Spices.</p>
-        <a href="shop.html" class="btn-hero-primary" style="display: inline-block;">Shop All Pure Creations →</a>
+        <a href="shop.html" class="btn-forest-primary" style="display: inline-flex; align-items: center; gap: 10px; padding: 14px 36px; background: #C59A46; color: #12271D; font-weight: 800; letter-spacing: 1.5px; border-radius: 30px; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.25);">
+          <span>SHOP ALL PURE CREATIONS</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
       </div>
     </section>
   </main>
@@ -573,7 +631,7 @@
         <div class="footer-col-title">Vedic Craft</div>
         <ul class="footer-links">
           <li><a href="index.html#vedic-craft">The 5 Sacred Pillars</a></li>
-          <li><a href="index.html#purity-verifier">Certified Lab Reports</a></li>
+          <li><a href="about.html#purity-verifier">Certified Lab Reports</a></li>
           <li><a href="index.html#rituals">Ayurvedic Recipes</a></li>
           <li><a href="about.html">Our Farm Story</a></li>
         </ul>
@@ -590,11 +648,11 @@
     </div>
 
     <div class="footer-bottom">
-      <div class="footer-copy">© 2026 Gourshal Wellness Pvt Ltd. All rights reserved. FSSAI Certified.</div>
+      <div class="footer-copy" style="font-weight: 700; color: #FFFFFF;">© 2026 Gourshal. Crafted to Last. All rights reserved. FSSAI Certified.</div>
       <div class="footer-legal">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Vedic Craft</a>
-        <a href="#">Lab Certifications</a>
+        <a href="privacy.html" style="color: rgba(255,255,255,0.85); font-weight: 600;">Privacy Policy</a>
+        <a href="terms.html" style="color: rgba(255,255,255,0.85); font-weight: 600;">Terms of Service</a>
+        <a href="about.html#purity-verifier" style="color: rgba(255,255,255,0.85); font-weight: 600;">Lab Certifications</a>
       </div>
     </div>
   </footer>
