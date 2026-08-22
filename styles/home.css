@@ -51,7 +51,7 @@
 #hero {
   position: relative;
   min-height: 100vh;
-  padding: 105px 48px 40px 48px;
+  padding: 135px 48px 40px 48px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -86,19 +86,20 @@
 
 /* ─── LUXURY FLOATING SEGMENTED SWITCHER DOCK ─── */
 .hero-product-switcher {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
-  margin: 0 auto 28px auto;
+  margin: 10px auto 28px auto;
   padding: 5px;
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(197, 154, 70, 0.32);
+  border: 1px solid rgba(197, 154, 70, 0.35);
   border-radius: 50px;
-  box-shadow: 0 10px 30px rgba(44, 31, 14, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03);
-  z-index: 10;
+  box-shadow: 0 10px 30px rgba(44, 31, 14, 0.08), 0 1px 3px rgba(0, 0, 0, 0.03);
+  z-index: 20;
   max-width: 95vw;
   overflow-x: auto;
 }
@@ -1255,29 +1256,59 @@
   line-height: 1.6;
 }
 
-/* ─── REVIEWS / TESTIMONIALS ─── */
+/* ─── REVIEWS / TESTIMONIALS CAROUSEL ─── */
 #testimonials {
   padding: 100px 48px;
   background: var(--warm-cream-alt);
 }
 
-.testimonials-track {
+.testimonials-carousel-wrapper {
+  position: relative;
   max-width: 1360px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.testimonials-slider {
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  width: 100%;
+  padding: 16px 4px;
+}
+.testimonials-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.testimonials-track {
+  display: flex;
   gap: 28px;
+  width: 100%;
 }
 
 .testi-card {
+  flex: 0 0 calc(33.333% - 19px);
+  min-width: 320px;
+  scroll-snap-align: start;
   background: #FFFFFF;
-  border-radius: 18px;
-  border: 1px solid rgba(197, 154, 70, 0.2);
-  padding: 32px 28px;
-  box-shadow: 0 8px 24px rgba(44, 31, 14, 0.06);
+  border-radius: 20px;
+  border: 1.5px solid rgba(197, 154, 70, 0.22);
+  padding: 36px 30px;
+  box-shadow: 0 10px 30px rgba(44, 31, 14, 0.06);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testi-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(27, 56, 43, 0.1);
+  border-color: var(--gold-vibrant);
 }
 
 .testi-stars {
@@ -1322,6 +1353,61 @@
 .testi-loc {
   font-size: 11px;
   color: var(--muted-ink);
+  margin-top: 2px;
+}
+
+.testi-nav-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1.5px solid rgba(197, 154, 70, 0.35);
+  color: var(--forest-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+  z-index: 5;
+}
+
+.testi-nav-btn:hover {
+  background: var(--forest-green);
+  color: #FFFFFF;
+  border-color: var(--forest-green);
+  transform: scale(1.08);
+}
+
+.testi-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 28px;
+}
+
+.testi-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(197, 154, 70, 0.3);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.testi-dot.active {
+  width: 28px;
+  border-radius: 10px;
+  background: var(--forest-green);
+}
+
+@media (max-width: 900px) {
+  .testi-card {
+    flex: 0 0 85%;
+    min-width: 280px;
+  }
 }
 
 /* ─── RESPONSIVE BREAKPOINTS ─── */

@@ -635,6 +635,8 @@ section {
   padding: 24px;
   border-top: 1px solid rgba(184, 137, 42, 0.1);
   background: #fff;
+  position: relative;
+  z-index: 2;
 }
 
 .product-category {
@@ -648,9 +650,10 @@ section {
 .product-name {
   font-family: 'Cormorant Garamond', serif;
   font-size: 22px;
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 8px;
   color: var(--ink);
+  transition: color 0.3s;
 }
 
 .product-desc {
@@ -669,7 +672,7 @@ section {
 .product-price {
   font-family: 'Cormorant Garamond', serif;
   font-size: 26px;
-  font-weight: 400;
+  font-weight: 600;
   color: var(--gold-dark);
 }
 
@@ -700,38 +703,97 @@ section {
   border-color: var(--gold);
 }
 
+/* ─── CARD QUANTITY STEPPER ─── */
+.card-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #172B20;
+  border: 1px solid var(--gold);
+  border-radius: 24px;
+  padding: 4px 10px;
+  box-shadow: 0 4px 12px rgba(23, 43, 32, 0.2);
+  transition: all 0.3s ease;
+}
+
+.stepper-btn {
+  background: none;
+  border: none;
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s, color 0.2s;
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1;
+}
+
+.stepper-btn:hover {
+  background: var(--gold);
+  color: #12271D;
+}
+
+.stepper-count {
+  font-size: 13px;
+  font-weight: 700;
+  color: #F5E6C4;
+  min-width: 16px;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+}
+
 /* ─── CART TOAST ─── */
 .cart-toast {
   position: fixed;
   bottom: 28px;
   right: 28px;
-  background: #fff;
-  border: 1px solid var(--gold);
-  padding: 14px 24px;
-  z-index: 999;
+  background: #172B20 !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(216, 175, 93, 0.4) !important;
+  border-radius: 12px;
+  padding: 14px 22px;
+  z-index: 9999;
   display: flex;
   align-items: center;
   gap: 12px;
   transform: translateY(100px);
   opacity: 0;
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-  box-shadow: 0 16px 48px rgba(44, 31, 14, 0.18);
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
 }
 
 .cart-toast.show {
   transform: translateY(0);
   opacity: 1;
+  pointer-events: auto;
 }
 
 .toast-icon {
-  color: var(--gold);
-  font-size: 16px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #C59A46 !important;
+  color: #12271D !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  flex-shrink: 0;
 }
 
 .toast-text {
-  font-size: 12px;
-  color: var(--ink);
-  letter-spacing: 1px;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #FFFFFF !important;
+  letter-spacing: 0.5px;
 }
 
 /* ─── FOOTER ─── */
