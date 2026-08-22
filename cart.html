@@ -236,17 +236,37 @@
       margin-top: 20px;
       text-align: center;
       display: block;
-      padding: 18px;
-      background: #7A5C1A;
+      padding: 18px 24px;
+      background: linear-gradient(135deg, #7A5C1A, #B8892A);
       color: #FFFFFF !important;
       font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
       border-radius: 8px;
       text-decoration: none;
-      transition: background 0.2s ease;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      transition: all 0.25s ease;
+      box-shadow: 0 6px 20px rgba(122, 92, 26, 0.25);
     }
 
     .checkout-btn:hover {
-      background: #1A3828;
+      background: linear-gradient(135deg, #1A3828, #2E6F40);
+      color: #FFFFFF !important;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 26px rgba(26, 56, 40, 0.35);
+    }
+
+    .checkout-btn::before {
+      display: none !important;
+    }
+
+    .checkout-btn span {
+      position: relative;
+      z-index: 2;
+      color: #FFFFFF !important;
     }
 
     .secure-note {
@@ -354,7 +374,7 @@
         <button class="btn-primary" onclick="applyCoupon()" style="padding:11px 16px;font-size:9px;">Apply</button>
       </div>
       <div id="couponMsg" style="font-size:11px;margin-bottom:4px;" aria-live="polite"></div>
-      <a href="checkout.html" class="btn-primary checkout-btn" onclick="return proceedToCheckout(event)">Proceed to Checkout →</a>
+      <a href="checkout.html" class="btn-primary checkout-btn" onclick="return proceedToCheckout(event)"><span>Proceed to Checkout →</span></a>
       <div class="secure-note">🔒 Secured by 256-bit SSL encryption</div>
       <div class="payment-icons" aria-hidden="true"><span>💳</span><span>🏦</span><span>📱</span><span>🔐</span></div>
     </div>
