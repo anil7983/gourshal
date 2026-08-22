@@ -74,6 +74,16 @@ body {
   min-height: 100vh;
 }
 
+input, textarea, select {
+  color: #1F1A14 !important;
+  font-family: 'Montserrat', sans-serif;
+}
+
+input::placeholder, textarea::placeholder {
+  color: #7A6F60 !important;
+  opacity: 1 !important;
+}
+
 /* ─── PARTICLES (hidden on light theme) ─── */
 #particles-canvas {
   position: fixed;

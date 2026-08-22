@@ -122,21 +122,24 @@
 
     /* ORDER SUMMARY */
     .order-summary {
-      background: var(--black-3);
-      border: 1px solid rgba(201, 168, 76, 0.15);
+      background: #FFFFFF;
+      border: 1.5px solid rgba(197, 154, 70, 0.25);
+      border-radius: 16px;
       padding: 36px;
       position: sticky;
       top: 100px;
       height: fit-content;
+      box-shadow: 0 10px 30px rgba(44, 31, 14, 0.06);
     }
 
     .summary-title {
       font-family: 'Cormorant Garamond', serif;
       font-size: 28px;
-      font-weight: 300;
+      font-weight: 600;
+      color: #1A3828;
       margin-bottom: 28px;
       padding-bottom: 16px;
-      border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+      border-bottom: 1.5px solid rgba(197, 154, 70, 0.2);
     }
 
     .summary-row {
@@ -144,31 +147,40 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
-      font-size: 13px;
+      font-size: 14px;
     }
 
     .summary-row.total {
-      border-top: 1px solid rgba(201, 168, 76, 0.1);
+      border-top: 1.5px solid rgba(197, 154, 70, 0.25);
       padding-top: 16px;
-      margin-top: 8px;
-      font-size: 16px;
-      font-family: 'Cormorant Garamond', serif;
+      margin-top: 12px;
+      font-size: 18px;
+      font-family: 'Montserrat', sans-serif;
     }
 
     .summary-row .label {
-      color: var(--text-muted);
-      letter-spacing: 1px;
+      color: #4A3520;
+      font-weight: 600;
+      letter-spacing: 0.5px;
     }
 
     .summary-row .value {
-      color: var(--white);
-      font-weight: 500;
+      color: #1F1A14 !important;
+      font-weight: 700 !important;
+      font-size: 15px;
+    }
+
+    .summary-row.total .label {
+      color: #1A3828;
+      font-weight: 700;
+      font-size: 18px;
     }
 
     .summary-row.total .value {
-      color: var(--gold-light);
+      color: #B8892A !important;
       font-size: 28px;
-      font-weight: 300;
+      font-weight: 700 !important;
+      font-family: 'Cormorant Garamond', serif;
     }
 
     .coupon-row {
@@ -179,18 +191,44 @@
 
     .coupon-row input {
       flex: 1;
-      padding: 11px 14px;
-      background: rgba(255, 255, 255, .04);
-      border: 1px solid rgba(201, 168, 76, .2);
-      color: var(--white);
-      font-size: 12px;
+      padding: 12px 14px;
+      background: #FAF7F2;
+      border: 1.5px solid rgba(197, 154, 70, 0.35);
+      border-radius: 6px;
+      color: #1F1A14 !important;
+      font-size: 13px;
+      font-weight: 600;
       font-family: 'Montserrat', sans-serif;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .coupon-row input::placeholder {
+      color: #7A6F60 !important;
+      opacity: 1 !important;
+    }
+
+    .coupon-row input:focus {
+      border-color: #B8892A;
+      background: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(184, 137, 42, 0.15);
     }
 
     .coupon-row button {
-      padding: 11px 18px;
-      font-size: 10px;
-      letter-spacing: 1px;
+      padding: 12px 20px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      background: #B8892A;
+      color: #FFFFFF !important;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .coupon-row button:hover {
+      background: #7A5C1A;
     }
 
     .checkout-btn {
@@ -199,13 +237,24 @@
       text-align: center;
       display: block;
       padding: 18px;
+      background: #7A5C1A;
+      color: #FFFFFF !important;
+      font-weight: 700;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s ease;
+    }
+
+    .checkout-btn:hover {
+      background: #1A3828;
     }
 
     .secure-note {
       text-align: center;
-      font-size: 10px;
-      color: var(--text-muted);
-      letter-spacing: 1px;
+      font-size: 11px;
+      color: #4A3520;
+      font-weight: 600;
+      letter-spacing: 0.5px;
       margin-top: 14px;
     }
 
