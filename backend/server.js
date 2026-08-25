@@ -137,8 +137,17 @@ app.use('/scripts', express.static(path.join(__dirname, 'public', 'scripts'), { 
 app.use('/products', express.static(path.join(__dirname, 'public', 'products'), { maxAge: 0, etag: true }));
 app.use('/videos', express.static(path.join(__dirname, 'public', 'videos'), { maxAge: 0, etag: true }));
 
-// Serve frontend HTML/CSS/JS/assets from backend/public only
-// Do NOT expose project root in production for security
+// Common route aliases & legacy URL redirects
+app.get(['/signup', '/register', '/signup.html', '/register.html', '/signup.php', '/register.php', '/create-account'], (req, res) => {
+  res.redirect('/login.html?tab=register');
+});
+app.get(['/signin', '/signin.html', '/login.php', '/signin.php'], (req, res) => {
+  res.redirect('/login.html');
+});
+app.get(['/cart.php', '/shop.php', '/about.php', '/contact.php', '/orders.php', '/admin.php'], (req, res) => {
+  const page = req.path.replace('.php', '.html');
+  res.redirect(page);
+});
 
 // Fallback: serve index.html for any unmatched route (SPA support)
 app.get('*', (req, res) => {

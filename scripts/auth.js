@@ -50,11 +50,6 @@ const Auth = {
     
     if (!password || password.length < 8) {
       errors.push('Password must be at least 8 characters.');
-    } else {
-      const strength = this.getPasswordStrength(password);
-      if (strength.score < 2) {
-        errors.push('Password is too weak. Include uppercase, numbers, and symbols.');
-      }
     }
     
     if (phone && !window.Utils?.validatePhone(phone)) {
