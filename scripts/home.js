@@ -21,7 +21,10 @@ function initHeroSwitcher() {
   const switcher = document.getElementById('heroSwitcher');
   if (!switcher || typeof GOURSHAL_HERO_PRODUCTS === 'undefined') return;
 
-  // Render the Switcher Tabs with Product Photo Thumbnails
+  // Hide the switcher pills so they don't cover the nav logo
+  switcher.style.display = 'none';
+
+  // Still render the hero product tabs (hidden) and first product
   switcher.innerHTML = GOURSHAL_HERO_PRODUCTS.map((prod, index) => `
     <button class="hero-tab-btn ${index === 0 ? 'active' : ''}" 
             role="tab" 
@@ -563,6 +566,8 @@ function switchModalChapter(videoSrc, title, tag, btn) {
 }
 
 // ─── 8. TESTIMONIALS SLIDER / CAROUSEL ───
+let testiAutoTimer = null;
+
 function initTestimonialSlider() {
   const slider = document.getElementById('testiSlider');
   const dotsContainer = document.getElementById('testiDots');
@@ -598,6 +603,26 @@ function initTestimonialSlider() {
       updateTestiDots(activeIndex);
     }
   }, { passive: true });
+
+  // ── Auto-slide every 4 seconds ──
+  const startTestiAuto = () => {
+    stopTestiAuto();
+    testiAutoTimer = setInterval(() => moveTestimonials(1), 4000);
+  };
+  const stopTestiAuto = () => {
+    if (testiAutoTimer) { clearInterval(testiAutoTimer); testiAutoTimer = null; }
+  };
+
+  // Pause on hover or touch
+  const section = document.getElementById('testimonials');
+  if (section) {
+    section.addEventListener('mouseenter', stopTestiAuto);
+    section.addEventListener('mouseleave', startTestiAuto);
+    section.addEventListener('touchstart', stopTestiAuto, { passive: true });
+    section.addEventListener('touchend', () => setTimeout(startTestiAuto, 2000), { passive: true });
+  }
+
+  startTestiAuto();
 }
 
 function moveTestimonials(direction) {
