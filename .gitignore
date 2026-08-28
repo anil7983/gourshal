@@ -61,4 +61,7 @@ backend/update-pipeline.js
 scratch/
 tmp/
 temp/
+_local_backup_vps_scripts/
+*_backup*/
+
 
