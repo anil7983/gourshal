@@ -43,3 +43,22 @@ Desktop.ini
 *.crt
 *.pfx
 *.id_rsa
+
+# Build Output
+backend/public/
+dist/
+
+# Scratch & Temporary Automation Scripts
+backend/*-vps*.js
+backend/fix-*.js
+backend/diagnose-*.js
+backend/clean-*.js
+backend/enable-ssl.js
+backend/setup-*.js
+backend/test-live.js
+backend/trigger-deploy.js
+backend/update-pipeline.js
+scratch/
+tmp/
+temp/
+

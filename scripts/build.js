@@ -82,9 +82,7 @@ function copyDirRecursive(src, dst) {
     const srcPath = path.join(src, entry.name);
     const dstPath = path.join(dst, entry.name);
     if (entry.isDirectory()) {
-      if (entry.name !== 'backup_spices') {
-        copyDirRecursive(srcPath, dstPath);
-      }
+      copyDirRecursive(srcPath, dstPath);
     } else {
       fs.copyFileSync(srcPath, dstPath);
       console.log(`Copied asset: ${entry.name}`);
