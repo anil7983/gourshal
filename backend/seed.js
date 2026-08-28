@@ -325,14 +325,18 @@ async function seed() {
     let admin = await User.findOne({ role: 'admin' });
     if (!admin) {
       const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash('AdminPassword@123', salt);
+      const initialPassword = process.env.INITIAL_ADMIN_PASSWORD || require('crypto').randomBytes(12).toString('hex');
+      const hashedPassword = await bcrypt.hash(initialPassword, salt);
       admin = await User.create({
         name: 'Gourshal Admin',
         email: process.env.FIRST_ADMIN_EMAIL || 'admin@gourshal.com',
         password: hashedPassword,
         role: 'admin'
       });
-      console.log('Created default admin user for seeding.');
+      console.log(`Created default admin user: ${admin.email}`);
+      if (!process.env.INITIAL_ADMIN_PASSWORD) {
+        console.log(`Auto-generated admin password: ${initialPassword}`);
+      }
     }
     
     await Product.deleteMany({});
