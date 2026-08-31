@@ -58,7 +58,12 @@ router.put('/orders/:id/status', authenticate, requireAdmin, sanitize, validate(
 router.get('/users', authenticate, requireAdmin, asyncHandler(async (req, res) => {
   const users = await User.find({}).select('-password');
   const usersWithCounts = await Promise.all(users.map(async (u) => {
-    const count = await Order.countDocuments({ userId: u._id });
+    const count = await Order.countDocuments({
+      $or: [
+        { userId: u._id },
+        { 'address.email': u.email }
+      ]
+    });
     return {
       id: u._id,
       name: u.name,

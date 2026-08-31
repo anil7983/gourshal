@@ -189,6 +189,8 @@ document.addEventListener('DOMContentLoaded', () => {
   renderOrders();
 });
 
+let loadedCustomerOrders = [];
+
 async function renderOrders() {
   const layout = document.getElementById('ordersLayout');
   let orders = [];
@@ -206,6 +208,8 @@ async function renderOrders() {
     console.warn('Backend unavailable or user not logged in, using LocalStorage orders fallback');
     orders = JSON.parse(localStorage.getItem('gourshal_orders') || '[]');
   }
+  
+  loadedCustomerOrders = orders;
   
   if (!orders.length) {
     layout.innerHTML = `
@@ -271,9 +275,9 @@ function renderOrderCard(o, i) {
         </div>
         <div style="margin-top:20px;font-size:11px;color:var(--text-muted);line-height:2;">
           <strong style="color:var(--white);">Deliver to:</strong><br>
-          ${o.address.firstName} ${o.address.lastName} · ${o.address.phone}<br>
-          ${o.address.addr1}${o.address.addr2?', '+o.address.addr2:''}<br>
-          ${o.address.city}, ${o.address.state} — ${o.address.pin}
+          ${o.address?.firstName || ''} ${o.address?.lastName || ''} · ${o.address?.phone || ''}<br>
+          ${o.address?.addr1 || ''}${o.address?.addr2 ? ', ' + o.address.addr2 : ''}<br>
+          ${o.address?.city || ''}, ${o.address?.state || ''} — ${o.address?.pin || ''}
         </div>
         ${o.expectedDelivery?`<div style="margin-top:12px;font-size:11px;color:var(--text-muted);">Expected delivery: <strong style="color:var(--gold);">${o.expectedDelivery}</strong></div>`:''}
       </div>
@@ -293,10 +297,10 @@ function toggleOrder(i) {
 }
 
 function downloadInvoice(orderId) {
-  const orders = JSON.parse(localStorage.getItem('gourshal_orders') || '[]');
-  const o = orders.find(x => x.id === orderId);
+  const o = (loadedCustomerOrders && loadedCustomerOrders.find(x => x.id === orderId)) || JSON.parse(localStorage.getItem('gourshal_orders') || '[]').find(x => x.id === orderId);
   if (!o) return;
-  const content = `GOURSHAL — INVOICE\n${'─'.repeat(40)}\nOrder ID: #${o.id}\nDate: ${new Date(o.placedAt).toLocaleDateString()}\n\nItems:\n${o.items.map(i=>`  ${i.name} (${i.unit}) × ${i.qty} = ${window.Utils?.formatCurrency ? Utils.formatCurrency(i.price*i.qty) : '₹' + (i.price*i.qty).toLocaleString()}`).join('\n')}\n\nSubtotal: ${window.Utils?.formatCurrency ? Utils.formatCurrency(o.subtotal) : '₹' + o.subtotal.toLocaleString()}\nShipping: ${window.Utils?.formatCurrency ? Utils.formatCurrency(o.shipping) : '₹' + o.shipping}\nTotal: ${window.Utils?.formatCurrency ? Utils.formatCurrency(o.total) : '₹' + o.total.toLocaleString()}\n\nDeliver to:\n${o.address.firstName} ${o.address.lastName}\n${o.address.addr1}\n${o.address.city}, ${o.address.state} ${o.address.pin}\n\nThank you for choosing Gourshal!\nCrafted to Last.`;
+  const addr = o.address || {};
+  const content = `GOURSHAL — INVOICE\n${'─'.repeat(40)}\nOrder ID: #${o.id}\nDate: ${new Date(o.placedAt).toLocaleDateString()}\n\nItems:\n${(o.items || []).map(i=>`  ${i.name} (${i.unit || 'unit'}) × ${i.qty} = ${window.Utils?.formatCurrency ? Utils.formatCurrency(i.price*i.qty) : '₹' + (i.price*i.qty).toLocaleString()}`).join('\n')}\n\nSubtotal: ${window.Utils?.formatCurrency ? Utils.formatCurrency(o.subtotal) : '₹' + o.subtotal.toLocaleString()}\nShipping: ${window.Utils?.formatCurrency ? Utils.formatCurrency(o.shipping) : '₹' + o.shipping}\nTotal: ${window.Utils?.formatCurrency ? Utils.formatCurrency(o.total) : '₹' + o.total.toLocaleString()}\n\nDeliver to:\n${addr.firstName || ''} ${addr.lastName || ''}\n${addr.addr1 || ''}\n${addr.city || ''}, ${addr.state || ''} ${addr.pin || ''}\n\nThank you for choosing Gourshal!\nCrafted to Last.`;
   const blob = new Blob([content], {type:'text/plain'});
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `Gourshal-Invoice-${orderId}.txt`; a.click();
 }

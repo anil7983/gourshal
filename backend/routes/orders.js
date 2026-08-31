@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const Order = require('../models/Order');
 const Product = require('../models/Product');
+const User = require('../models/User');
 const crypto = require('crypto');
 const Razorpay = require('razorpay');
 const { optionalAuth, authenticate } = require('../middleware/auth');
@@ -10,7 +12,7 @@ const { sanitize, validate, isValidEmail } = require('../middleware/validate');
 const { asyncHandler } = require('../middleware/errorHandler');
 
 let razorpayInstance = null;
-const RazorpayEnabled = process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET
+const RazorpayEnabled = process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET;
 if (RazorpayEnabled) {
   razorpayInstance = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
@@ -29,10 +31,19 @@ const orderFields = [
   { name: 'total', required: true, message: 'Total is required.' }
 ];
 
+// @route   GET /api/orders/payment-methods
+router.get('/payment-methods', (req, res) => {
+  res.json({
+    ok: true,
+    razorpayEnabled: !!razorpayInstance,
+    razorpayKey: RazorpayEnabled ? process.env.RAZORPAY_KEY_ID : null
+  });
+});
+
 // @route   POST /api/orders/create-payment
 router.post('/create-payment', optionalAuth, sanitize, validate([{ name: 'amount', required: true, message: 'Amount is required.' }]), asyncHandler(async (req, res) => {
   if (!razorpayInstance) {
-    return res.status(500).json({ ok: false, error: 'Payment gateway not configured on server.' });
+    return res.status(500).json({ ok: false, error: 'Online payment gateway is temporarily unavailable. Please select Cash on Delivery (COD) to place your order.' });
   }
   const { amount } = req.body;
   
@@ -52,11 +63,11 @@ router.post('/', optionalAuth, sanitize, validate(orderFields), asyncHandler(asy
 
   if (paymentMethod === 'razorpay' || paymentMethod === 'upi') {
     if (!razorpayInstance) {
-      return res.status(500).json({ ok: false, error: 'Payment gateway is not configured on the server.' });
+      return res.status(500).json({ ok: false, error: 'Online payment gateway is not configured on the server. Please select Cash on Delivery (COD).' });
     }
 
     if (!razorpay_payment_id || !razorpay_order_id || !razorpay_signature) {
-      return res.status(400).json({ ok: false, error: 'Payment details missing' });
+      return res.status(400).json({ ok: false, error: 'Payment details missing. Payment was not verified.' });
     }
 
     const existingOrder = await Order.findOne({ 'paymentId': razorpay_order_id });
@@ -71,48 +82,65 @@ router.post('/', optionalAuth, sanitize, validate(orderFields), asyncHandler(asy
       .digest('hex');
 
     if (expectedSignature !== razorpay_signature) {
-      return res.status(400).json({ ok: false, error: 'Payment signature verification failed' });
+      return res.status(400).json({ ok: false, error: 'Payment signature verification failed.' });
     }
   }
 
+  // Validate products and check stock
   for (const item of items) {
-    const product = await Product.findOne({ productId: item.productId });
+    const isObjectId = mongoose.isValidObjectId(item.productId);
+    const product = await Product.findOne(
+      isObjectId ? { $or: [{ productId: item.productId }, { _id: item.productId }] } : { productId: item.productId }
+    );
     if (!product) {
-      return res.status(404).json({ ok: false, error: `Product ${item.productId} not found` });
+      return res.status(404).json({ ok: false, error: `Product "${item.name || item.productId}" not found.` });
     }
     if (product.stock < item.qty) {
-      return res.status(400).json({ ok: false, error: `Insufficient stock for ${product.name}` });
+      return res.status(400).json({ ok: false, error: `Insufficient stock for ${product.name}. Available: ${product.stock}` });
+    }
+  }
+
+  // Determine user account to link order to
+  let orderUserId = req.user ? req.user.userId : null;
+  if (!orderUserId && address && address.email) {
+    const cleanEmail = address.email.toLowerCase().trim();
+    const matchedUser = await User.findOne({ email: cleanEmail });
+    if (matchedUser) {
+      orderUserId = matchedUser._id;
     }
   }
 
   const orderId = 'GOU' + Date.now().toString().slice(-8).toUpperCase();
   const expectedDelivery = new Date(Date.now() + 5*24*60*60*1000).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
 
+  const isOnlinePayment = paymentMethod === 'razorpay' || paymentMethod === 'upi';
+
   const newOrder = new Order({
     orderId,
-    userId: req.user ? req.user.userId : null,
+    userId: orderUserId,
     items,
     address: {
       ...address,
-      email: address.email?.toLowerCase()
+      email: address.email?.toLowerCase().trim()
     },
     paymentMethod,
     paymentId: razorpay_order_id || null,
-    paymentStatus: (paymentMethod === 'razorpay' || paymentMethod === 'upi') ? 'completed' : 'pending',
+    paymentStatus: isOnlinePayment ? 'completed' : 'pending',
     subtotal: Number(subtotal),
     shipping: Number(shipping),
     discountAmt: Number(discountAmt) || 0,
     total: Number(total),
     expectedDelivery,
-    status: paymentMethod === 'razorpay' ? 'confirmed' : 'pending'
+    status: isOnlinePayment ? 'confirmed' : 'pending'
   });
 
   await newOrder.save();
 
-  // Decrement stock for all orders regardless of payment method
+  // Decrement stock for all ordered items
   for (const item of items) {
+    const isObjectId = mongoose.isValidObjectId(item.productId);
     await Product.findOneAndUpdate(
-      { productId: item.productId },
+      isObjectId ? { $or: [{ productId: item.productId }, { _id: item.productId }] } : { productId: item.productId },
       { $inc: { stock: -item.qty } }
     );
   }
@@ -122,7 +150,15 @@ router.post('/', optionalAuth, sanitize, validate(orderFields), asyncHandler(asy
 
 // @route   GET /api/orders
 router.get('/', authenticate, asyncHandler(async (req, res) => {
-  const orders = await Order.find({ userId: req.user.userId }).sort({ createdAt: -1 });
+  const user = await User.findById(req.user.userId);
+  const userEmail = user ? user.email : null;
+
+  const orders = await Order.find({
+    $or: [
+      { userId: req.user.userId },
+      userEmail ? { 'address.email': userEmail } : null
+    ].filter(Boolean)
+  }).sort({ createdAt: -1 });
   
   const formattedOrders = orders.map(o => ({
     id: o.orderId,

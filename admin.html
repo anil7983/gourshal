@@ -813,6 +813,8 @@
       if (target) target.classList.add('active');
     }
 
+    let loadedOrders = [];
+
     async function loadData() {
       let orders = [];
       let users = [];
@@ -838,6 +840,8 @@
         orders = JSON.parse(localStorage.getItem('gourshal_orders') || '[]');
         users = Auth.getUsersLocal();
       }
+
+      loadedOrders = orders;
 
       // Dashboard Stats (Exclude cancelled orders from revenue)
       const revenue = orders.filter(o => o.status !== 'cancelled').reduce((sum, o) => sum + (o.total || 0), 0);
@@ -1003,25 +1007,25 @@
     }
 
     function viewOrder(id) {
-      const orders = JSON.parse(localStorage.getItem('gourshal_orders') || '[]');
-      const o = orders.find(o => o.id === id);
+      const o = (loadedOrders && loadedOrders.find(x => x.id === id)) || JSON.parse(localStorage.getItem('gourshal_orders') || '[]').find(x => x.id === id);
       if (!o) return;
       const modal = document.getElementById('orderModal');
+      const addr = o.address || {};
       document.getElementById('modalContent').innerHTML = `
         <h2 id="modalTitle" style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:30px;color:var(--admin-gold-bright);margin-bottom:20px;">Order #${o.id}</h2>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;font-size:13px;margin-bottom:24px;" class="responsive-grid-2">
           <div style="background:rgba(255,255,255,0.03);padding:14px;border-radius:6px;border:1px solid var(--admin-border);">
             <div style="color:var(--admin-gold-bright);font-weight:700;margin-bottom:6px;letter-spacing:1px;font-size:11px;text-transform:uppercase;">Customer</div>
-            <div style="color:#FFF;line-height:1.5;">${o.address.firstName} ${o.address.lastName}<br><span style="color:var(--admin-text-sub);">${o.address.email}</span><br><span style="color:var(--admin-text-sub);">${o.address.phone}</span></div>
+            <div style="color:#FFF;line-height:1.5;">${addr.firstName || ''} ${addr.lastName || ''}<br><span style="color:var(--admin-text-sub);">${addr.email || ''}</span><br><span style="color:var(--admin-text-sub);">${addr.phone || ''}</span></div>
           </div>
           <div style="background:rgba(255,255,255,0.03);padding:14px;border-radius:6px;border:1px solid var(--admin-border);">
             <div style="color:var(--admin-gold-bright);font-weight:700;margin-bottom:6px;letter-spacing:1px;font-size:11px;text-transform:uppercase;">Shipping Address</div>
-            <div style="color:#FFF;line-height:1.5;">${o.address.addr1}<br><span style="color:var(--admin-text-sub);">${o.address.city}, ${o.address.state} - ${o.address.pin}</span></div>
+            <div style="color:#FFF;line-height:1.5;">${addr.addr1 || ''}${addr.addr2 ? ', ' + addr.addr2 : ''}<br><span style="color:var(--admin-text-sub);">${addr.city || ''}, ${addr.state || ''} - ${addr.pin || ''}</span></div>
           </div>
         </div>
         <div style="color:var(--admin-gold-bright);margin-bottom:10px;letter-spacing:1.5px;text-transform:uppercase;font-size:11px;font-weight:700;">Ordered Items</div>
         <div style="background:var(--admin-card-2);padding:18px;border-radius:8px;border:1px solid var(--admin-border);margin-bottom:24px;">
-          ${o.items.map(i => `
+          ${(o.items || []).map(i => `
             <div style="display:flex;justify-content:space-between;margin-bottom:10px;font-size:13px;align-items:center;">
               <div style="color:#FFF;font-weight:500;"><strong>${i.qty}x</strong> ${i.name}</div>
               <div style="color:var(--admin-gold-bright);font-weight:600;">${window.Utils?.formatCurrency ? Utils.formatCurrency(i.price * i.qty) : '₹' + (i.price * i.qty).toLocaleString()}</div>
@@ -1033,8 +1037,9 @@
           </div>
         </div>
         <div style="font-size:12px;color:var(--admin-text-sub);line-height:1.6;background:rgba(255,255,255,0.02);padding:12px 14px;border-radius:6px;">
-          <strong>Payment:</strong> ${o.paymentMethod.toUpperCase()}<br>
-          <strong>Placed At:</strong> ${new Date(o.placedAt).toLocaleString()}
+          <strong>Payment:</strong> ${(o.paymentMethod || 'COD').toUpperCase()}<br>
+          <strong>Status:</strong> ${(o.status || 'pending').toUpperCase()}<br>
+          <strong>Placed At:</strong> ${o.placedAt ? new Date(o.placedAt).toLocaleString() : '-'}
         </div>
       `;
       modal.style.display = 'flex';
