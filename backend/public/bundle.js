@@ -365,14 +365,14 @@ const htmlFiles = fs.readdirSync(frontendDir).filter(f => f.endsWith('.html'));
 for (const file of htmlFiles) {
 let html = fs.readFileSync(path.join(frontendDir, file), 'utf8');
 const cacheVer = Date.now().toString(36);
-html = html.replace(/<script src="scripts\/([^"]+)"><\/script>/g, (match, scriptFile) => {
+html = html.replace(/<script src="(\/)?scripts\/([^"?]+)(\?[^"]*)?"><\/script>/g, (match, prefix, scriptFile) => {
 return `<script src="/scripts/${scriptFile}?v=${cacheVer}"></script>`;
 });
-html = html.replace(/href="styles\/([^"]+)"/g, `href="/styles/$1?v=${cacheVer}"`);
-html = html.replace(/(src|href)="public\/([^"]+)"/g, '$1="/$2"');
-html = html.replace(/openStoryVideo\('public\/([^']+)'/g, "openStoryVideo('/$1'");
-html = html.replace(/switchModalChapter\('public\/([^']+)'/g, "switchModalChapter('/$1'");
-html = html.replace(/poster="public\/([^"]+)"/g, 'poster="/$1"');
+html = html.replace(/href="(\/)?styles\/([^"?]+)(\?[^"]*)?"/g, `href="/styles/$2?v=${cacheVer}"`);
+html = html.replace(/(src|href)="(\/)?public\/([^"]+)"/g, '$1="/$3"');
+html = html.replace(/openStoryVideo\('(\/)?(public\/)?([^']+)'/g, "openStoryVideo('/$3'");
+html = html.replace(/switchModalChapter\('(\/)?(public\/)?([^']+)'/g, "switchModalChapter('/$3'");
+html = html.replace(/poster="(\/)?(public\/)?([^"]+)"/g, 'poster="/$3"');
 html = html.replace(/href="data:image\/svg\+xml,<svg[^"]*"/g, 'href="/favicon.svg"');
 html = html.replace(/href="data:image\/svg\+xml,<svg[^>]*><\/svg>/g, 'href="/favicon.svg"');
 writeFile(path.join(buildDir, file), html);
@@ -2007,3 +2007,79 @@ return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'
 }
 };
 window.Utils = Utils;
+
+// ─── vps-deploy-live.js ───
+const { Client } = require('../backend/node_modules/ssh2');
+const config = {
+host: process.env.VPS_HOST || '200.234.39.211',
+port: parseInt(process.env.VPS_PORT || '22', 10),
+username: process.env.VPS_USER || 'root',
+password: process.env.VPS_PASSWORD || 'Gourshal@2000',
+readyTimeout: 30000
+};
+const conn = new Client();
+function runCommand(cmd) {
+return new Promise((resolve, reject) => {
+console.log(`\n🔹 Running: ${cmd}`);
+conn.exec(cmd, (err, stream) => {
+if (err) return reject(err);
+let out = '';
+let errOut = '';
+stream.on('close', (code) => {
+console.log(`Exit code: ${code}`);
+resolve({ code, out, errOut });
+}).on('data', (d) => {
+const str = d.toString();
+out += str;
+process.stdout.write(str);
+}).stderr.on('data', (d) => {
+const str = d.toString();
+errOut += str;
+process.stderr.write(str);
+});
+});
+});
+}
+console.log(`Connecting to Hostinger VPS at ${config.host}...`);
+conn.on('ready', async () => {
+console.log('✅ Connected to VPS!');
+try {
+await runCommand('pm2 list || true');
+const deployScript = `
+if [ -d "/var/www/gourshal" ]; then
+cd /var/www/gourshal
+echo "=== Updating /var/www/gourshal ==="
+git fetch --all
+git reset --hard origin/main
+git pull origin main
+npm install --production=false
+npm run build || node scripts/build.js || true
+pm2 restart all || pm2 restart gourshal || systemctl restart gourshal || true
+fi
+if [ -d "$HOME/gourshal" ]; then
+cd $HOME/gourshal
+echo "=== Updating $HOME/gourshal ==="
+git fetch --all
+git reset --hard origin/main
+git pull origin main
+npm install --production=false
+npm run build || node scripts/build.js || true
+pm2 restart all || pm2 restart gourshal || true
+fi
+if [ -f "$HOME/deploy-backend.sh" ]; then
+echo "=== Running ~/deploy-backend.sh ==="
+bash $HOME/deploy-backend.sh || true
+fi
+`;
+await runCommand(deployScript);
+await runCommand('systemctl reload nginx || nginx -s reload || true');
+await runCommand('pm2 list || true');
+console.log('\n🎉 VPS Live Deployment Completed Successfully!');
+} catch (err) {
+console.error('Error during deployment:', err);
+} finally {
+conn.end();
+}
+}).on('error', (err) => {
+console.error('SSH connection failed:', err);
+}).connect(config);

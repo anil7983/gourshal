@@ -107,28 +107,25 @@ for (const file of htmlFiles) {
   let html = fs.readFileSync(path.join(frontendDir, file), 'utf8');
   
   const cacheVer = Date.now().toString(36);
-  // Update script references for production with cache-busting query
-  html = html.replace(/<script src="scripts\/([^"]+)"><\/script>/g, (match, scriptFile) => {
+  // Update script references for production with clean cache-busting query
+  html = html.replace(/<script src="(\/)?scripts\/([^"?]+)(\?[^"]*)?"><\/script>/g, (match, prefix, scriptFile) => {
     return `<script src="/scripts/${scriptFile}?v=${cacheVer}"></script>`;
   });
   
-  // Update stylesheet references for absolute path with cache-busting query
-  html = html.replace(/href="styles\/([^"]+)"/g, `href="/styles/$1?v=${cacheVer}"`);
+  // Update stylesheet references for absolute path with clean cache-busting query
+  html = html.replace(/href="(\/)?styles\/([^"?]+)(\?[^"]*)?"/g, `href="/styles/$2?v=${cacheVer}"`);
   
   // Fix asset paths: strip public/ prefix for production serving
-  html = html.replace(/(src|href)="public\/([^"]+)"/g, '$1="/$2"');
-  html = html.replace(/openStoryVideo\('public\/([^']+)'/g, "openStoryVideo('/$1'");
-  html = html.replace(/switchModalChapter\('public\/([^']+)'/g, "switchModalChapter('/$1'");
-  html = html.replace(/poster="public\/([^"]+)"/g, 'poster="/$1"');
+  html = html.replace(/(src|href)="(\/)?public\/([^"]+)"/g, '$1="/$3"');
+  html = html.replace(/openStoryVideo\('(\/)?(public\/)?([^']+)'/g, "openStoryVideo('/$3'");
+  html = html.replace(/switchModalChapter\('(\/)?(public\/)?([^']+)'/g, "switchModalChapter('/$3'");
+  html = html.replace(/poster="(\/)?(public\/)?([^"]+)"/g, 'poster="/$3"');
   
   // Replace inline SVG favicon with external file reference
   html = html.replace(/href="data:image\/svg\+xml,<svg[^"]*"/g, 'href="/favicon.svg"');
   
   // Update favicon.ico references if any
   html = html.replace(/href="data:image\/svg\+xml,<svg[^>]*><\/svg>/g, 'href="/favicon.svg"');
-  
-  // Remove particle canvas and cursor glow scripts from production for cleaner pages
-  // (keep functionality, just make sure they reference proper elements)
   
   writeFile(path.join(buildDir, file), html);
 }
