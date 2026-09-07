@@ -45,7 +45,6 @@ Desktop.ini
 *.id_rsa
 
 # Build Output
-backend/public/
 dist/
 
 # Scratch & Temporary Automation Scripts

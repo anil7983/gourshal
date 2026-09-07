@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
@@ -131,11 +132,16 @@ process.on('SIGINT', async () => {
 
 // Serve static files from public directory both at root and with /public prefix
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 0, etag: true, extensions: ['html'] }));
+app.use(express.static(path.join(__dirname, '..'), { maxAge: 0, etag: true, extensions: ['html'] }));
 app.use('/public', express.static(path.join(__dirname, 'public'), { maxAge: 0, etag: true, extensions: ['html'] }));
 app.use('/styles', express.static(path.join(__dirname, 'public', 'styles'), { maxAge: 0, etag: true }));
+app.use('/styles', express.static(path.join(__dirname, '..', 'styles'), { maxAge: 0, etag: true }));
 app.use('/scripts', express.static(path.join(__dirname, 'public', 'scripts'), { maxAge: 0, etag: true }));
+app.use('/scripts', express.static(path.join(__dirname, '..', 'scripts'), { maxAge: 0, etag: true }));
 app.use('/products', express.static(path.join(__dirname, 'public', 'products'), { maxAge: 0, etag: true }));
+app.use('/products', express.static(path.join(__dirname, '..', 'products'), { maxAge: 0, etag: true }));
 app.use('/videos', express.static(path.join(__dirname, 'public', 'videos'), { maxAge: 0, etag: true }));
+app.use('/videos', express.static(path.join(__dirname, '..', 'videos'), { maxAge: 0, etag: true }));
 
 // Common route aliases & legacy URL redirects
 app.get(['/signup', '/register', '/signup.html', '/register.html', '/signup.php', '/register.php', '/create-account'], (req, res) => {
@@ -151,7 +157,11 @@ app.get(['/cart.php', '/shop.php', '/about.php', '/contact.php', '/orders.php', 
 
 // Fallback: serve index.html for any unmatched route (SPA support)
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  const publicIndex = path.join(__dirname, 'public', 'index.html');
+  if (fs.existsSync(publicIndex)) {
+    return res.sendFile(publicIndex);
+  }
+  res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
 // Error handler must be last

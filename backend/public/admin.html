@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — GOURSHAL</title>
+  <meta name="description" content="Admin dashboard for Gourshal orders and management.">
+  <meta property="og:title" content="Admin Dashboard — GOURSHAL">
+  <meta property="og:image" content="/neww-logo.jpeg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon"
+    href="/favicon.svg">
+  <link rel="stylesheet" href="/styles/main.css?v=2.1?v=mtr34fsz">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600,1,300,400&family=Montserrat:wght@200;300,400;500,600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --admin-bg: #0C0A07;
+      --admin-card: #15110B;
+      --admin-card-2: #1C1710;
+      --admin-border: rgba(212, 175, 55, 0.28);
+      --admin-border-light: rgba(212, 175, 55, 0.15);
+      --admin-gold: #E6CA65;
+      --admin-gold-bright: #F5D061;
+      --admin-text-bright: #FFFFFF;
+      --admin-text-sub: #E2D9CC;
+      --admin-text-muted: #B8ADA0;
+    }
+
+    body {
+      background: var(--admin-bg);
+      color: var(--admin-text-bright);
+    }
+
+    canvas#particles-canvas {
+      opacity: .08;
+    }
+
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 40px;
+      min-height: 80vh;
+    }
+
+    .admin-sidebar {
+      position: sticky;
+      top: 100px;
+      height: fit-content;
+    }
+
+    .admin-sidebar-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--admin-gold-bright);
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 12px;
+      padding-left: 16px;
+    }
+
+    .admin-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .admin-menu-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid transparent;
+      color: var(--admin-text-sub);
+      text-align: left;
+      padding: 14px 18px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all .25s ease;
+      border-left: 3px solid transparent;
+      border-radius: 4px;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .admin-menu-btn:hover {
+      color: var(--admin-gold-bright);
+      border-left-color: var(--admin-gold-bright);
+      background: rgba(212, 175, 55, 0.1);
+    }
+
+    .admin-menu-btn.active {
+      color: #0C0A07;
+      background: var(--admin-gold-bright);
+      border-left-color: #FFF;
+      font-weight: 700;
+      box-shadow: 0 4px 15px rgba(230, 202, 101, 0.25);
+    }
+
+    .admin-panel {
+      display: none;
+      animation: fadeIn .3s ease;
+    }
+
+    .admin-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .panel-header {
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--admin-border-light);
+    }
+
+    .panel-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 400;
+      color: var(--admin-text-bright);
+      letter-spacing: 0.5px;
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+
+    .stat-card {
+      background: var(--admin-card);
+      border: 1px solid var(--admin-border);
+      border-radius: 8px;
+      padding: 22px 20px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+      transition: transform .2s ease, border-color .2s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(212, 175, 55, 0.5);
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, #B8892A, #F5D061);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      color: var(--admin-gold);
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .stat-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 38px;
+      font-weight: 400;
+      color: #FFFFFF;
+      line-height: 1;
+    }
+
+    .stat-warning {
+      color: #FF7675 !important;
+    }
+
+    /* Tables */
+    .admin-table-wrap {
+      background: var(--admin-card);
+      border: 1px solid var(--admin-border);
+      border-radius: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 28px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .admin-table {
+      width: 100%;
+      min-width: 600px;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .admin-table th {
+      text-align: left;
+      padding: 16px 18px;
+      color: var(--admin-gold-bright);
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-bottom: 2px solid var(--admin-border);
+      background: var(--admin-card-2);
+      white-space: nowrap;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .admin-table td {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--admin-border-light);
+      color: var(--admin-text-bright);
+      font-weight: 500;
+      vertical-align: middle;
+    }
+
+    .admin-table tr:hover td {
+      background: rgba(212, 175, 55, 0.05);
+    }
+
+    .admin-table select {
+      background: #14100A;
+      color: #FFFFFF;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 4px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-family: 'Montserrat', sans-serif;
+      cursor: pointer;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 14px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .status-confirmed {
+      background: rgba(212, 175, 55, 0.2);
+      color: #FFE082;
+      border: 1px solid #FFD54F;
+    }
+
+    .status-packed {
+      background: rgba(76, 175, 80, 0.2);
+      color: #A5D6A7;
+      border: 1px solid #81C784;
+    }
+
+    .status-shipped {
+      background: rgba(58, 134, 255, 0.2);
+      color: #90CAF9;
+      border: 1px solid #64B5F6;
+    }
+
+    .status-delivered {
+      background: rgba(255, 255, 255, 0.15);
+      color: #FFFFFF;
+      border: 1px solid #FFFFFF;
+    }
+
+    .status-pending {
+      background: rgba(255, 152, 0, 0.2);
+      color: #FFCC80;
+      border: 1px solid #FFB74D;
+    }
+
+    .status-processing {
+      background: rgba(156, 39, 176, 0.2);
+      color: #CE93D8;
+      border: 1px solid #BA68C8;
+    }
+
+    .status-cancelled {
+      background: rgba(244, 67, 54, 0.2);
+      color: #EF9A9A;
+      border: 1px solid #E57373;
+    }
+
+    .action-btn {
+      background: none;
+      border: none;
+      color: var(--admin-gold-bright);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all .2s;
+    }
+
+    .action-btn:hover {
+      background: rgba(212, 175, 55, 0.15);
+      color: #FFF;
+      text-decoration: none;
+    }
+
+    .low-stock-section {
+      margin-top: 32px;
+      padding: 24px;
+      background: rgba(244, 67, 54, 0.06);
+      border: 1px solid rgba(244, 67, 54, 0.25);
+      border-radius: 8px;
+    }
+
+    .low-stock-item {
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 13px;
+      font-weight: 500;
+      color: #FFFFFF;
+    }
+
+    .low-stock-item:last-child {
+      border-bottom: none;
+    }
+
+    /* Modal Styling */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .85);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      display: none;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .modal {
+      background: #14110C;
+      border: 1px solid var(--admin-border);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 600px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 32px;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      color: #FFFFFF;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      color: var(--admin-text-sub);
+      font-size: 20px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .modal-close:hover {
+      background: #E57373;
+      color: #FFF;
+    }
+
+    /* Form Controls */
+    .admin-form-group {
+      margin-bottom: 16px;
+    }
+
+    .admin-form-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--admin-gold-bright);
+      margin-bottom: 8px;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .admin-form-input,
+    .admin-form-textarea {
+      width: 100%;
+      background: #0D0A07;
+      border: 1px solid var(--admin-border);
+      border-radius: 6px;
+      color: #FFFFFF;
+      padding: 12px 14px;
+      font-size: 13px;
+      font-family: 'Montserrat', sans-serif;
+      transition: border-color .2s;
+      box-sizing: border-box;
+    }
+
+    .admin-form-input:focus,
+    .admin-form-textarea:focus {
+      outline: none;
+      border-color: var(--admin-gold-bright);
+      box-shadow: 0 0 0 2px rgba(245, 208, 97, 0.2);
+    }
+
+    /* Admin Navbar Dark Theme & Sign Out Button */
+    nav#navbar {
+      background: rgba(12, 10, 7, 0.98) !important;
+      border-bottom: 1px solid var(--admin-border) !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6) !important;
+    }
+
+    .nav-logo-text {
+      color: #FFFFFF !important;
+    }
+
+    .nav-signout {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid var(--admin-border);
+      color: var(--admin-gold-bright);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      transition: all .25s ease;
+      margin-left: auto;
+      margin-right: 12px;
+    }
+
+    .nav-signout:hover {
+      background: rgba(244, 67, 54, 0.2);
+      border-color: #E57373;
+      color: #FF8A80;
+    }
+
+    .nav-hamburger span {
+      background: var(--admin-gold-bright) !important;
+    }
+
+    /* Admin Responsive Mobile Design */
+    @media (max-width: 900px) {
+      .admin-layout {
+        grid-template-columns: 1fr;
+        padding: 16px 14px 40px 14px;
+        gap: 20px;
+      }
+
+      .page-header {
+        padding-top: 85px !important;
+        padding-bottom: 10px !important;
+      }
+
+      .page-header .section-title {
+        font-size: 28px !important;
+      }
+
+      .nav-links.open {
+        background: #120E08 !important;
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.9) !important;
+      }
+
+      .nav-links.open a {
+        color: var(--admin-gold-bright) !important;
+      }
+
+      .admin-sidebar {
+        position: sticky;
+        top: 60px;
+        z-index: 90;
+        background: rgba(12, 10, 7, 0.98);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        margin: -10px -14px 16px -14px;
+        padding: 8px 14px;
+        border-bottom: 1px solid var(--admin-border);
+      }
+
+      .admin-sidebar-label {
+        display: none;
+      }
+
+      .admin-menu {
+        flex-direction: row;
+        overflow-x: auto;
+        white-space: nowrap;
+        gap: 8px;
+        padding: 4px 0;
+        margin-top: 0;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .admin-menu::-webkit-scrollbar {
+        display: none;
+      }
+
+      .admin-menu-btn {
+        padding: 9px 15px;
+        border-radius: 20px;
+        border: 1px solid var(--admin-border);
+        border-left: 1px solid var(--admin-border);
+        background: rgba(255, 255, 255, 0.05);
+        font-size: 11px;
+        letter-spacing: 1px;
+        flex-shrink: 0;
+      }
+
+      .admin-menu-btn.active {
+        background: var(--admin-gold-bright);
+        color: #0C0A07;
+        border-color: var(--admin-gold-bright);
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 24px;
+      }
+
+      .stat-card {
+        padding: 14px 12px;
+      }
+
+      .stat-label {
+        font-size: 10px;
+        letter-spacing: 1px;
+        margin-bottom: 6px;
+      }
+
+      .stat-val {
+        font-size: clamp(20px, 5.5vw, 26px);
+        word-break: break-word;
+      }
+
+      .panel-header {
+        margin-bottom: 18px;
+        padding-bottom: 10px;
+      }
+
+      .panel-header h2 {
+        font-size: 26px;
+      }
+
+      .modal-overlay {
+        padding: 10px;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal {
+        padding: 22px 16px;
+        max-width: 95vw;
+        max-height: 88vh;
+        border-radius: 12px;
+      }
+
+      .admin-table th,
+      .admin-table td {
+        padding: 10px 12px;
+        font-size: 12px;
+      }
+
+      .responsive-grid-2,
+      .responsive-grid-3 {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .nav-signout {
+        padding: 6px 10px;
+        font-size: 10px;
+        margin-right: 8px;
+      }
+
+      .nav-signout-text {
+        display: none;
+      }
+
+      .low-stock-section {
+        padding: 16px 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+
+      .stat-card {
+        padding: 12px 10px;
+      }
+
+      .stat-val {
+        font-size: clamp(18px, 5vw, 22px);
+      }
+
+      .admin-table {
+        min-width: 520px;
+      }
+    }
+
+    @media (max-width: 350px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <canvas id="particles-canvas" aria-hidden="true"></canvas>
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+  <nav id="navbar" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">
+      <img src="/neww-logo.jpeg" alt="Gourshal" class="nav-logo-img">
+      <div class="nav-logo-text-wrap">
+        <div class="nav-logo-text">GOURSHAL</div><span class="nav-logo-tagline">ADMIN PORTAL</span>
+      </div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">View Site</a></li>
+    </ul>
+    <button class="nav-signout" id="navSignOut" onclick="Auth.logout()" aria-label="Sign Out">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        aria-hidden="true">
+        <path d="M9 18h10a2 2 0 002-2V8a2 2 0 00-2-2H9" />
+        <polyline points="15 3 12 6 9 3" />
+        <line x1="9" y1="12" x2="15" y2="12" />
+      </svg>
+      <span class="nav-signout-text">Sign Out</span>
+    </button>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+
+  <div class="page-header" style="padding-top:120px;padding-bottom:20px;">
+    <h1 class="section-title">Command Center</h1>
+  </div>
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar-label">Menu</div>
+      <div class="admin-menu">
+        <button class="admin-menu-btn active" onclick="switchPanel('dashboard', this)"
+          aria-current="page">Dashboard</button>
+        <button class="admin-menu-btn" onclick="switchPanel('orders', this)">Orders</button>
+        <button class="admin-menu-btn" onclick="switchPanel('users', this)">Customers</button>
+        <button class="admin-menu-btn" onclick="switchPanel('products', this)">Products</button>
+        <button class="admin-menu-btn" onclick="switchPanel('payment', this)">Payment & Payouts</button>
+      </div>
+    </aside>
+    <main id="main-content">
+      <!-- DASHBOARD -->
+      <div class="admin-panel active" id="dashboardPanel">
+        <div class="panel-header">
+          <h2>Overview</h2>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total Revenue</div>
+            <div class="stat-val" id="statRev">₹0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Orders</div>
+            <div class="stat-val" id="statOrders">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Customers</div>
+            <div class="stat-val" id="statUsers">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Today's Orders</div>
+            <div class="stat-val" id="statTodayOrders">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Pending Orders</div>
+            <div class="stat-val" id="statPending">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Cancelled Orders</div>
+            <div class="stat-val stat-warning" id="statCancelled">0</div>
+          </div>
+        </div>
+
+        <!-- Low Stock Products Section -->
+        <div class="low-stock-section">
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;color:#FF7675;margin-bottom:16px;font-weight:600;">Low Stock Alert</h3>
+          <div id="lowStockList">
+            <div class="spinner"></div>
+          </div>
+        </div>
+
+        <h3 style="margin-top:36px;margin-bottom:16px;font-size:22px;color:var(--admin-text-bright);font-weight:500;">Recent Orders</h3>
+        <div class="admin-table-wrap">
+          <table class="admin-table" id="recentOrdersTable">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ORDERS -->
+      <div class="admin-panel" id="ordersPanel">
+        <div class="panel-header">
+          <h2>All Orders</h2>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table" id="allOrdersTable">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- USERS -->
+      <div class="admin-panel" id="usersPanel">
+        <div class="panel-header">
+          <h2>Customers</h2>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table" id="usersTable">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Joined</th>
+                <th>Orders</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PRODUCTS -->
+      <div class="admin-panel" id="productsPanel">
+        <div class="panel-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+          <h2>Products</h2>
+          <button class="btn-primary" style="padding:10px 24px;font-size:11px;font-weight:600;" onclick="openAddProductModal()">+ Add Product</button>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table" id="productsTable">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PAYMENT SETTINGS -->
+      <div class="admin-panel" id="paymentPanel">
+        <div class="panel-header">
+          <h2>Payment & Payouts</h2>
+        </div>
+        <div style="background:var(--admin-card);border:1px solid var(--admin-border);padding:32px 24px;max-width:600px;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,0.4);">
+          <p style="color:var(--admin-text-sub);font-size:13px;line-height:1.6;margin-bottom:24px;">Enter your bank details to receive automated payouts via Razorpay Route when customers purchase your products.</p>
+          <form id="paymentSettingsForm" onsubmit="savePaymentDetails(event)" style="display:flex;flex-direction:column;gap:18px;">
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="bankAccount">Bank Account Number</label>
+              <input type="text" id="bankAccount" name="bankAccount" class="admin-form-input" required placeholder="e.g. 123456789012">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="ifscCode">IFSC Code</label>
+              <input type="text" id="ifscCode" name="ifscCode" class="admin-form-input" required placeholder="e.g. HDFC0001234">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="accountHolderName">Account Holder Name</label>
+              <input type="text" id="accountHolderName" name="accountHolderName" class="admin-form-input" required placeholder="e.g. Gourshal Wellness LLP">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="razorpayAccountId">Razorpay Account ID (Optional)</label>
+              <input type="text" id="razorpayAccountId" name="razorpayAccountId" class="admin-form-input" placeholder="acc_...">
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%;padding:14px;font-size:12px;margin-top:10px;letter-spacing:1.5px;font-weight:700;">Save Payment Details</button>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Order Detail Modal -->
+  <div class="modal-overlay" id="orderModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()" aria-label="Close dialog">✕</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <footer id="footer" style="margin-top:60px;">
+    <div class="footer-bottom">
+      <div class="footer-copy" style="color:var(--admin-text-sub);">© 2026 Gourshal Admin Portal. Crafted to Last.</div>
+    </div>
+  </footer>
+
+  <script src="/scripts/config.js?v=mtr34fsz"></script>
+  <script src="/scripts/utils.js?v=mtr34fsz"></script>
+  <script src="/scripts/effects.js?v=mtr34fsz"></script>
+  <script src="/scripts/products.js?v=mtr34fsz"></script>
+  <script src="/scripts/cart.js?v=mtr34fsz"></script>
+  <script src="/scripts/auth.js?v=mtr34fsz"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.Effects) {
+        Effects.initParticles(document.getElementById('particles-canvas'));
+        Effects.initCursorGlow(document.getElementById('cursorGlow'));
+      } else {
+        const canvas = document.getElementById('particles-canvas'), ctx = canvas.getContext('2d');
+        if (canvas) {
+          canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+          const pts = Array.from({ length: 40 }, () => ({ x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight, vx: (Math.random() - .5) * .15, vy: (Math.random() - .5) * .15, r: Math.random() * .8 + .2, o: Math.random() * .25 + .05, g: Math.random() > .5 }));
+          (function anim() { ctx.clearRect(0, 0, canvas.width, canvas.height); pts.forEach(p => { p.x += p.vx; p.y += p.vy; if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0; if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fillStyle = p.g ? `rgba(201,168,76,${p.o})` : `rgba(184,184,200,${p.o * .5})`; ctx.fill(); }); requestAnimationFrame(anim); })();
+        }
+        document.addEventListener('mousemove', e => {
+          const glow = document.getElementById('cursorGlow');
+          if (glow) { glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px'; }
+        });
+      }
+
+      // Security check
+      if (!Auth.isLoggedIn() || !Auth.isAdmin()) {
+        document.body.innerHTML = `<div style="text-align:center;padding:100px 20px;font-family:'Montserrat',sans-serif;color:#FFF;"><h1>Access Denied</h1><p style="color:#DDD;margin:16px 0 24px 0;">You need admin privileges to view this page.</p><a href="login.html" style="color:var(--admin-gold-bright);font-weight:600;text-decoration:underline;">Sign in as admin →</a></div>`;
+        return;
+      }
+
+      loadData();
+      loadPaymentDetails();
+
+      // Update nav cart count
+      const navCc = document.getElementById('navCartCount');
+      if (navCc && window.Cart) navCc.textContent = Cart.count();
+    });
+
+    function switchPanel(panelId, btnElement) {
+      document.querySelectorAll('.admin-menu-btn').forEach(b => b.classList.remove('active'));
+      if (btnElement) btnElement.classList.add('active');
+      document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+      const target = document.getElementById(panelId + 'Panel');
+      if (target) target.classList.add('active');
+    }
+
+    let loadedOrders = [];
+
+    async function loadData() {
+      let orders = [];
+      let users = [];
+      let lowStockProducts = [];
+      const apiUrl = window.Config ? Config.API_URL : 'http://localhost:5000/api';
+      const token = Auth.getToken();
+
+      try {
+        if (!token) throw new Error('No token');
+        const [resOrders, resUsers, resLowStock] = await Promise.all([
+          fetch(apiUrl + '/admin/orders', { headers: { 'Authorization': 'Bearer ' + token } }),
+          fetch(apiUrl + '/admin/users', { headers: { 'Authorization': 'Bearer ' + token } }),
+          fetch(apiUrl + '/admin/low-stock', { headers: { 'Authorization': 'Bearer ' + token } })
+        ]);
+        const dOrders = await resOrders.json();
+        const dUsers = await resUsers.json();
+        const dLowStock = await resLowStock.json();
+        if (dOrders.ok) orders = dOrders.orders; else throw new Error(dOrders.error);
+        if (dUsers.ok) users = dUsers.users; else throw new Error(dUsers.error);
+        if (dLowStock.ok) lowStockProducts = dLowStock.products; else throw new Error(dLowStock.error);
+      } catch (e) {
+        console.warn('Backend unavailable, using LocalStorage fallback for Admin');
+        orders = JSON.parse(localStorage.getItem('gourshal_orders') || '[]');
+        users = Auth.getUsersLocal();
+      }
+
+      loadedOrders = orders;
+
+      // Dashboard Stats (Exclude cancelled orders from revenue)
+      const revenue = orders.filter(o => o.status !== 'cancelled').reduce((sum, o) => sum + (o.total || 0), 0);
+      document.getElementById('statRev').textContent = window.Utils?.formatCurrency ? Utils.formatCurrency(revenue) : '₹' + revenue.toLocaleString();
+      document.getElementById('statOrders').textContent = orders.length;
+      document.getElementById('statUsers').textContent = users.length;
+
+      // Today's orders
+      const today = new Date().toDateString();
+      const todaysOrders = orders.filter(o => new Date(o.placedAt).toDateString() === today);
+      document.getElementById('statTodayOrders').textContent = todaysOrders.length;
+
+      // Pending and cancelled
+      const pending = orders.filter(o => ['pending', 'confirmed', 'processing'].includes(o.status));
+      const cancelled = orders.filter(o => o.status === 'cancelled');
+      document.getElementById('statPending').textContent = pending.length;
+      document.getElementById('statCancelled').textContent = cancelled.length;
+
+      // Recent Orders (Dash)
+      const recentTbody = document.getElementById('recentOrdersTable')?.querySelector('tbody');
+      if (recentTbody) {
+        recentTbody.innerHTML = orders.length ? orders.slice(0, 5).map(o => `
+          <tr>
+            <td><strong style="color:var(--admin-gold-bright);">#${o.id}</strong></td>
+            <td><strong>${o.address.firstName} ${o.address.lastName}</strong></td>
+            <td style="color:var(--admin-text-sub);">${new Date(o.placedAt).toLocaleDateString()}</td>
+            <td><strong>${window.Utils?.formatCurrency ? Utils.formatCurrency(o.total) : '₹' + o.total.toLocaleString()}</strong></td>
+            <td><span class="status-badge status-${o.status}">${o.status}</span></td>
+          </tr>
+        `).join('') : `<tr><td colspan="5" style="text-align:center;color:var(--admin-text-muted);padding:24px;">No orders found yet.</td></tr>`;
+      }
+
+      // All Orders
+      const allOrdersTbody = document.getElementById('allOrdersTable')?.querySelector('tbody');
+      if (allOrdersTbody) {
+        allOrdersTbody.innerHTML = orders.length ? orders.map(o => `
+          <tr>
+            <td><strong style="color:var(--admin-gold-bright);">#${o.id}</strong></td>
+            <td><strong>${o.address.firstName} ${o.address.lastName}</strong></td>
+            <td style="color:var(--admin-text-sub);">${new Date(o.placedAt).toLocaleDateString()}</td>
+            <td><strong>${window.Utils?.formatCurrency ? Utils.formatCurrency(o.total) : '₹' + o.total.toLocaleString()}</strong></td>
+            <td>
+              <select onchange="updateOrderStatus('${o.id}', this.value)">
+                <option value="pending" ${o.status === 'pending' ? 'selected' : ''}>Pending</option>
+                <option value="confirmed" ${o.status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
+                <option value="processing" ${o.status === 'processing' ? 'selected' : ''}>Processing</option>
+                <option value="packed" ${o.status === 'packed' ? 'selected' : ''}>Packed</option>
+                <option value="shipped" ${o.status === 'shipped' ? 'selected' : ''}>Shipped</option>
+                <option value="delivered" ${o.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                <option value="cancelled" ${o.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+              </select>
+            </td>
+            <td><button class="action-btn" onclick="viewOrder('${o.id}')">View Details</button></td>
+          </tr>
+        `).join('') : `<tr><td colspan="6" style="text-align:center;color:var(--admin-text-muted);padding:24px;">No orders found.</td></tr>`;
+      }
+
+      // Users
+      const usersTbody = document.getElementById('usersTable')?.querySelector('tbody');
+      if (usersTbody) {
+        usersTbody.innerHTML = users.length ? users.map(u => `
+          <tr>
+            <td><strong>${u.name}</strong> ${u.role === 'admin' ? '<span style="color:var(--admin-gold-bright);font-size:10px;font-weight:700;margin-left:4px;">(Admin)</span>' : ''}</td>
+            <td style="color:var(--admin-text-sub);">${u.email}</td>
+            <td style="color:var(--admin-text-sub);">${u.phone || '-'}</td>
+            <td style="color:var(--admin-text-sub);">${new Date(u.createdAt).toLocaleDateString()}</td>
+            <td><strong style="color:var(--admin-gold-bright);">${u.orderCount !== undefined ? u.orderCount : (u.orders ? u.orders.length : 0)}</strong></td>
+          </tr>
+        `).join('') : `<tr><td colspan="5" style="text-align:center;color:var(--admin-text-muted);padding:24px;">No customer records yet.</td></tr>`;
+      }
+
+      // Low stock products
+      const lowStock = lowStockProducts.length ? lowStockProducts : (window.GOURSHAL_PRODUCTS?.filter(p => p.stock < 10) || []);
+      const lowStockEl = document.getElementById('lowStockList');
+      if (lowStockEl) {
+        lowStockEl.innerHTML = lowStock.length ?
+          lowStock.map(p => `<div class="low-stock-item"><span style="color:#FF7675;margin-right:6px;">⚠️</span> <strong>${p.name}</strong> — <span style="color:#FFD700;font-weight:700;">Only ${p.stock} left in stock</span></div>`).join('') :
+          '<p style="color:var(--admin-text-sub);font-size:13px;">✓ All products are sufficiently stocked.</p>';
+      }
+
+      // Products Management
+      renderProductsAdmin();
+    }
+
+    async function updateOrderStatus(id, newStatus) {
+      const apiUrl = window.Config ? Config.API_URL : 'http://localhost:5000/api';
+      const token = Auth.getToken();
+      try {
+        if (!token) throw new Error('No token');
+        const res = await fetch(apiUrl + '/admin/orders/' + id + '/status', {
+          method: 'PUT',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ status: newStatus })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          loadData();
+          return;
+        } else { throw new Error(data.error); }
+      } catch (e) {
+        console.warn('Backend unavailable, updating local storage fallback order status');
+        const orders = JSON.parse(localStorage.getItem('gourshal_orders') || '[]');
+        const order = orders.find(o => o.id === id);
+        if (order) {
+          order.status = newStatus;
+          localStorage.setItem('gourshal_orders', JSON.stringify(orders));
+          loadData();
+        }
+      }
+    }
+
+    async function loadPaymentDetails() {
+      const apiUrl = window.Config ? Config.API_URL : 'http://localhost:5000/api';
+      const token = Auth.getToken();
+      if (!token) return;
+      try {
+        const res = await fetch(apiUrl + '/admin/payment-details', { headers: { 'Authorization': 'Bearer ' + token } });
+        const data = await res.json();
+        if (data.ok && data.paymentDetails) {
+          document.getElementById('bankAccount').value = data.paymentDetails.bankAccount || '';
+          document.getElementById('ifscCode').value = data.paymentDetails.ifscCode || '';
+          document.getElementById('accountHolderName').value = data.paymentDetails.accountHolderName || '';
+          document.getElementById('razorpayAccountId').value = data.paymentDetails.razorpayAccountId || '';
+        }
+      } catch (e) { console.warn('Could not load payment details'); }
+    }
+
+    async function savePaymentDetails(e) {
+      e.preventDefault();
+      const apiUrl = window.Config ? Config.API_URL : 'http://localhost:5000/api';
+      const token = Auth.getToken();
+      const btn = e.target.querySelector('button');
+      const details = {
+        bankAccount: document.getElementById('bankAccount').value.trim(),
+        ifscCode: document.getElementById('ifscCode').value.trim(),
+        accountHolderName: document.getElementById('accountHolderName').value.trim(),
+        razorpayAccountId: document.getElementById('razorpayAccountId').value.trim()
+      };
+
+      btn.textContent = 'Saving...';
+      try {
+        const res = await fetch(apiUrl + '/admin/payment-details', {
+          method: 'PUT',
+          headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+          body: JSON.stringify(details)
+        });
+        const data = await res.json();
+        if (data.ok) {
+          btn.textContent = 'Saved Successfully!';
+          btn.style.background = '#4CAF50';
+          setTimeout(() => { btn.textContent = 'Save Payment Details'; btn.style.background = 'var(--gold)'; }, 2000);
+        } else {
+          alert('Failed to save details: ' + data.error);
+          btn.textContent = 'Save Payment Details';
+        }
+      } catch (err) {
+        alert('Network error while saving details');
+        btn.textContent = 'Save Payment Details';
+      }
+    }
+
+    function viewOrder(id) {
+      const o = (loadedOrders && loadedOrders.find(x => x.id === id)) || JSON.parse(localStorage.getItem('gourshal_orders') || '[]').find(x => x.id === id);
+      if (!o) return;
+      const modal = document.getElementById('orderModal');
+      const addr = o.address || {};
+      document.getElementById('modalContent').innerHTML = `
+        <h2 id="modalTitle" style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:30px;color:var(--admin-gold-bright);margin-bottom:20px;">Order #${o.id}</h2>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;font-size:13px;margin-bottom:24px;" class="responsive-grid-2">
+          <div style="background:rgba(255,255,255,0.03);padding:14px;border-radius:6px;border:1px solid var(--admin-border);">
+            <div style="color:var(--admin-gold-bright);font-weight:700;margin-bottom:6px;letter-spacing:1px;font-size:11px;text-transform:uppercase;">Customer</div>
+            <div style="color:#FFF;line-height:1.5;">${addr.firstName || ''} ${addr.lastName || ''}<br><span style="color:var(--admin-text-sub);">${addr.email || ''}</span><br><span style="color:var(--admin-text-sub);">${addr.phone || ''}</span></div>
+          </div>
+          <div style="background:rgba(255,255,255,0.03);padding:14px;border-radius:6px;border:1px solid var(--admin-border);">
+            <div style="color:var(--admin-gold-bright);font-weight:700;margin-bottom:6px;letter-spacing:1px;font-size:11px;text-transform:uppercase;">Shipping Address</div>
+            <div style="color:#FFF;line-height:1.5;">${addr.addr1 || ''}${addr.addr2 ? ', ' + addr.addr2 : ''}<br><span style="color:var(--admin-text-sub);">${addr.city || ''}, ${addr.state || ''} - ${addr.pin || ''}</span></div>
+          </div>
+        </div>
+        <div style="color:var(--admin-gold-bright);margin-bottom:10px;letter-spacing:1.5px;text-transform:uppercase;font-size:11px;font-weight:700;">Ordered Items</div>
+        <div style="background:var(--admin-card-2);padding:18px;border-radius:8px;border:1px solid var(--admin-border);margin-bottom:24px;">
+          ${(o.items || []).map(i => `
+            <div style="display:flex;justify-content:space-between;margin-bottom:10px;font-size:13px;align-items:center;">
+              <div style="color:#FFF;font-weight:500;"><strong>${i.qty}x</strong> ${i.name}</div>
+              <div style="color:var(--admin-gold-bright);font-weight:600;">${window.Utils?.formatCurrency ? Utils.formatCurrency(i.price * i.qty) : '₹' + (i.price * i.qty).toLocaleString()}</div>
+            </div>
+          `).join('')}
+          <div style="border-top:1px solid var(--admin-border);padding-top:14px;margin-top:14px;display:flex;justify-content:space-between;font-size:17px;font-weight:700;">
+            <div style="color:#FFF;">Total Amount</div>
+            <div style="color:var(--admin-gold-bright);">${window.Utils?.formatCurrency ? Utils.formatCurrency(o.total) : '₹' + o.total.toLocaleString()}</div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--admin-text-sub);line-height:1.6;background:rgba(255,255,255,0.02);padding:12px 14px;border-radius:6px;">
+          <strong>Payment:</strong> ${(o.paymentMethod || 'COD').toUpperCase()}<br>
+          <strong>Status:</strong> ${(o.status || 'pending').toUpperCase()}<br>
+          <strong>Placed At:</strong> ${o.placedAt ? new Date(o.placedAt).toLocaleString() : '-'}
+        </div>
+      `;
+      modal.style.display = 'flex';
+    }
+
+    function closeModal() { document.getElementById('orderModal').style.display = 'none'; }
+
+    // --- PRODUCT MANAGEMENT ---
+    function renderProductsAdmin() {
+      const products = window.GOURSHAL_PRODUCTS || window.GOURSHAL_PRODUCTS_LOCAL || [];
+      const prodTbody = document.getElementById('productsTable')?.querySelector('tbody');
+      if (prodTbody) {
+        prodTbody.innerHTML = products.length ? products.map(p => `
+          <tr>
+            <td><strong>${p.name}</strong></td>
+            <td><span class="status-badge status-confirmed">${p.category}</span></td>
+            <td><strong style="color:var(--admin-gold-bright);">${window.Utils?.formatCurrency ? Utils.formatCurrency(p.price) : '₹' + p.price}</strong></td>
+            <td><strong>${p.stock}</strong></td>
+            <td>
+              <button class="action-btn" style="color:#FF7675;font-weight:700;" onclick="deleteProduct('${p.id || p.productId}')">✕ Delete</button>
+            </td>
+          </tr>
+        `).join('') : `<tr><td colspan="5" style="text-align:center;color:var(--admin-text-muted);padding:24px;">No products loaded.</td></tr>`;
+      }
+    }
+
+    function openAddProductModal() {
+      const modal = document.getElementById('orderModal');
+      document.getElementById('modalContent').innerHTML = `
+        <h2 id="modalTitle" style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:28px;color:var(--admin-gold-bright);margin-bottom:20px;">Add New Product</h2>
+        <form id="addProductForm" onsubmit="submitAddProduct(event)" style="display:flex;flex-direction:column;gap:14px;">
+          <div class="admin-form-group">
+            <label class="admin-form-label">Product Name *</label>
+            <input type="text" id="addProdName" required class="admin-form-input" placeholder="e.g. Wild Forest Honey">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" class="responsive-grid-2">
+            <div class="admin-form-group">
+              <label class="admin-form-label">Category *</label>
+              <input type="text" id="addProdCat" required class="admin-form-input" placeholder="e.g. Pure Honey">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">Category Slug *</label>
+              <input type="text" id="addProdSlug" required class="admin-form-input" placeholder="e.g. honey">
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;" class="responsive-grid-3">
+            <div class="admin-form-group">
+              <label class="admin-form-label">Price (₹) *</label>
+              <input type="number" id="addProdPrice" min="0" required class="admin-form-input" placeholder="899">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">Orig. Price (₹)</label>
+              <input type="number" id="addProdOrig" min="0" class="admin-form-input" placeholder="1099">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">Stock *</label>
+              <input type="number" id="addProdStock" min="0" required class="admin-form-input" placeholder="50">
+            </div>
+          </div>
+          <div class="admin-form-group">
+            <label class="admin-form-label">Description *</label>
+            <textarea id="addProdDesc" rows="3" required class="admin-form-textarea" placeholder="Enter rich product description..."></textarea>
+          </div>
+          <button type="submit" class="btn-primary" style="margin-top:8px;padding:13px;font-size:12px;font-weight:700;">+ Add Product</button>
+        </form>
+      `;
+      modal.style.display = 'flex';
+    }
+
+    async function submitAddProduct(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button');
+      btn.textContent = 'Adding...';
+
+      const payload = {
+        name: document.getElementById('addProdName').value,
+        category: document.getElementById('addProdCat').value,
+        categorySlug: document.getElementById('addProdSlug').value,
+        price: Number(document.getElementById('addProdPrice').value),
+        originalPrice: Number(document.getElementById('addProdOrig').value) || Number(document.getElementById('addProdPrice').value),
+        stock: Number(document.getElementById('addProdStock').value),
+        description: document.getElementById('addProdDesc').value,
+        unit: '1 unit',
+        badge: 'NEW',
+        rating: 5.0,
+        reviews: 0
+      };
+
+      const apiUrl = window.Config ? Config.API_URL : 'http://localhost:5000/api';
+      const token = Auth.getToken();
+
+      try {
+        if (!token) throw new Error('No token');
+        const res = await fetch(apiUrl + '/products', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.ok) {
+          if (window.GOURSHAL_PRODUCTS) window.GOURSHAL_PRODUCTS.push(data.product);
+          renderProductsAdmin();
+          closeModal();
+        } else {
+          throw new Error(data.error);
+        }
+      } catch (err) {
+        console.warn('Backend failed, adding to local products', err);
+        payload.id = 'PRD' + Date.now();
+        payload.productId = payload.id;
+        if (window.GOURSHAL_PRODUCTS) window.GOURSHAL_PRODUCTS.push(payload);
+        renderProductsAdmin();
+        closeModal();
+      }
+    }
+
+    async function deleteProduct(id) {
+      if (!confirm('Are you sure you want to delete this product?')) return;
+      const apiUrl = window.Config ? Config.API_URL : 'http://localhost:5000/api';
+      const token = Auth.getToken();
+
+      try {
+        if (!token) throw new Error('No token');
+        const res = await fetch(apiUrl + '/products/' + id, {
+          method: 'DELETE',
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        if (data.ok) {
+          if (window.GOURSHAL_PRODUCTS) {
+            window.GOURSHAL_PRODUCTS = window.GOURSHAL_PRODUCTS.filter(p => p.id !== id && p.productId !== id);
+          }
+          renderProductsAdmin();
+        } else {
+          throw new Error(data.error);
+        }
+      } catch (err) {
+        console.warn('Backend failed, deleting from local products', err);
+        if (window.GOURSHAL_PRODUCTS) {
+          window.GOURSHAL_PRODUCTS = window.GOURSHAL_PRODUCTS.filter(p => p.id !== id && p.productId !== id);
+        }
+        renderProductsAdmin();
+      }
+    }
+  </script>
+</body>
+
+</html>

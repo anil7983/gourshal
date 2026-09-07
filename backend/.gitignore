@@ -77,7 +77,6 @@ web_modules/
 
 # Gatsby files
 .cache/
-public
 
 # Store for `npx` scripts installed globally
 .node_repl_history
