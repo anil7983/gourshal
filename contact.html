@@ -157,8 +157,13 @@
     }
     .skip-link:focus { top: 0; }
     @media(max-width:900px){
-      .contact-layout { grid-template-columns: 1fr; padding: 24px 20px; }
+      .contact-layout { grid-template-columns: 1fr; padding: 24px 20px; gap: 36px; }
       .contact-info { padding-right: 0; }
+    }
+    @media(max-width:600px){
+      .contact-layout { padding: 18px 14px; gap: 28px; }
+      .contact-form-wrap { padding: 24px 16px; border-radius: 14px; }
+      .page-header { padding: 80px 16px 20px; }
     }
   </style>
 </head>

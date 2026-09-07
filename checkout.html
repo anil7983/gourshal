@@ -368,6 +368,7 @@
       .checkout-layout {
         grid-template-columns: 1fr;
         padding: 24px;
+        gap: 32px;
       }
 
       .checkout-summary {
@@ -381,7 +382,32 @@
 
     @media(max-width:600px) {
       .checkout-layout {
-        padding: 16px;
+        padding: 16px 14px;
+        gap: 24px;
+      }
+
+      .step-indicator {
+        margin-bottom: 28px;
+      }
+
+      .step {
+        gap: 6px;
+        font-size: 9px;
+        letter-spacing: 1px;
+      }
+
+      .step-num {
+        width: 22px;
+        height: 22px;
+        font-size: 10px;
+      }
+
+      .step-line {
+        margin: 0 6px;
+      }
+
+      .checkout-summary {
+        padding: 22px 16px;
       }
 
       /* Full-width buttons on mobile */
@@ -400,6 +426,7 @@
       /* Stack form-row fields on small screens */
       .form-row {
         grid-template-columns: 1fr !important;
+        gap: 12px !important;
       }
 
       /* Payment methods single column on phones */
@@ -408,7 +435,7 @@
       }
 
       .page-header {
-        padding: 80px 16px 24px;
+        padding: 80px 16px 20px;
       }
     }
 

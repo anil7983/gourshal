@@ -46,7 +46,13 @@
     .tracking-step.done .tracking-step-label,.tracking-step.active .tracking-step-label{color:var(--gold);}
     .skip-link{position:absolute;top:-40px;left:0;background:var(--gold);color:var(--black);padding:8px 16px;z-index:1000;transition:top .3s;}
     .skip-link:focus{top:0;}
-    @media(max-width:700px){.orders-layout{padding:24px;}.order-card-header{flex-direction:column;align-items:flex-start;}.tracking-steps{flex-wrap:wrap;gap:20px;}.tracking-step-line{display:none;}}
+    @media(max-width:700px){
+      .orders-layout { padding: 20px 14px; }
+      .order-card-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .tracking-steps { flex-wrap: wrap; gap: 14px; }
+      .tracking-step-line { display: none; }
+      .order-item-row { flex-wrap: wrap; gap: 10px; }
+    }
   </style>
 </head>
 <body>

@@ -225,7 +225,7 @@
 
     @media (max-width: 768px) {
       .about-video-frame {
-        height: 380px;
+        height: 340px;
       }
       .ethos-grid {
         grid-template-columns: 1fr;
@@ -236,13 +236,25 @@
       .about-t-node, .about-t-node:nth-child(even) {
         flex-direction: column;
         align-items: flex-start;
-        padding-left: 50px;
+        padding-left: 48px;
       }
       .about-t-dot {
         left: 20px;
       }
       .about-t-card {
         width: 100%;
+      }
+    }
+    @media (max-width: 480px) {
+      .about-video-frame {
+        height: 220px;
+        border-radius: 14px;
+      }
+      .about-hero-section {
+        padding: 60px 14px 40px;
+      }
+      .about-t-card {
+        padding: 20px 16px;
       }
     }
   </style>

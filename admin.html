@@ -424,7 +424,48 @@
       box-shadow: 0 0 0 2px rgba(245, 208, 97, 0.2);
     }
 
-    /* Responsive Mobile Design */
+    /* Admin Navbar Dark Theme & Sign Out Button */
+    nav#navbar {
+      background: rgba(12, 10, 7, 0.98) !important;
+      border-bottom: 1px solid var(--admin-border) !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6) !important;
+    }
+
+    .nav-logo-text {
+      color: #FFFFFF !important;
+    }
+
+    .nav-signout {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid var(--admin-border);
+      color: var(--admin-gold-bright);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      transition: all .25s ease;
+      margin-left: auto;
+      margin-right: 12px;
+    }
+
+    .nav-signout:hover {
+      background: rgba(244, 67, 54, 0.2);
+      border-color: #E57373;
+      color: #FF8A80;
+    }
+
+    .nav-hamburger span {
+      background: var(--admin-gold-bright) !important;
+    }
+
+    /* Admin Responsive Mobile Design */
     @media (max-width: 900px) {
       .admin-layout {
         grid-template-columns: 1fr;
@@ -433,21 +474,30 @@
       }
 
       .page-header {
-        padding-top: 90px !important;
-        padding-bottom: 12px !important;
+        padding-top: 85px !important;
+        padding-bottom: 10px !important;
       }
 
       .page-header .section-title {
-        font-size: 30px !important;
+        font-size: 28px !important;
+      }
+
+      .nav-links.open {
+        background: #120E08 !important;
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.9) !important;
+      }
+
+      .nav-links.open a {
+        color: var(--admin-gold-bright) !important;
       }
 
       .admin-sidebar {
         position: sticky;
-        top: 70px;
+        top: 60px;
         z-index: 90;
-        background: rgba(12, 10, 7, 0.96);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        background: rgba(12, 10, 7, 0.98);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
         margin: -10px -14px 16px -14px;
         padding: 8px 14px;
         border-bottom: 1px solid var(--admin-border);
@@ -473,8 +523,8 @@
       }
 
       .admin-menu-btn {
-        padding: 10px 16px;
-        border-radius: 24px;
+        padding: 9px 15px;
+        border-radius: 20px;
         border: 1px solid var(--admin-border);
         border-left: 1px solid var(--admin-border);
         background: rgba(255, 255, 255, 0.05);
@@ -492,51 +542,72 @@
       .stats-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
+        margin-bottom: 24px;
       }
 
       .stat-card {
-        padding: 16px 14px;
+        padding: 14px 12px;
       }
 
       .stat-label {
         font-size: 10px;
+        letter-spacing: 1px;
         margin-bottom: 6px;
       }
 
       .stat-val {
-        font-size: 26px;
+        font-size: clamp(20px, 5.5vw, 26px);
+        word-break: break-word;
       }
 
       .panel-header {
-        margin-bottom: 20px;
+        margin-bottom: 18px;
         padding-bottom: 10px;
       }
 
       .panel-header h2 {
-        font-size: 28px;
+        font-size: 26px;
       }
 
       .modal-overlay {
-        padding: 12px;
-        align-items: flex-start;
+        padding: 10px;
+        align-items: center;
+        justify-content: center;
       }
 
       .modal {
-        padding: 24px 16px;
-        margin: 20px 0;
+        padding: 22px 16px;
+        max-width: 95vw;
         max-height: 88vh;
+        border-radius: 12px;
       }
 
       .admin-table th,
       .admin-table td {
-        padding: 12px 14px;
+        padding: 10px 12px;
         font-size: 12px;
       }
 
       .responsive-grid-2,
       .responsive-grid-3 {
         grid-template-columns: 1fr !important;
-        gap: 12px !important;
+        gap: 10px !important;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .nav-signout {
+        padding: 6px 10px;
+        font-size: 10px;
+        margin-right: 8px;
+      }
+
+      .nav-signout-text {
+        display: none;
+      }
+
+      .low-stock-section {
+        padding: 16px 12px;
       }
     }
 
@@ -547,11 +618,21 @@
       }
 
       .stat-card {
-        padding: 14px 10px;
+        padding: 12px 10px;
       }
 
       .stat-val {
-        font-size: 22px;
+        font-size: clamp(18px, 5vw, 22px);
+      }
+
+      .admin-table {
+        min-width: 520px;
+      }
+    }
+
+    @media (max-width: 350px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>

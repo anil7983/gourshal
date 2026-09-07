@@ -1388,16 +1388,20 @@
   .hero-main-container {
     grid-template-columns: 1fr;
     text-align: center;
-    gap: 40px;
+    gap: 36px;
   }
   .hero-left {
     align-items: center;
   }
   .hero-badges-row {
-    margin: 0 auto 36px auto;
+    margin: 0 auto 30px auto;
   }
   .hero-actions {
     justify-content: center;
+  }
+  .hero-product-stage {
+    max-width: 480px;
+    margin: 0 auto;
   }
   .hero-benefit-bar {
     grid-template-columns: repeat(2, 1fr);
@@ -1405,173 +1409,352 @@
   }
   .category-cards-grid {
     grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
   }
   .pillars-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
   }
-  .rituals-grid, .testimonials-track {
+  .rituals-grid {
     grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .masterpieces-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
   }
 }
 
 @media (max-width: 768px) {
   #hero {
-    padding: 100px 20px 40px 20px;
-  }
-  .top-announcement-bar {
-    font-size: 9px;
-    letter-spacing: 1px;
-    padding: 6px 12px;
+    padding: 85px 16px 36px 16px;
   }
   .hero-title {
-    font-size: 36px;
+    font-size: clamp(30px, 7vw, 42px);
   }
   .hero-badges-row {
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    gap: 12px;
+    max-width: 320px;
+  }
+  .hero-product-img-wrap {
+    height: 320px;
+    border-radius: 18px;
+  }
+  .hero-glow-backdrop {
+    width: 280px;
+    height: 280px;
   }
   .hero-benefit-bar {
     grid-template-columns: 1fr;
-    padding: 20px;
+    padding: 20px 16px;
+    gap: 16px;
   }
   .benefit-item:not(:last-child)::after {
     display: none;
   }
   .category-cards-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
   .pillars-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  #vedic-craft .section-heading {
+    font-size: 36px;
+  }
+  .verifier-box {
+    padding: 24px 16px;
+    border-radius: 16px;
   }
   .verifier-input-wrap {
     flex-direction: column;
+    gap: 10px;
+    margin: 18px 0;
   }
   .lab-stats-grid {
     grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .story-film-hero {
+    height: 340px;
+    border-radius: 18px;
+  }
+  .story-film-overlay {
+    padding: 20px;
+  }
+  .story-film-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .story-stats-pills {
+    width: 100%;
+    justify-content: space-between;
   }
 }
 
 /* ─── PHONE (≤480px) ─── */
 @media (max-width: 480px) {
   #hero {
-    padding: 90px 16px 36px 16px;
-    min-height: 100svh;
+    padding: 80px 14px 30px 14px;
+    min-height: auto;
   }
 
-  .top-announcement-bar {
-    font-size: 8px;
-    letter-spacing: 0.5px;
-    padding: 5px 10px;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  /* Product switcher tabs scroll horizontally */
+  /* Product switcher tabs scroll horizontally with smooth touch */
   .hero-product-switcher {
     overflow-x: auto;
-    max-width: 100vw;
+    max-width: calc(100vw - 28px);
     justify-content: flex-start;
-    padding: 5px 16px;
-    border-radius: 40px;
+    padding: 4px 8px;
+    border-radius: 30px;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    margin: 6px auto 20px auto;
   }
   .hero-product-switcher::-webkit-scrollbar { display: none; }
 
   .hero-tab-btn {
     font-size: 10px;
     padding: 5px 12px 5px 6px;
-    gap: 7px;
+    gap: 6px;
     flex-shrink: 0;
   }
 
   .hero-tab-btn .tab-product-thumb {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
+  }
+
+  .hero-eyebrow {
+    font-size: 10px;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
   }
 
   .hero-title {
-    font-size: clamp(28px, 8vw, 38px);
-    line-height: 1.12;
+    font-size: clamp(26px, 7.5vw, 36px);
+    line-height: 1.15;
+    margin-bottom: 12px;
   }
 
   .hero-sub {
     font-size: 13px;
-    line-height: 1.65;
+    line-height: 1.6;
+    margin-bottom: 20px;
   }
 
   /* Badges 2x2 grid on phones */
   .hero-badges-row {
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    max-width: 100%;
+    gap: 10px;
+    max-width: 280px;
+    margin: 0 auto 24px auto;
   }
 
   .hero-badge-circle {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
   }
 
   .hero-badge-label {
     font-size: 9px;
   }
 
-  /* CTA buttons stack vertically */
+  /* CTA buttons stack vertically and take full width */
   .hero-actions {
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     width: 100%;
   }
 
-  .hero-actions .btn-primary,
-  .hero-actions .btn-secondary {
+  .btn-forest-primary,
+  .btn-hero-outline {
     width: 100%;
     text-align: center;
-    padding: 15px 24px;
+    justify-content: center;
+    padding: 14px 20px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    box-sizing: border-box;
   }
 
-  /* Category cards single column */
+  /* Hero Visual Stage on Phones */
+  .hero-product-stage {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .hero-product-img-wrap {
+    height: 250px;
+    border-radius: 16px;
+    padding: 10px;
+  }
+
+  .hero-glow-backdrop {
+    width: 220px;
+    height: 220px;
+  }
+
+  .hero-floating-pill {
+    left: 8px;
+    bottom: 8px;
+    padding: 6px 12px;
+    gap: 8px;
+    animation: none;
+  }
+
+  .floating-pill-icon {
+    width: 22px;
+    height: 22px;
+    font-size: 11px;
+  }
+
+  .floating-pill-text {
+    font-size: 9px;
+  }
+
+  .floating-pill-sub {
+    font-size: 8px;
+  }
+
+  /* Category cards 2 columns on phones */
   .category-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .category-card-thumb {
+    height: 110px;
+    padding: 6px;
+  }
+
+  .category-card-info {
+    padding: 10px 8px 12px 8px;
+  }
+
+  .category-name {
+    font-size: 14px;
+  }
+
+  .category-subtext {
+    font-size: 10px;
+    margin-bottom: 8px;
+  }
+
+  .category-link-cta {
+    font-size: 9px;
+  }
+
+  /* Products section */
+  #products, #pillars, #rituals, #testimonials, #purity-verifier, #categories, #vedic-craft {
+    padding: 50px 14px;
+  }
+
+  .section-header-centered {
+    margin-bottom: 36px;
+  }
+
+  .section-heading {
+    font-size: clamp(26px, 7vw, 34px);
+  }
+
+  .section-lead {
+    font-size: 13px;
+  }
+
+  .products-filter-bar {
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+
+  .filter-pill {
+    padding: 8px 16px;
+    font-size: 11px;
+  }
+
+  .masterpieces-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 18px;
   }
 
-  /* Products section padding */
-  #products, #pillars, #rituals, #testimonials, #purity, #our-story {
-    padding: 60px 16px;
+  .modern-product-card {
+    padding: 16px;
+    border-radius: 14px;
   }
 
-  /* Trust bar horizontal scroll */
-  .trust-bar {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    justify-content: flex-start;
-    gap: 20px;
-    padding-bottom: 8px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-  .trust-bar::-webkit-scrollbar { display: none; }
-
-  .trust-item {
-    flex-shrink: 0;
+  .card-img-wrap {
+    height: 190px;
+    margin-bottom: 14px;
   }
 
-  /* Testimonials single column */
-  .testimonials-track {
-    grid-template-columns: 1fr;
+  .card-title {
+    font-size: 18px;
   }
 
-  /* Story section */
-  #our-story {
-    padding: 60px 16px;
+  .card-desc {
+    font-size: 11px;
+    margin-bottom: 12px;
   }
-  .story-film-hero {
-    height: 260px;
+
+  /* Pillars on Phone */
+  .pillar-card {
+    padding: 24px 16px 20px;
     border-radius: 16px;
   }
-  .story-film-overlay {
-    padding: 20px;
+
+  .pillar-icon {
+    width: 54px;
+    height: 54px;
+    font-size: 20px;
+    margin-bottom: 14px;
+  }
+
+  .pillar-title {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  .pillar-desc {
+    font-size: 11px;
+  }
+
+  /* Testimonials on Phone */
+  .testi-card {
+    flex: 0 0 92%;
+    min-width: 250px;
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  .testi-text {
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
+
+  .testi-nav-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Story section on Phone */
+  #our-story {
+    padding: 50px 14px;
+  }
+  .story-film-hero {
+    height: 240px;
+    border-radius: 14px;
+    margin-bottom: 30px;
+  }
+  .play-film-btn {
+    width: 60px;
+    height: 60px;
+  }
+  .play-film-label {
+    font-size: 10px;
+    margin-top: 10px;
   }
   .story-reels-grid {
     grid-template-columns: 1fr;
@@ -1582,16 +1765,24 @@
 /* ─── TINY PHONE (≤390px / iPhone 14) ─── */
 @media (max-width: 390px) {
   #hero {
-    padding: 80px 14px 32px 14px;
+    padding: 75px 12px 24px 12px;
   }
 
   .hero-title {
-    font-size: 26px;
+    font-size: 24px;
   }
 
   .hero-tab-btn {
     font-size: 9px;
-    letter-spacing: 0.8px;
+    letter-spacing: 0.5px;
+  }
+
+  .category-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .category-card-thumb {
+    height: 130px;
   }
 }
 
@@ -2094,27 +2285,39 @@
   .story-reels-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  .story-film-bottom {
-    flex-direction: column;
-    align-items: flex-start;
-  }
 }
 
 @media (max-width: 768px) {
-  .story-film-hero {
-    height: 420px;
-  }
-  .story-film-overlay {
-    padding: 24px;
-  }
   .story-reels-grid {
     grid-template-columns: 1fr;
   }
-  .story-stats-pills {
-    width: 100%;
-    justify-content: space-between;
+  .video-modal {
+    padding: 12px;
+  }
+  .video-modal-dialog {
+    border-radius: 16px;
+    max-width: 100%;
   }
   .video-modal-player-wrap {
-    height: 280px;
+    height: 260px;
+  }
+  .video-modal-header {
+    padding: 12px 16px;
+  }
+  .video-modal-footer {
+    padding: 12px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .video-modal-player-wrap {
+    height: 200px;
+  }
+  .video-modal-title {
+    font-size: 16px;
+  }
+  .video-chapter-btn {
+    padding: 5px 10px;
+    font-size: 10px;
   }
 }
